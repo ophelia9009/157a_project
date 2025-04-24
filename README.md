@@ -1,1 +1,2 @@
-# 157a_project
+# This is a project for course CS157a.
+
