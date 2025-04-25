@@ -1,5 +1,13 @@
-CREATE DATABASE sf_db;
+CREATE DATABASE IF NOT EXISTS sf_db;
 USE sf_db;
+DROP TABLE IF EXISTS `Subscriptions`;
+DROP TABLE IF EXISTS `Comments`;
+DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Subforums`;
+DROP TABLE IF EXISTS `Users`;
+
+
+
 CREATE TABLE `Users` (
   `UserID` INT NOT NULL AUTO_INCREMENT,
   `Username` VARCHAR(45) NOT NULL,
@@ -16,7 +24,7 @@ CREATE TABLE `Subforums` (
   `CreationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `SubscriberCount` INT NOT NULL DEFAULT 0,
   `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`SubforumID`),
+  PRIMARY KEY (`SubforumID`)
   );
 
 CREATE TABLE `Posts` (
@@ -60,12 +68,14 @@ CREATE TABLE `Comments` (
     REFERENCES `Posts` (`PostID`)
     ON DELETE CASCADE -- If post deleted, delete its comments
     ON UPDATE CASCADE
-  CONSTRAINT `FK_Comments_ParentID`
-    FOREIGN KEY (`ParentID`)
-    REFERENCES `Comments` (`CommentID`)
-    ON DELETE CASCADE -- If parent comment deleted, delete replies
-    ON UPDATE CASCADE
   );
+
+ALTER TABLE `Comments` 
+ADD CONSTRAINT `FK_Comments_ParentID`
+  FOREIGN KEY (`ParentID`)
+  REFERENCES `Comments` (`CommentID`)
+  ON DELETE CASCADE -- If parent comment deleted, delete replies
+  ON UPDATE CASCADE;
 
 CREATE TABLE `Subscriptions` (
   `UserID` INT NOT NULL, -- FK to Users table
