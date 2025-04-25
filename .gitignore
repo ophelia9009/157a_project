@@ -1,1 +1,41 @@
 .DS_Store
+
+# frontend 
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.parcel-cache/
+frontend/.next/
+frontend/.vite/
+frontend/.turbo/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-lock.yaml
+frontend/.DS_Store
+
+# backend 
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.env
+
+# IntelliJ 
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# VS Code 
+.vscode/
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
