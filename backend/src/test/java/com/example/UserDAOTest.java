@@ -4,12 +4,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MyJDBCTest {
+public class UserDAOTest {
 
     @Test
     public void test_getConnection() {
 
-        MyJDBC myJDBC = new MyJDBC();
-        assertNotNull(myJDBC.getConnection());
+        UserDAO userDAO = new UserDAO();
+        assertNotNull(userDAO.getConnection());
     }
 }
