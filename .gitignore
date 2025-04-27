@@ -39,3 +39,5 @@ backend/.env
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+**/.smarttomcat/
