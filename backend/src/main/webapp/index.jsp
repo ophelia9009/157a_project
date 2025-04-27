@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.example.UserDAO, com.example.User, java.util.List" %>
+<%@ page import="com.example.dao.UserDAO, com.example.model.User, java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>

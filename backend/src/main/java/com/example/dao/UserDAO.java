@@ -1,9 +1,9 @@
-package com.example;
+package com.example.dao;
 
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
-import com.example.User;
+import com.example.model.User;
 
 public class UserDAO extends BaseDAO{
 
