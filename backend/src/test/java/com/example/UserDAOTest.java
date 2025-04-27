@@ -21,4 +21,13 @@ public class UserDAOTest {
         assertEquals( "flowery_pin", userDAO.getPasswordByUsername("flower_girl"));
 
     }
+
+    @Test
+    public void test_getAllUsers() {
+
+        UserDAO userDAO = new UserDAO();
+        assertTrue(userDAO.getAllUsers().size()>0);
+
+    }
+
 }

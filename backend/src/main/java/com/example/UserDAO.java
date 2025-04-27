@@ -1,6 +1,9 @@
 package com.example;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
+import com.example.User;
 
 public class UserDAO extends BaseDAO{
 
@@ -31,6 +34,31 @@ public class UserDAO extends BaseDAO{
         return  result;
 
 
+    }
+
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        try {
+            Connection conn = getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+            while (rs.next()) {
+                users.add(new User(
+                    gStr(rs, "UserID"),
+                    gStr(rs, "Username"),
+                    gStr(rs, "Password"),
+                    gStr(rs, "Email"),
+                    rs.getTimestamp("RegisterDate")
+                ));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get users", se);
+        }
+        return users;
     }
 
     public static String gStr(ResultSet rs, String s) {
