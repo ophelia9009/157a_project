@@ -6,6 +6,33 @@ public class UserDAO extends BaseDAO{
 
 
 
+    public String getPasswordByUsername(String username) {
+
+        String result = null;
+        try {
+            Connection conn = getConnection();
+            // Create and execute SQL statement (Step 3)
+            PreparedStatement stmt = conn.prepareStatement("SELECT Password FROM Users where Username = ?");
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            // Display the SQL query results
+            if (rs.next()) {
+                result = rs.getString("Password");
+            }
+            // Make sure our DB resources are released (step 4) in reverse order
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("");
+        }
+
+        return  result;
+
+
+    }
+
     public static String gStr(ResultSet rs, String s) {
         try {
             return rs.getString(s);

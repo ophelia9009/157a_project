@@ -12,4 +12,13 @@ public class UserDAOTest {
         UserDAO userDAO = new UserDAO();
         assertNotNull(userDAO.getConnection());
     }
+
+    @Test
+    public void test_getPasswordByUsername() {
+
+        UserDAO userDAO = new UserDAO();
+        assertNull(userDAO.getPasswordByUsername("DoesntExist"));
+        assertEquals( "flowery_pin", userDAO.getPasswordByUsername("flower_girl"));
+
+    }
 }
