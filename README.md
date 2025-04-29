@@ -11,7 +11,37 @@ To run the backend:
 $ cd backend
 $ 
 ```
+**Requirements:**
+Functional Requirements:
 
+- User Management:
+    - [ ] Allow new users to register for an account.
+    - [ ] Allow registered users to log in. 
+    - [ ] Allow registered users to view their own profile information.
+    - [ ] Allow registered users to update their own profile information.
+    - [ ] Allow registered users to delete their account.
+    - [ ] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
+    - [ ] whatever it is , it will use "select all from users" for example, user list page
+- Subforum Management:
+    - [ ] Allow registered users to create new subforums.
+    - [ ] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
+    - [ ] Allow registered users to delete the subforums they created. (Same note as above regarding ownership).
+    - [ ] Allow the public (and registered users) to view a list of subforums.
+    - [ ] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
+- Post Management:
+    - [ ] Allow registered users to create new posts within a specific subforum.
+    - [ ] Allow registered users to edit the posts they created.
+    - [ ] Allow registered users to delete the posts they created.
+    - [ ] Allow the public (and registered users) to view posts within a subforum.
+    - [ ] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
+- Comment Management:
+    - [ ] Allow registered users to create comments (reply) on posts.
+    - [ ] Allow registered users to edit the comments they created.
+    - [ ] Allow registered users to delete the comments they created.
+    - [ ] Allow the public (and registered users) to view comments on posts.
+    - [ ] Store comment information (CommentID, CommentText, UserID, CreationDate, Rating, PostID, ParentID, lastUpdated) in a database.
+General Access:
+    - [ ] Public users should be able to browse and view subforums, posts, and comments without registration.
 **TODO:**
 
 - Data Layer: Database Design
