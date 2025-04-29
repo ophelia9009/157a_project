@@ -36,6 +36,32 @@ public class UserDAO extends BaseDAO{
 
     }
 
+    public User getUserById(String userId) {
+        User user = null;
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE UserID = ?");
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(
+                    gStr(rs, "UserID"),
+                    gStr(rs, "Username"),
+                    gStr(rs, "Password"),
+                    gStr(rs, "Email"),
+                    rs.getTimestamp("RegisterDate")
+                );
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get user", se);
+        }
+        return user;
+    }
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try {
