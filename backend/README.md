@@ -1,3 +1,13 @@
+# Run Backend
+
+1. Install Tomcat using [Homebrew](https://formulae.brew.sh/formula/tomcat) or downloading [tomcat zip](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.104/bin/apache-tomcat-9.0.104.zip) directly
+2. Get tomcat installation path, (for example if installed using Homebrew, path looks like this `/opt/homebrew/Cellar/tomcat/11.0.6/libexec/`)
+3. Install "Smart Tomcat" IntelliJ IDEA plugin from marketplace ("Settings..." -> "Plugins" -> Search "Smart Tomcat" in marketplace)
+4. Configure "Smart Tomcat" IntelliJ IDEA plugin
+5. Click Green Arrow Icon to Run
+
+
+
 # User Management API Documentation
 
 This document describes the RESTful API endpoints for user management in the application.
