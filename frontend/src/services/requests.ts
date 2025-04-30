@@ -47,7 +47,7 @@ export const loginUser = async (username: string, password: string) => {
 // Get user profile
 export const getUserProfile = async (userId: number) => {
     try {
-        const response = await fetch(`${BASE_URL}/profiles/userId`);
+        const response = await fetch(`${BASE_URL}/${userId}`);
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -64,7 +64,7 @@ export const getUserProfile = async (userId: number) => {
 // Update user profile
 export const updateUserProfile = async (userId: number, username: string, email: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/profiles/${userId}`, {
+        const response = await fetch(`${BASE_URL}/${userId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const updateUserProfile = async (userId: number, username: string, email:
 // Delete user account
 export const deleteUserAccount = async (userId: number) => {
     try {
-        const response = await fetch(`${BASE_URL}/profiles/${userId}`, {
+        const response = await fetch(`${BASE_URL}/${userId}`, {
             method: "DELETE",
         });
 
