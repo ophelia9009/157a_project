@@ -9,7 +9,37 @@ public class UserDAO extends BaseDAO{
 
 
     /**
-     * this method is to fetch user password, mainly used for user login
+     * This method is to create a new user in database, maily used for user registeration.
+     * @param newUser
+     * @return
+     */
+    public User createUser(User newUser){
+        // 
+        return newUser;
+    }
+
+
+    /**
+     * This method is to update user, mainly used for user file edit.
+     * @param user
+     * @return
+     */
+    public User updateUser(User user){
+        return user;
+    }
+
+    /**
+     * This method is to delete user, maily used for user deletion.
+     * @param user
+     */
+
+    public void deleteUser(User user){
+        
+    }
+    
+
+    /**
+     * This method is to fetch user password, mainly used for user login.
      * @param username
      * @return
      */
@@ -41,7 +71,7 @@ public class UserDAO extends BaseDAO{
     }
 
     /**
-     * this method is to fetch user info by userID, mainly used for user profile page
+     * This method is to fetch user info by userID, mainly used for user profile page.
      * @param userId
      * @return
      */
@@ -70,6 +100,9 @@ public class UserDAO extends BaseDAO{
         }
         return user;
     }
+
+    
+
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
