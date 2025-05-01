@@ -99,4 +99,70 @@ public class UserProfileServletTest {
         writer.flush();
         assertTrue(stringWriter.toString().contains("Registration failed"));
     }
+    @Test
+    public void testDoPostLogin_Success() throws Exception {
+        // Setup request
+        when(request.getPathInfo()).thenReturn("/login");
+        
+        // Create test user data
+        User testUser = new User(
+            "123",
+            "testuser",
+            "testpass",
+            "test@example.com",
+            new Timestamp(System.currentTimeMillis())
+        );
+        
+        String json = new Gson().toJson(testUser);
+        BufferedReader reader = new BufferedReader(new StringReader(json));
+        when(request.getReader()).thenReturn(reader);
+        
+        // Mock DAO responses
+        when(userDAO.getPasswordByUsername(testUser.getUsername())).thenReturn(testUser.getPassword());
+        when(userDAO.getUserByUsername(testUser.getUsername())).thenReturn(testUser);
+        
+        // Execute
+        servlet.doPost(request, response);
+        
+        // Verify
+        verify(response).setContentType("application/json");
+        verify(response).setCharacterEncoding("UTF-8");
+        
+        writer.flush();
+        String responseJson = stringWriter.toString();
+        User responseUser = new Gson().fromJson(responseJson, User.class);
+        assertEquals(testUser.getUserID(), responseUser.getUserID());
+        assertEquals(testUser.getUsername(), responseUser.getUsername());
+        assertEquals(testUser.getEmail(), responseUser.getEmail());
+    }
+
+    @Test
+    public void testDoPostLogin_InvalidCredentials() throws Exception {
+        // Setup request
+        when(request.getPathInfo()).thenReturn("/login");
+        
+        // Create test user data
+        User testUser = new User(
+            "123",
+            "testuser",
+            "wrongpass", // incorrect password
+            "test@example.com",
+            new Timestamp(System.currentTimeMillis())
+        );
+        
+        String json = new Gson().toJson(testUser);
+        BufferedReader reader = new BufferedReader(new StringReader(json));
+        when(request.getReader()).thenReturn(reader);
+        
+        // Mock DAO response
+        when(userDAO.getPasswordByUsername(testUser.getUsername())).thenReturn("correctpass");
+        
+        // Execute
+        servlet.doPost(request, response);
+        
+        // Verify
+        verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        writer.flush();
+        assertTrue(stringWriter.toString().contains("Invalid credentials"));
+    }
 }

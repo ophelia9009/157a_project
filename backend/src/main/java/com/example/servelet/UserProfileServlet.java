@@ -42,22 +42,46 @@ public class UserProfileServlet extends HttpServlet {
             throws IOException {
         String pathInfo = request.getPathInfo();
         
-        if (pathInfo == null || !pathInfo.equals("/register")) {
+        if (pathInfo == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         try {
-            User newUser = gson.fromJson(request.getReader(), User.class);
-            User createdUser = userDAO.createUser(newUser);
-            
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            response.getWriter().write(gson.toJson(createdUser));
+            switch (pathInfo) {
+                case "/register":
+                    User newUser = gson.fromJson(request.getReader(), User.class);
+                    User createdUser = userDAO.createUser(newUser);
+                    
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                    response.getWriter().write(gson.toJson(createdUser));
+                    break;
+                    
+                case "/login":
+                    User loginUser = gson.fromJson(request.getReader(), User.class);
+                    String storedPassword = userDAO.getPasswordByUsername(loginUser.getUsername());
+                    
+                    if (storedPassword != null && storedPassword.equals(loginUser.getPassword())) {
+                        User user = userDAO.getUserByUsername(loginUser.getUsername());
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write(gson.toJson(user));
+                    } else {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.getWriter().write("{\"error\":\"Invalid credentials\"}");
+                    }
+                    break;
+                    
+                default:
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\":\"Registration failed\",\"details\":\"" +
+            response.getWriter().write("{\"error\":\"Operation failed\",\"details\":\"" +
                 e.getMessage() + "\"}");
         }
     }

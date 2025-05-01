@@ -147,6 +147,37 @@ public class UserDAO extends BaseDAO{
     }
 
     /**
+     * This method is to fetch user by username, mainly used for login.
+     * @param username
+     * @return User
+     */
+    public User getUserByUsername(String username) {
+        User user = null;
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE Username = ?");
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(
+                    rs.getString("UserID"),
+                    rs.getString("Username"),
+                    rs.getString("Password"),
+                    rs.getString("Email"),
+                    rs.getTimestamp("RegisterDate")
+                );
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get user", se);
+        }
+        return user;
+    }
+
+    /**
      * This method is to fetch user info by userID, mainly used for user profile page.
      * @param userId
      * @return User
