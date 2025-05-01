@@ -93,8 +93,26 @@ public class UserDAO extends BaseDAO{
      */
 
     public void deleteUser(User user){
-        // TODO: Implement it
-
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(
+                "DELETE FROM users WHERE UserID = ?"
+            );
+            
+            stmt.setString(1, user.getUserID());
+            
+            int affectedRows = stmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting user failed, no rows affected.");
+            }
+            
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to delete user", se);
+        }
     }
 
 

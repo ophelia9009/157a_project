@@ -107,4 +107,35 @@ public class UserDAOTest {
         assertEquals(updatedUser.getPassword(), fetchedUser.getPassword());
         assertEquals(updatedUser.getEmail(), fetchedUser.getEmail());
     }
+
+    @Test
+    public void test_deleteUser() {
+        UserDAO userDAO = new UserDAO();
+        
+        // Create test user
+        long timestamp = System.currentTimeMillis();
+        User testUser = new User(
+            null,
+            "delete_test_" + timestamp,
+            "testpass",
+            "delete_test_" + timestamp + "@example.com",
+            new Timestamp(timestamp)
+        );
+        
+        // Create user in DB
+        User createdUser = userDAO.createUser(testUser);
+        assertNotNull(createdUser);
+        assertNotNull(createdUser.getUserID());
+        
+        // Verify user exists
+        User fetchedUser = userDAO.getUserById(createdUser.getUserID());
+        assertNotNull(fetchedUser);
+        
+        // Delete the user
+        userDAO.deleteUser(createdUser);
+        
+        // Verify user no longer exists
+        User deletedUser = userDAO.getUserById(createdUser.getUserID());
+        assertNull(deletedUser);
+    }
 }
