@@ -8,7 +8,11 @@ import com.example.model.User;
 public class UserDAO extends BaseDAO{
 
 
-
+    /**
+     * this method is to fetch user password, mainly used for user login
+     * @param username
+     * @return
+     */
     public String getPasswordByUsername(String username) {
 
         String result = null;
@@ -36,6 +40,11 @@ public class UserDAO extends BaseDAO{
 
     }
 
+    /**
+     * this method is to fetch user info by userID, mainly used for user profile page
+     * @param userId
+     * @return
+     */
     public User getUserById(String userId) {
         User user = null;
         try {
