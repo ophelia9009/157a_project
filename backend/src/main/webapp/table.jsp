@@ -64,5 +64,51 @@
             </tr>
             <% } %>
         </table>
+        <h1>Selected Post List With Condition</h1>
+                        <%
+                            List<Map<String, Object>> posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+                            "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, null, null);
+                        %>
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>BodyText</th>
+                                <th>Rating</th>
+                                <th>Poster</th>
+                            </tr>
+                            <% for(Map<String, Object> post : posts) { %>
+                            <tr>
+                                <td><%= post.get("PostID") %></td>
+                                <td><%= post.get("Title") %></td>
+                                <td><%= post.get("BodyText") %></td>
+                                <td><%= post.get("Rating") %></td>
+                                <td><%= post.get("UserID") %></td>
+                            </tr>
+                            <% } %>
+                        </table>
+        <h1>Selected Post List</h1>
+                <%
+                    posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+                    "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
+                %>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>BodyText</th>
+                        <th>Rating</th>
+                        <th>Poster</th>
+                    </tr>
+                    <% for(Map<String, Object> post : posts) { %>
+                    <tr>
+                        <td><%= post.get("PostID") %></td>
+                        <td><%= post.get("Title") %></td>
+                        <td><%= post.get("BodyText") %></td>
+                        <td><%= post.get("Rating") %></td>
+                        <td><%= post.get("UserID") %></td>
+                    </tr>
+                    <% } %>
+                </table>
 </body>
 </html>

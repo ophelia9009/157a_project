@@ -14,7 +14,7 @@ public class UserDAO extends BaseDAO{
     /**
      * This method is to create a new user in database, maily used for user registeration.
      * @param newUser
-     * @return
+     * @return User
      */
     public User createUser(User newUser){
         try {
@@ -57,7 +57,7 @@ public class UserDAO extends BaseDAO{
     /**
      * This method is to update user, mainly used for user file edit.
      * @param user
-     * @return
+     * @return User
      */
     public User updateUser(User user){
         try {
@@ -119,15 +119,14 @@ public class UserDAO extends BaseDAO{
     /**
      * This method is to fetch user password, mainly used for user login.
      * @param username
-     * @return
+     * @return String
      */
     public String getPasswordByUsername(String username) {
-
         String result = null;
         try {
             Connection conn = getConnection();
             // Create and execute SQL statement (Step 3)
-            PreparedStatement stmt = conn.prepareStatement("SELECT Password FROM Users where Username = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT Password FROM Users WHERE Username = ?");
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             // Display the SQL query results
@@ -151,7 +150,7 @@ public class UserDAO extends BaseDAO{
     /**
      * This method is to fetch user info by userID, mainly used for user profile page.
      * @param userId
-     * @return
+     * @return User
      */
     public User getUserById(String userId) {
         User user = null;
@@ -213,7 +212,6 @@ public class UserDAO extends BaseDAO{
         Connection connection = getConnection();
         PreparedStatement stmt = connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
-
         while (rs.next()) {
             Map<String, Object> row = new HashMap<>();
             for (String col : columns) {
@@ -226,15 +224,28 @@ public class UserDAO extends BaseDAO{
         stmt.close();
         return result;
     }
-    public List<Map<String, Object>> getTableWithCondition(String table, String[] columns, String condition, Object[] condParams) throws SQLException {
-        List<Map<String, Object>> result = new ArrayList<>();
-        String sql = "SELECT * FROM " + table + " WHERE " + condition;
-        Connection connection = getConnection();
-        PreparedStatement stmt = connection.prepareStatement(sql);
 
-        for (int i = 0; i < condParams.length; i++) {
-            stmt.setObject(i + 1, condParams[i]);
+    //List<Map<String, Object>> posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+    //                            "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, null, null);
+    // RETURNS SELECT * FROM posts
+    // posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+    //                    "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
+    // RETURNS SELECT * FROM posts WHERE PostID < 10
+    public List<Map<String, Object>> getTableWithCondition(String table, String[] columns, String condition, Object[] parameters) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM " + table);
+        Connection connection = getConnection();
+
+        if(condition != null && !condition.isBlank()) {
+            sql.append(" WHERE ").append(condition);
         }
+
+        PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+        if(parameters != null)
+            for (int i = 0; i < parameters.length; i++) {
+                stmt.setObject(i + 1, parameters[i]);
+            }
 
         ResultSet rs = stmt.executeQuery();
 
