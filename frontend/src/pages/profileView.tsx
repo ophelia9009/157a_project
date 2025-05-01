@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/requests";
+import { getUserProfile, updateUserProfile, deleteUserAccount } from "../services/userrequests";
 
 const ProfileView: React.FC = () => {
     const [userId] = useState<number>(1); // Replace with actual user ID (e.g., from auth context or route params)

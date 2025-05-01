@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api/users"; // TODO REPLACE WITH ACTUAL THING
+const BASE_URL = "http://localhost:8080/backend/api/users"; // TODO REPLACE WITH ACTUAL THING
 
 export const registerUser = async (username: string, password: string, email: string) => {
     try {
