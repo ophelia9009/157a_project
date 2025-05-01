@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import Searchbar from "../components/Searchbar";
 
 
 interface Post { // I'm creating the functionality for getting posts in a diff file
@@ -34,6 +35,7 @@ const Home: React.FC = () => {
     return (
         <div> 
             <Navbar></Navbar> 
+            <Searchbar></Searchbar>
 
             <div className="post-container"> // TODO: THIS WILL USE A METHOD FOR LOADING POSTS (written in a diff file) 
                 {posts.map((post) => (
