@@ -20,14 +20,13 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                "INSERT INTO users (Username, Password, Email, RegisterDate) VALUES (?, ?, ?, ?)",
+                "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
             
             stmt.setString(1, newUser.getUsername());
             stmt.setString(2, newUser.getPassword());
             stmt.setString(3, newUser.getEmail());
-            stmt.setTimestamp(4, newUser.getRegisterDate());
             
             int affectedRows = stmt.executeUpdate();
             

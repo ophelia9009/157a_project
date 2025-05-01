@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet("/api/users/*")
 public class UserProfileServlet extends HttpServlet {
-    private final UserDAO userDAO = new UserDAO();
+    UserDAO userDAO = new UserDAO();
     private final Gson gson = new Gson();
 
     @Override
@@ -34,6 +34,31 @@ public class UserProfileServlet extends HttpServlet {
             response.getWriter().write("{\"error\":\"User not found\"}");
         } else {
             response.getWriter().write(gson.toJson(user));
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String pathInfo = request.getPathInfo();
+        
+        if (pathInfo == null || !pathInfo.equals("/register")) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        try {
+            User newUser = gson.fromJson(request.getReader(), User.class);
+            User createdUser = userDAO.createUser(newUser);
+            
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            response.getWriter().write(gson.toJson(createdUser));
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Registration failed\",\"details\":\"" +
+                e.getMessage() + "\"}");
         }
     }
 }
