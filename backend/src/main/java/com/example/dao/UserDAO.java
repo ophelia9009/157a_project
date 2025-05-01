@@ -60,8 +60,31 @@ public class UserDAO extends BaseDAO{
      * @return
      */
     public User updateUser(User user){
-        // TODO: Implement it
-        return user;
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(
+                "UPDATE users SET Username = ?, Password = ?, Email = ? WHERE UserID = ?"
+            );
+            
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getUserID());
+            
+            int affectedRows = stmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Updating user failed, no rows affected.");
+            }
+            
+            stmt.close();
+            conn.close();
+            
+            return user;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to update user", se);
+        }
     }
 
     /**
