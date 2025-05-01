@@ -1,8 +1,11 @@
 package com.example.dao;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+
 import com.example.model.User;
 
 public class UserDAO extends BaseDAO{
@@ -36,7 +39,7 @@ public class UserDAO extends BaseDAO{
 
     public void deleteUser(User user){
         // TODO: Implement it
-        
+
     }
 
 
@@ -86,10 +89,10 @@ public class UserDAO extends BaseDAO{
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(
-                    gStr(rs, "UserID"),
-                    gStr(rs, "Username"),
-                    gStr(rs, "Password"),
-                    gStr(rs, "Email"),
+                    rs.getString("UserID"),
+                    rs.getString("Username"),
+                    rs.getString("Password"),
+                    rs.getString("Email"),
                     rs.getTimestamp("RegisterDate")
                 );
             }
@@ -103,7 +106,7 @@ public class UserDAO extends BaseDAO{
         return user;
     }
 
-    
+
 
 
     public List<User> getAllUsers() {
@@ -114,10 +117,10 @@ public class UserDAO extends BaseDAO{
             ResultSet rs = stmt.executeQuery("SELECT * FROM users");
             while (rs.next()) {
                 users.add(new User(
-                    gStr(rs, "UserID"),
-                    gStr(rs, "Username"),
-                    gStr(rs, "Password"),
-                    gStr(rs, "Email"),
+                    rs.getString("UserID"),
+                    rs.getString("Username"),
+                    rs.getString("Password"),
+                    rs.getString("Email"),
                     rs.getTimestamp("RegisterDate")
                 ));
             }
@@ -130,15 +133,65 @@ public class UserDAO extends BaseDAO{
         }
         return users;
     }
+    //each map is a tuple, the table is a list of tuples
+    public List<Map<String, Object>> getTable(String table, String[] columns) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        String sql = "SELECT * FROM " + table;
+        Connection connection = getConnection();
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery();
 
-    public static String gStr(ResultSet rs, String s) {
-        try {
-            return rs.getString(s);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (String col : columns) {
+                row.put(col, rs.getObject(col));
+            }
+            result.add(row);
         }
+
+        rs.close();
+        stmt.close();
+        return result;
+    }
+    public List<Map<String, Object>> getTableWithCondition(String table, String[] columns, String condition, Object[] condParams) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        String sql = "SELECT * FROM " + table + " WHERE " + condition;
+        Connection connection = getConnection();
+        PreparedStatement stmt = connection.prepareStatement(sql);
+
+        for (int i = 0; i < condParams.length; i++) {
+            stmt.setObject(i + 1, condParams[i]);
+        }
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (String col : columns) {
+                row.put(col, rs.getObject(col));
+            }
+            result.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        return result;
     }
 
+    public static void printTable(String table, String[] columns, Connection connection) throws SQLException{
+        System.out.println(table.toUpperCase());
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
+        ResultSet rs = statement.executeQuery();
+        while(rs.next()) {
+            for (String column : columns) {
+                System.out.print(rs.getString(column) + ", ");
+            }
+            System.out.println();
+        }
+        rs.close();
+        statement.close();
+    }
+    //1234, password
     public static void main(String[] args) {
         Connection connection = null;
         try {
@@ -147,52 +200,19 @@ public class UserDAO extends BaseDAO{
                     "root",
                     "1234"
             );
-            Statement statement = connection.createStatement();
-            System.out.println("USERS");
-            ResultSet rs = statement.executeQuery("SELECT * FROM users");
-            while (rs.next()) {
-                System.out.println(gStr(rs, "UserID") + ", " + gStr(rs, "Username") + ", " +
-                        gStr(rs, "Password") + ", " + gStr(rs, "Email") + ", " + gStr(rs, "RegisterDate"));
-            }
-            System.out.println("SUBFORUMS");
-            Statement statement2 = connection.createStatement();
-            rs = statement2.executeQuery("SELECT * FROM subforums");
-            while (rs.next()) {
-                System.out.println(gStr(rs, "SubforumID") + ", " + gStr(rs, "Name") + ", " +
-                        gStr(rs, "Description") + ", " + gStr(rs, "CreationDate") + ", " +
-                        gStr(rs, "SubscriberCount") + ", " + gStr(rs, "LastUpdated"));
-            }
-            System.out.println("POSTS");
-            Statement statement3 = connection.createStatement();
-            rs = statement3.executeQuery("SELECT * FROM posts");
-            while (rs.next()) {
-                System.out.println(gStr(rs, "PostID") + ", " + gStr(rs, "Title") + ", " + gStr(rs, "BodyText")
-                        + ", " + gStr(rs, "CreationDate") + ", " + gStr(rs, "Rating") + ", " +
-                        gStr(rs, "UserID") + ", " + gStr(rs, "SubforumID"));
-            }
-            System.out.println("COMMENTS");
-            Statement statement4 = connection.createStatement();
-            rs = statement4.executeQuery("SELECT * FROM comments");
-            while (rs.next()) {
-                System.out.println(gStr(rs, "CommentID") + ", " + gStr(rs, "CommentText") + ", " +
-                        gStr(rs, "CreationDate") + ", " + gStr(rs, "Rating") + ", " + gStr(rs, "UserID") + ", "
-                        + gStr(rs, "PostID") + ", " + gStr(rs, "ParentID") + ", " + gStr(rs, "LastUpdated"));
-            }
-            System.out.println("SUBSCRIPTIONS");
-            Statement statement5 = connection.createStatement();
-            rs = statement5.executeQuery("SELECT * FROM subscriptions");
-            while (rs.next()) {
-                System.out.println(gStr(rs, "UserID") + ", " + gStr(rs, "SubforumID") + ", " +
-                        gStr(rs, "SubscriptionDate"));
-            }
+
+            printTable("users", new String[]{"UserID", "Username", "Password", "Email", "RegisterDate"},
+                    connection);
+            printTable("subforums", new String[]{"SubforumID", "Name", "Description", "CreationDate",
+                    "SubscriberCount", "LastUpdated"}, connection);
+            printTable("posts", new String[]{"PostID", "Title", "BodyText", "CreationDate", "Rating", "UserID",
+                    "SubforumID"}, connection);
+            printTable("comments", new String[]{"CommentID", "CommentText", "CreationDate", "Rating",
+                    "UserID", "PostID", "ParentID", "LastUpdated"}, connection);
+            printTable("subscriptions", new String[]{"UserID", "SubforumID", "SubscriptionDate"}, connection);
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
