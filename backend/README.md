@@ -91,7 +91,7 @@ All endpoints are relative to `/api/users`
   ```
 
 ### Update User Profile
-- **Method**: PUT
+- **Method**: PATCH
 - **Path**: `/{userId}`
 - **Request Body** (partial updates allowed):
   ```json
@@ -166,3 +166,106 @@ User information is stored with these fields:
 
 ## Example Implementation
 See `UsersServlet.java` for reference implementation pattern.
+
+
+# Subforum Management API Documentation
+
+This document describes the RESTful API endpoints for subforum management in the application.
+
+## Base URL
+All endpoints are relative to `/api/subforums`
+
+## Endpoints
+
+### Register New Subforum
+- **Method**: POST
+- **Path**: `/`
+- **Request Body**:
+  ```json
+  {
+    "Name": "newsubforum",
+    "Description": "newdescription"
+  }
+  ```
+- **Success Response (201 Created)**:
+  ```json
+  {
+    "SubforumID": 101,
+    "Name": "newsubforum",
+    "Description": "newdescription",
+    "CreationDate": "2025-04-29T18:48:00Z"
+  }
+  ```
+- **Error Response (400 Bad Request)**:
+  ```json
+  {
+    "error": "Validation failed",
+    "details": ["Name invalid (must be unique)"]
+  }
+
+### Get Subforum View
+- **Method**: GET
+- **Path**: `/{SubforumID}`
+- **Success Response (200 OK)**:
+  ```json
+  {
+    "SubforumID": 101,
+    "Name": "existingsubforum",
+    "Description": "description",
+    "CreationDate": "2025-04-29T18:48:00Z"
+  }
+  ```
+- **Error Response (404 Not Found)**:
+  ```json
+  {
+    "error": "Subforum {SubforumID} not found"
+  }
+  ```
+
+### Update Subforum
+- **Method**: PATCH
+- **Path**: `/{SubforumID}`
+- **Request Body**:
+  ```json
+  {
+    "Name": "updatedsubforum",
+    "Description": "updateddescription"
+  }
+  ```
+- **Success Response (200 OK)**:
+  ```json
+  {
+    "SubforumID": 101,
+    "Name": "updatedsubforum",
+    "Description": "updateddescription",
+    "LastUpdated": "2025-04-30T18:48:00Z"
+  }
+  ```
+- **Error Response (400 Bad Request)**:
+  ```json
+  {
+    "error": "Name invalid (must be unique)"
+  }
+  ```
+
+### Delete Subforum 
+- **Method**: DELETE
+- **Path**: `/{SubforumID}`
+- **Success Response**: 204 No Content (empty body)
+- **Error Response (404 Not Found)**:
+  ```json
+  {
+    "error": "Subforum {SubforumID} not found"
+  }
+
+## Data Model
+Subforum information is stored with these fields:
+- SubforumID (auto-generated)
+- Name (unique)
+- Description
+- CreationDate (auto-generated)
+- SubscriberCount (count of Subscriptions with this SubforumID)
+- LastUpdated (auto-generated)
+
+## Example Implementation
+See `SubforumsServlet.java` for reference implementation pattern.

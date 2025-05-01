@@ -4,19 +4,19 @@ import com.example.dao.UserDAO;
 import com.example.model.User;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/api/users/*")
-public class UserProfileServlet extends HttpServlet {
+public class UserProfileServlet extends BaseServlet {
     UserDAO userDAO = new UserDAO();
     private final Gson gson = new Gson();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        setCorsHeaders(response);
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID required");
@@ -40,6 +40,7 @@ public class UserProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        setCorsHeaders(response);
         String pathInfo = request.getPathInfo();
         
         if (pathInfo == null) {
@@ -88,6 +89,7 @@ public class UserProfileServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        setCorsHeaders(response);
         String pathInfo = request.getPathInfo();
         
         if (pathInfo == null || pathInfo.equals("/")) {
@@ -131,6 +133,7 @@ public class UserProfileServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        setCorsHeaders(response);
         String pathInfo = request.getPathInfo();
         
         if (pathInfo == null || pathInfo.equals("/")) {
