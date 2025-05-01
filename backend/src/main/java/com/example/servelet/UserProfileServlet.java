@@ -128,4 +128,35 @@ public class UserProfileServlet extends HttpServlet {
                 e.getMessage() + "\"}");
         }
     }
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String pathInfo = request.getPathInfo();
+        
+        if (pathInfo == null || pathInfo.equals("/")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID required");
+            return;
+        }
+
+        String userId = pathInfo.substring(1); // Remove leading slash
+        
+        try {
+            boolean deleted = userDAO.deleteUserById(userId);
+            
+            if (deleted) {
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            } else {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"error\":\"User not found\"}");
+            }
+        } catch (Exception e) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Delete failed\",\"details\":\"" +
+                e.getMessage() + "\"}");
+        }
+    }
 }

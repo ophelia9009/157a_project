@@ -114,6 +114,32 @@ public class UserDAO extends BaseDAO{
         }
     }
 
+    /**
+     * This method deletes a user by ID directly
+     * @param userId The ID of the user to delete
+     * @return boolean indicating if deletion was successful
+     */
+    public boolean deleteUserById(String userId) {
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(
+                "DELETE FROM users WHERE UserID = ?"
+            );
+            
+            stmt.setString(1, userId);
+            
+            int affectedRows = stmt.executeUpdate();
+            
+            stmt.close();
+            conn.close();
+            
+            return affectedRows > 0;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to delete user", se);
+        }
+    }
+
 
     /**
      * This method is to fetch user password, mainly used for user login.

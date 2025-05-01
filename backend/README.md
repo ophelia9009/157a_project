@@ -130,12 +130,30 @@ All endpoints are relative to `/api/users`
 ### Delete User Account
 - **Method**: DELETE
 - **Path**: `/{userId}`
-- **Success Response**: 204 No Content (empty body)
-- **Error Response (404 Not Found)**:
+- **Behavior**:
+  - Permanently deletes the user account with the specified ID
+  - Returns empty response on success
+  - Returns error if user doesn't exist
+- **Success Response**:
+  - Status: 204 No Content
+  - Body: Empty
+- **Error Responses**:
+  - 400 Bad Request (invalid user ID format):
+  ```json
+  {
+    "error": "Delete failed",
+    "details": "Invalid user ID"
+  }
+  ```
+  - 404 Not Found (user doesn't exist):
   ```json
   {
     "error": "User not found"
   }
+  ```
+- **Example Request**:
+  ```http
+  DELETE /api/users/123 HTTP/1.1
   ```
 
 ## Data Model

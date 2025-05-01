@@ -235,4 +235,47 @@ public class UserProfileServletTest {
         writer.flush();
         assertTrue(stringWriter.toString().contains("Update failed"));
     }
+    @Test
+    public void testDoDelete_Success() throws Exception {
+        // Setup request with valid user ID
+        when(request.getPathInfo()).thenReturn("/123");
+        
+        // Mock DAO response
+        when(userDAO.deleteUserById("123")).thenReturn(true);
+        
+        // Execute
+        servlet.doDelete(request, response);
+        
+        // Verify
+        verify(response).setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+    @Test
+    public void testDoDelete_UserNotFound() throws Exception {
+        // Setup request with valid user ID
+        when(request.getPathInfo()).thenReturn("/123");
+        
+        // Mock DAO response
+        when(userDAO.deleteUserById("123")).thenReturn(false);
+        
+        // Execute
+        servlet.doDelete(request, response);
+        
+        // Verify
+        verify(response).setStatus(HttpServletResponse.SC_NOT_FOUND);
+        writer.flush();
+        assertTrue(stringWriter.toString().contains("User not found"));
+    }
+
+    @Test
+    public void testDoDelete_InvalidPath() throws Exception {
+        // Setup request with invalid path (no user ID)
+        when(request.getPathInfo()).thenReturn("/");
+        
+        // Execute
+        servlet.doDelete(request, response);
+        
+        // Verify
+        verify(response).sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID required");
+    }
 }
