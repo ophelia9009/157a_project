@@ -99,6 +99,7 @@ public class UserProfileServletTest {
         writer.flush();
         assertTrue(stringWriter.toString().contains("Registration failed"));
     }
+
     @Test
     public void testDoPostLogin_Success() throws Exception {
         // Setup request
@@ -162,7 +163,76 @@ public class UserProfileServletTest {
         
         // Verify
         verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        verify(response).setContentType("application/json");
+        verify(response).setCharacterEncoding("UTF-8");
         writer.flush();
         assertTrue(stringWriter.toString().contains("Invalid credentials"));
+    }
+
+    @Test
+    public void testDoPut_Success() throws Exception {
+        // Setup request
+        when(request.getPathInfo()).thenReturn("/123");
+        
+        // Create test user data
+        User updatedUser = new User(
+            "123",
+            "updateduser",
+            "newpass",
+            "newemail@example.com",
+            new Timestamp(System.currentTimeMillis())
+        );
+        
+        String json = new Gson().toJson(updatedUser);
+        BufferedReader reader = new BufferedReader(new StringReader(json));
+        when(request.getReader()).thenReturn(reader);
+        
+        // Mock DAO response
+        when(userDAO.updateUser(any(User.class))).thenReturn(updatedUser);
+        
+        // Execute
+        servlet.doPut(request, response);
+        
+        // Verify
+        verify(response).setContentType("application/json");
+        verify(response).setCharacterEncoding("UTF-8");
+        
+        writer.flush();
+        String responseJson = stringWriter.toString();
+        User responseUser = new Gson().fromJson(responseJson, User.class);
+        assertEquals(updatedUser.getUserID(), responseUser.getUserID());
+        assertEquals(updatedUser.getUsername(), responseUser.getUsername());
+        assertEquals(updatedUser.getEmail(), responseUser.getEmail());
+    }
+
+    @Test
+    public void testDoPut_InvalidUserId() throws Exception {
+        // Setup request with no user ID
+        when(request.getPathInfo()).thenReturn("/");
+        
+        // Execute
+        servlet.doPut(request, response);
+        
+        // Verify
+        verify(response).sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID required");
+    }
+
+    @Test
+    public void testDoPut_InvalidJson() throws Exception {
+        // Setup request
+        when(request.getPathInfo()).thenReturn("/123");
+        
+        BufferedReader reader = new BufferedReader(new StringReader("invalid json"));
+        when(request.getReader()).thenReturn(reader);
+        
+        // Execute
+        servlet.doPut(request, response);
+        
+        // Verify
+        verify(response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        verify(response).setContentType("application/json");
+        verify(response).setCharacterEncoding("UTF-8");
+        writer.flush();
+        assertTrue(stringWriter.toString().contains("Update failed"));
     }
 }

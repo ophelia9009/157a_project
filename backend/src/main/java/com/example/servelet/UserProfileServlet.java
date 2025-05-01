@@ -85,4 +85,47 @@ public class UserProfileServlet extends HttpServlet {
                 e.getMessage() + "\"}");
         }
     }
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String pathInfo = request.getPathInfo();
+        
+        if (pathInfo == null || pathInfo.equals("/")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "User ID required");
+            return;
+        }
+
+        String userId = pathInfo.substring(1); // Remove leading slash
+        
+        try {
+            // Get existing user data
+            User existingUser = userDAO.getUserById(userId);
+            if (existingUser == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found");
+                return;
+            }
+
+            // Parse update fields (only password and email should be updated)
+            User updateFields = gson.fromJson(request.getReader(), User.class);
+            
+            // Create updated user with existing data plus new password/email
+            User updatedUser = new User(
+                userId,
+                existingUser.getUsername(), // Keep original username
+                updateFields.getPassword() != null ? updateFields.getPassword() : existingUser.getPassword(),
+                updateFields.getEmail() != null ? updateFields.getEmail() : existingUser.getEmail(),
+                existingUser.getRegisterDate() // Keep original registration date
+            );
+            
+            User result = userDAO.updateUser(updatedUser);
+            
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(gson.toJson(result));
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Update failed\",\"details\":\"" +
+                e.getMessage() + "\"}");
+        }
+    }
 }

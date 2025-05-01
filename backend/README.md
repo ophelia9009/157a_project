@@ -93,26 +93,37 @@ All endpoints are relative to `/api/users`
 ### Update User Profile
 - **Method**: PUT
 - **Path**: `/{userId}`
-- **Request Body**:
+- **Request Body** (partial updates allowed):
   ```json
   {
-    "username": "updateduser",
+    "password": "newpassword123",
     "email": "newemail@example.com"
   }
   ```
+- **Behavior**:
+  - Only password and email fields are updated
+  - Username and registration date remain unchanged
+  - Missing fields preserve their current values
 - **Success Response (200 OK)**:
   ```json
   {
     "userId": 100,
-    "username": "updateduser",
-    "email": "newemail@example.com",
-    "registerDate": "2025-04-27T10:30:00Z"
+    "username": "originaluser",  // Unchanged
+    "email": "newemail@example.com",  // Updated
+    "registerDate": "2025-04-27T10:30:00Z"  // Unchanged
   }
   ```
-- **Error Response (400 Bad Request)**:
+- **Error Responses**:
+  - 400 Bad Request (invalid email format):
   ```json
   {
     "error": "Email format invalid"
+  }
+  ```
+  - 404 Not Found (user doesn't exist):
+  ```json
+  {
+    "error": "User not found"
   }
   ```
 
