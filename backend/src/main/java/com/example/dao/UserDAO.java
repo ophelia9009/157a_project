@@ -17,8 +17,40 @@ public class UserDAO extends BaseDAO{
      * @return
      */
     public User createUser(User newUser){
-        // TODO: Implement it
-        return newUser;
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(
+                "INSERT INTO users (Username, Password, Email, RegisterDate) VALUES (?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+            );
+            
+            stmt.setString(1, newUser.getUsername());
+            stmt.setString(2, newUser.getPassword());
+            stmt.setString(3, newUser.getEmail());
+            stmt.setTimestamp(4, newUser.getRegisterDate());
+            
+            int affectedRows = stmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    newUser.setUserID(generatedKeys.getString(1));
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+            
+            stmt.close();
+            conn.close();
+            
+            return newUser;
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to create user", se);
+        }
     }
 
 
