@@ -4,20 +4,20 @@ import com.example.dao.UserDAO;
 import com.example.model.User;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/api/users")
-public class UsersServlet extends HttpServlet {
+public class UsersServlet extends BaseServlet {
     private final UserDAO userDAO = new UserDAO();
     private final Gson gson = new Gson();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        setCorsHeaders(response);
         List<User> users = userDAO.getAllUsers();
         
         response.setContentType("application/json");
