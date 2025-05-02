@@ -23,8 +23,8 @@
 </head>
 <body>
     <div class="nav-links">
-        <a href="login.jsp">Login</a>
-        <a href="signup.jsp">Sign Up</a>
+        <a href="auth/login.jsp">Login</a>
+        <a href="auth/signup.jsp">Sign Up</a>
     </div>
     <div class="welcome">
         <h1>Welcome to Our Forum</h1>

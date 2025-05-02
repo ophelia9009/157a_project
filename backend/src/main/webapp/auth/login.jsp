@@ -59,7 +59,7 @@
                     error = "Invalid username or password";
                 } else {
                     session.setAttribute("user", user);
-                    response.sendRedirect("home.jsp");
+                    response.sendRedirect("../forum/home.jsp");
                     return;
                 }
             } catch (Exception e) {
