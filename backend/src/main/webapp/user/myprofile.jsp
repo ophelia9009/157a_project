@@ -3,14 +3,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Forum Home</title>
+    <title>My Profile</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
-    <div class="nav-links">
-        <a href="../user/myprofile.jsp">My Profile</a>
-        <a href="../index.jsp">Logout</a>
-    </div>
-    <h1>Sub Forum List</h1>
+    <h1>My Profile</h1>
+    <p>TODO: add User Profile Display</p>
+    <button>Edit</button>
 </body>
 </html>
