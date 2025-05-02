@@ -1,4 +1,9 @@
+<%--
+  table.jsp - Displays database tables for users, subforums and posts
+  Used for administrative viewing of forum data
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- Import required DAOs, models and utilities --%>
 <%@ page import="edu.sjsu.cs157a.forum.dao.UserDAO, edu.sjsu.cs157a.forum.dao.BaseDAO, edu.sjsu.cs157a.forum.model.User, java.util.List, java.util.Map" %>
 <!DOCTYPE html>
 <html>
@@ -22,8 +27,10 @@
     </style>
 </head>
 <body>
+    <%-- Users table section --%>
     <h1>User List</h1>
     <%
+        // Get all users from database
         UserDAO userDAO = new UserDAO();
         List<Map<String, Object>> users = userDAO.getTable("users", new String[]{"UserID", "Username", "Password", "Email", "RegisterDate"});
     %>
@@ -43,12 +50,14 @@
         </tr>
         <% } %>
     </table>
+    <%-- Subforums table section --%>
     <h1>Subforum List</h1>
     <%
-                BaseDAO baseDAO = new BaseDAO();
-                List<Map<String, Object>> subforums = baseDAO.getTable("subforums", new String[]{"SubforumID", "Name", "Description", "CreationDate",
-                                                                                                                 "SubscriberCount", "LastUpdated"});
-            %>
+        // Get all subforums from database
+        BaseDAO baseDAO = new BaseDAO();
+        List<Map<String, Object>> subforums = baseDAO.getTable("subforums", new String[]{"SubforumID", "Name", "Description", "CreationDate",
+                                                                                        "SubscriberCount", "LastUpdated"});
+    %>
             <table>
                 <tr>
                     <th>ID</th>
@@ -65,11 +74,13 @@
                 </tr>
                 <% } %>
             </table>
-        <h1>Selected Post List With Condition</h1>
-                <%
-                    List<Map<String, Object>> posts = baseDAO.getTableWithCondition("posts", new String[]{"PostID",
-                    "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
-                %>
+    <%-- Posts table section with condition --%>
+    <h1>Selected Post List With Condition</h1>
+    <%
+        // Get posts with ID < 10 from database
+        List<Map<String, Object>> posts = baseDAO.getTableWithCondition("posts", new String[]{"PostID",
+        "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
+    %>
                 <table>
                     <tr>
                         <th>ID</th>

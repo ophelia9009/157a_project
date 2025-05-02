@@ -1,3 +1,7 @@
+<%--
+  myprofile.jsp - User profile management page
+  Displays profile information and handles account actions
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="edu.sjsu.cs157a.forum.model.User" %>
 <!DOCTYPE html>
@@ -12,6 +16,7 @@
         <a href="../forum/home.jsp">View Forum</a>
         <a href="../index.jsp">Logout</a>
     </div>
+    <%-- Check user session --%>
     <%
     User user = (User) session.getAttribute("user");
     if (user == null) {
@@ -19,13 +24,17 @@
         return;
     }
     %>
+    <%-- Profile display section --%>
     <h1>My Profile</h1>
     <div class="profile-info">
         <p>TODO:  add User Profile Display</p>
     </div>
-    <button>Edit</button>
-    <button class="delete-btn" onclick="confirmDelete()">Delete My Account</button>
+
+    <%-- Profile action buttons --%>
+    <button>Edit(TODO)</button>
+    <button class="delete-btn" onclick="confirmDelete()">Delete My Account(TODO)</button>
     
+    <%-- JavaScript functions --%>
     <script>
     function confirmDelete() {
         if(confirm('Are you sure you want to delete your account? This cannot be undone.')) {
