@@ -98,4 +98,4 @@ CREATE TABLE `Subscriptions` (
 
 
 CREATE USER 'appuser'@'%' IDENTIFIED BY 'Password!1';
-GRANT SELECT ON sf_db.* TO 'appuser'@'%';
+GRANT ALL ON sf_db.* TO 'appuser'@'%';
