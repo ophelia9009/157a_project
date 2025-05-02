@@ -24,5 +24,15 @@
         <p>TODO:  add User Profile Display</p>
     </div>
     <button>Edit</button>
+    <button class="delete-btn" onclick="confirmDelete()">Delete My Account</button>
+    
+    <script>
+    function confirmDelete() {
+        if(confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+            // TODO: Add account deletion logic
+            window.location.href = '../auth/deleteAccount';
+        }
+    }
+    </script>
 </body>
 </html>
