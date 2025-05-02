@@ -1,47 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.example.dao.UserDAO, com.example.model.User, java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>User List</title>
+    <title>Welcome to Forum</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+        .nav-links a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: #0066cc;
         }
-        th {
-            background-color: #f2f2f2;
+        .welcome {
+            text-align: center;
+            margin-top: 100px;
         }
     </style>
 </head>
 <body>
-    <h1>User List</h1>
-    <%
-        UserDAO userDAO = new UserDAO();
-        List<User> users = userDAO.getAllUsers();
-    %>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Register Date</th>
-        </tr>
-        <% for(User user : users) { %>
-        <tr>
-            <td><%= user.getUserID() %></td>
-            <td><%= user.getUsername() %></td>
-            <td><%= user.getEmail() %></td>
-            <td><%= user.getRegisterDate() %></td>
-        </tr>
-        <% } %>
-    </table>
+    <div class="nav-links">
+        <a href="login.jsp">Login</a>
+        <a href="signup.jsp">Sign Up</a>
+    </div>
+    <div class="welcome">
+        <h1>Welcome to Our Forum</h1>
+        <p>Join the discussion with our community</p>
+    </div>
 </body>
 </html>
