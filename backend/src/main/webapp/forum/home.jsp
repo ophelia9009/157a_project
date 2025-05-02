@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+    <div class="nav-links">
+        <a href="../index.jsp">Logout</a>
+    </div>
     <h1>Sub Forum List</h1>
 </body>
 </html>
