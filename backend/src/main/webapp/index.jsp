@@ -4,22 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Forum</title>
-    <style>
-        .nav-links {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        .nav-links a {
-            margin-left: 15px;
-            text-decoration: none;
-            color: #0066cc;
-        }
-        .welcome {
-            text-align: center;
-            margin-top: 100px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="nav-links">

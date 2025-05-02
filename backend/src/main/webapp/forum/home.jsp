@@ -4,18 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Forum Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <h1>Sub Forum List</h1>
