@@ -1,11 +1,8 @@
-package com.example.servelet;
+package edu.sjsu.cs157a.forum.servelet;
 
-import com.example.dao.BaseDAO;
-import com.example.dao.UserDAO;
-import com.example.model.User;
+import edu.sjsu.cs157a.forum.dao.BaseDAO;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

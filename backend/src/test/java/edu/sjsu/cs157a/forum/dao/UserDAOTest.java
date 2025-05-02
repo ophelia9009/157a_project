@@ -1,7 +1,6 @@
-package com.example.dao;
+package edu.sjsu.cs157a.forum.dao;
 
-import com.example.dao.UserDAO;
-import com.example.model.User;
+import edu.sjsu.cs157a.forum.model.User;
 import org.junit.Test;
 
 import java.sql.Timestamp;

@@ -1,4 +1,4 @@
-package com.example.model;
+package edu.sjsu.cs157a.forum.model;
 
 import java.sql.Timestamp;
 

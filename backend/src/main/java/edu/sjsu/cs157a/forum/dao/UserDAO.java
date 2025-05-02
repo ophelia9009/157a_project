@@ -1,12 +1,10 @@
-package com.example.dao;
+package edu.sjsu.cs157a.forum.dao;
 
 import java.sql.*;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 
-import com.example.model.User;
+import edu.sjsu.cs157a.forum.model.User;
 
 public class UserDAO extends BaseDAO{
 

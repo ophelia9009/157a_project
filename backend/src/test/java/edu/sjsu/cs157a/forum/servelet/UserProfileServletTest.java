@@ -1,7 +1,7 @@
-package com.example.servelet;
+package edu.sjsu.cs157a.forum.servelet;
 
-import com.example.dao.UserDAO;
-import com.example.model.User;
+import edu.sjsu.cs157a.forum.dao.UserDAO;
+import edu.sjsu.cs157a.forum.model.User;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

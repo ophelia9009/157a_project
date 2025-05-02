@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.example.dao.UserDAO, com.example.dao.BaseDAO, com.example.model.User, java.util.List, java.util.Map" %>
+<%@ page import="edu.sjsu.cs157a.forum.dao.UserDAO, edu.sjsu.cs157a.forum.dao.BaseDAO, edu.sjsu.cs157a.forum.model.User, java.util.List, java.util.Map" %>
 <!DOCTYPE html>
 <html>
 <head>

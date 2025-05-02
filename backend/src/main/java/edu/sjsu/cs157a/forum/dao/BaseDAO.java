@@ -1,4 +1,4 @@
-package com.example.dao;
+package edu.sjsu.cs157a.forum.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
