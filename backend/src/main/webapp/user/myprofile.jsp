@@ -30,17 +30,17 @@
         <p>TODO:  add User Profile Display</p>
     </div>
 
-    <%-- Profile action buttons --%>
-    <button>Edit(TODO)</button>
-    <button class="delete-btn" onclick="confirmDelete()">Delete My Account(TODO)</button>
+    <%-- Profile action form --%>
+    <form id="profileForm" method="post" action="../auth/profileAction">
+        <input type="hidden" name="userId" value="<%= user.getUserID() %>">
+        <button type="submit" name="action" value="edit">Edit Profile</button>
+        <button type="submit" name="action" value="delete" class="delete-btn" onclick="return confirmDelete()">Delete My Account</button>
+    </form>
     
     <%-- JavaScript functions --%>
     <script>
     function confirmDelete() {
-        if(confirm('Are you sure you want to delete your account? This cannot be undone.')) {
-            // TODO: Add account deletion logic
-            window.location.href = '../auth/deleteAccount';
-        }
+        return confirm('Are you sure you want to delete your account? This cannot be undone.');
     }
     </script>
 </body>
