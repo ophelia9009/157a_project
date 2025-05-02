@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+    <div class="nav-links">
+        <a href="../forum/home.jsp">View Forum</a>
+        <a href="../index.jsp">Logout</a>
+    </div>
     <%
     User user = (User) session.getAttribute("user");
     if (user == null) {
