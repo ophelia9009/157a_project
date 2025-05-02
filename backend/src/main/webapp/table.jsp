@@ -25,20 +25,12 @@
         }
     </style>
 </head>
-<div style="text-align: center; margin: 20px;">
-    <a href="?action=create">Create Comments</a> |
-    <a href="?action=update">Update Comments</a> |
-    <a href="?action=delete">Delete Comments</a> |
-    <a href="?action=reset">Reset Flags</a>
-</div>
 <%
-    // Reset flags if requested
-    if ("reset".equals(request.getParameter("action"))) {
-        session.removeAttribute("created");
-        session.removeAttribute("updated");
-        session.removeAttribute("deleted");
-    }
+response.setHeader("Cache-Control","no-cache");
+response.setHeader("Pragma","no-cache");
+response.setDateHeader ("Expires", 0);
 %>
+
 <body>
 
     <%
@@ -179,14 +171,10 @@
     <!-- COMMENTS UPDATED-->
         <h1>Comment List with Updated Comments</h1>
         <%
-
-            if ("update".equals(request.getParameter("action")) && session.getAttribute("updated") == null) {
-                dao.updateTuple(new Element ("comments", "CommentID", 1, new String[] {"CommentText", "LastUpdated"},
-                                        new Object[] {"I take it back. Mew FTW.", Timestamp.from(Instant.now())}));
-                dao.updateTuple(new Element ("comments", "CommentID", 2, new String[] {"CommentText", "LastUpdated"},
-                                        new Object[] {"Mew is actually Just Better.", Timestamp.from(Instant.now())}));
-                session.setAttribute("updated", true);
-            }
+            dao.updateTuple(new Element ("comments", "CommentID", 1, new String[] {"CommentText", "LastUpdated"},
+                                    new Object[] {"I take it back. Mew FTW.", Timestamp.from(Instant.now())}));
+            dao.updateTuple(new Element ("comments", "CommentID", 2, new String[] {"CommentText", "LastUpdated"},
+                                    new Object[] {"Mew is actually Just Better.", Timestamp.from(Instant.now())}));
             comments = dao.getTable("comments", new String[]{
                         "CommentID", "CommentText", "CreationDate", "UserID", "PostID", "ParentID", "LastUpdated"});
         %>
@@ -215,15 +203,17 @@
     <!-- COMMENTS DELETED-->
         <h1>Comment List with Deleted Comments</h1>
             <%
-                String action = request.getParameter("action");
-
-                if ("delete".equals(request.getParameter("action")) && session.getAttribute("deleted") == null)  {
-                    List<Map<String, Object>> toDelete = dao.getTable("comments", new String[]{"CommentID"}, 2);
-                    for (Map<String, Object> row : toDelete) {
-                        dao.deleteTuple(new Element("comments", "CommentID", row.get("CommentID"), new String[]{}, new Object[]{}));
-                    }
-                    session.setAttribute("deleted", true);
+                Map<String, Object> check = dao.findByPrimaryKey("comments", "CommentID", 3);
+                if (check != null) {
+                    dao.deleteTuple(new Element("comments", "CommentID", 3, new String[]{}, new Object[]{}));
                 }
+                check = dao.findByPrimaryKey("comments", "CommentID", 4);
+                if (check != null) {
+                    dao.deleteTuple(new Element("comments", "CommentID", 4, new String[]{}, new Object[]{}));
+                }
+                // Fetch updated comment list
+                comments = dao.getTable("comments", new String[]{
+                    "CommentID", "CommentText", "CreationDate", "UserID", "PostID", "ParentID", "LastUpdated"});
             %>
             <table>
                 <tr>
@@ -251,21 +241,17 @@
     <!-- COMMENTS CREATED-->
         <h1>Comment List with Created Comments</h1>
         <%
-            if ("create".equals(request.getParameter("action")) && session.getAttribute("created") == null) {
-                Element c1 = dao.createTuple(new Element("comments", "CommentID", null,
-                    new String[]{"CommentText", "UserID", "PostID", "ParentID"},
-                    new Object[]{"Umm Mew can create stuff", 10, 1, 1}));
-                dao.updateTuple(new Element("comments", "CommentID", c1.getPrimaryKeyValue(),
-                    new String[]{"ParentID"}, new Object[]{c1.getPrimaryKeyValue()}));
+            Element c1 = dao.createTuple(new Element("comments", "CommentID", null,
+                new String[]{"CommentText", "UserID", "PostID", "ParentID"},
+                new Object[]{"Umm Mew can create stuff", 10, 1, 1}));
+            dao.updateTuple(new Element("comments", "CommentID", c1.getPrimaryKeyValue(),
+                new String[]{"ParentID"}, new Object[]{c1.getPrimaryKeyValue()}));
 
-                Element c2 = dao.createTuple(new Element("comments", "CommentID", null,
-                    new String[]{"CommentText", "UserID", "PostID", "ParentID"},
-                    new Object[]{"Umm Mewtwo can create stuff", 11, 1, 1}));
-                dao.updateTuple(new Element("comments", "CommentID", c2.getPrimaryKeyValue(),
-                    new String[]{"ParentID"}, new Object[]{c2.getPrimaryKeyValue()}));
-
-                session.setAttribute("created", true);
-            }
+            Element c2 = dao.createTuple(new Element("comments", "CommentID", null,
+                new String[]{"CommentText", "UserID", "PostID", "ParentID"},
+                new Object[]{"Umm Mewtwo can create stuff", 11, 1, 1}));
+            dao.updateTuple(new Element("comments", "CommentID", c2.getPrimaryKeyValue(),
+                new String[]{"ParentID"}, new Object[]{c2.getPrimaryKeyValue()}));
 
             // Fetch updated comment list
             comments = dao.getTable("comments", new String[]{

@@ -223,7 +223,7 @@ public class BaseDAO {
                 stmt.setObject(i++, value);
             }
 
-            stmt.setObject(i, element.getPrimaryKeyValueString()); // WHERE condition
+            stmt.setObject(i, element.getPrimaryKeyValue()); // WHERE condition
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -252,7 +252,7 @@ public class BaseDAO {
                     "DELETE FROM " + element.getTable() + " WHERE " + element.getPrimaryKeyColumn() +" = ?"
             );
 
-            stmt.setString(1, element.getPrimaryKeyValueString());
+            stmt.setObject(1, element.getPrimaryKeyValue());
 
             int affectedRows = stmt.executeUpdate();
 
