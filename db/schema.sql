@@ -94,3 +94,8 @@ CREATE TABLE `Subscriptions` (
     ON DELETE CASCADE -- If subforum deleted, remove subscriptions
     ON UPDATE CASCADE
     );
+
+
+
+CREATE USER 'appuser'@'%' IDENTIFIED BY 'Password!1';
+GRANT SELECT ON sf_db.* TO 'appuser'@'%';

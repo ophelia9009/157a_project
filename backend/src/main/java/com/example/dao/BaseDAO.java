@@ -14,8 +14,8 @@ public class BaseDAO {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/sf_db", "root",
-                    "1234");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/sf_db", "appuser",
+                    "Password!1");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException("Something is wrong", e);
         }
