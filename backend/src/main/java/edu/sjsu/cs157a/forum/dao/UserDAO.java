@@ -10,7 +10,7 @@ public class UserDAO extends BaseDAO{
 
 
     /**
-     * This method is to create a new user in database, maily used for user registeration.
+     * This method is to create a new user in database, maily used for user registration.
      * @param newUser
      * @return User
      */
@@ -274,7 +274,6 @@ public class UserDAO extends BaseDAO{
         rs.close();
         statement.close();
     }
-    //1234, password
     public static void main(String[] args) {
         Connection connection = null;
         try {

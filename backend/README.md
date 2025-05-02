@@ -31,7 +31,7 @@ All endpoints are relative to `/api/users`
 - **Success Response (201 Created)**:
   ```json
   {
-    "userId": 101,
+    "UserID": 101,
     "username": "newuser",
     "email": "newuser@example.com",
     "registerDate": "2025-04-28T18:48:00Z"
@@ -58,7 +58,7 @@ All endpoints are relative to `/api/users`
 - **Success Response (200 OK)**:
   ```json
   {
-    "userId": 100,
+    "UserID": 100,
     "username": "existinguser",
     "email": "user@example.com",
     "registerDate": "2025-04-27T10:30:00Z"
@@ -73,11 +73,11 @@ All endpoints are relative to `/api/users`
 
 ### Get User Profile
 - **Method**: GET
-- **Path**: `/{userId}`
+- **Path**: `/{UserID}`
 - **Success Response (200 OK)**:
   ```json
   {
-    "userId": 100,
+    "UserID": 100,
     "username": "existinguser",
     "email": "user@example.com",
     "registerDate": "2025-04-27T10:30:00Z"
@@ -86,13 +86,13 @@ All endpoints are relative to `/api/users`
 - **Error Response (404 Not Found)**:
   ```json
   {
-    "error": "User not found"
+    "error": "User {UserID} not found"
   }
   ```
 
 ### Update User Profile
 - **Method**: PATCH
-- **Path**: `/{userId}`
+- **Path**: `/{UserID}`
 - **Request Body** (partial updates allowed):
   ```json
   {
@@ -107,7 +107,7 @@ All endpoints are relative to `/api/users`
 - **Success Response (200 OK)**:
   ```json
   {
-    "userId": 100,
+    "UserID": 100,
     "username": "originaluser",  // Unchanged
     "email": "newemail@example.com",  // Updated
     "registerDate": "2025-04-27T10:30:00Z"  // Unchanged
@@ -123,13 +123,13 @@ All endpoints are relative to `/api/users`
   - 404 Not Found (user doesn't exist):
   ```json
   {
-    "error": "User not found"
+    "error": "User {UserID} not found"
   }
   ```
 
 ### Delete User Account
 - **Method**: DELETE
-- **Path**: `/{userId}`
+- **Path**: `/{UserID}`
 - **Behavior**:
   - Permanently deletes the user account with the specified ID
   - Returns empty response on success
@@ -148,7 +148,7 @@ All endpoints are relative to `/api/users`
   - 404 Not Found (user doesn't exist):
   ```json
   {
-    "error": "User not found"
+    "error": "User {UserID} not found"
   }
   ```
 - **Example Request**:
