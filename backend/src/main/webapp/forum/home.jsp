@@ -19,5 +19,15 @@
 
     <%-- Main content section --%>
     <h1>Sub Forum List</h1>
+    <form method="get" action="home.jsp">
+        <input type="text" name="filter" placeholder="Search Sub Forums" value="<%= request.getParameter("filter") != null ? request.getParameter("filter") : "" %>">
+        <button type="submit">Submit search</button>
+    </form>
+
+    <%
+        String filter = request.getParameter("filter");
+        List<Subforum> subforums = (List<Subforum>) request.getAttribute("subforums");
+
+
 </body>
 </html>
