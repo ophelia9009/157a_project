@@ -1,8 +1,6 @@
 package edu.sjsu.cs157a.forum.servelet;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public abstract class BaseServlet extends jakarta.servlet.http.HttpServlet {
     

@@ -65,7 +65,7 @@
         });
     </script>
 
-<%-- sticky version
+<%-- sticky version --%>
     <form method="get" action="home.jsp">
         <input type="text" name="filterName" placeholder="Search by Name" value="<%= request.getParameter("filterName") != null ? request.getParameter("filterName") : "" %>">
         <input type="date" name="endDate" placeholder="End Date" value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>">

@@ -20,14 +20,17 @@
     <%
     User user = (User) session.getAttribute("user");
     if (user == null) {
-        response.sendRedirect("../auth/login.jsp");
+        response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
         return;
     }
     %>
     <%-- Profile display section --%>
     <h1>My Profile</h1>
     <div class="profile-info">
-        <p>TODO:  add User Profile Display</p>
+        <p><strong>User ID:</strong> <%= user.getUserID() %></p>
+        <p><strong>Username:</strong> <%= user.getUsername() %></p>
+        <p><strong>Email:</strong> <%= user.getEmail() %></p>
+        <p><strong>Registration Date:</strong> <%= user.getRegisterDate() %></p>
     </div>
 
     <%-- Profile action form --%>

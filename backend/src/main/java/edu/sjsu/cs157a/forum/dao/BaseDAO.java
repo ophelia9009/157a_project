@@ -242,7 +242,7 @@ public class BaseDAO {
      * This method is to delete a tuple, mainly used for tuple deletion.
      * @param element
      */
-    public void deleteTuple(Element element){
+    public boolean deleteTuple(Element element){
         try {
             if (!VALID_TABLES.contains(element.getTable())) {
                 throw new IllegalArgumentException("Invalid table: " + element.getTable());
@@ -262,6 +262,7 @@ public class BaseDAO {
 
             stmt.close();
             conn.close();
+            return true;
         } catch (SQLException se) {
             System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to delete "+ element, se);
