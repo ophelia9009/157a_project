@@ -3,16 +3,16 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class Comment {
-    private int CommentID;
+    private Integer CommentID;
     private String CommentText;
     private Timestamp CreationDate;
-    private int Rating = 0;
-    private int UserID;
-    private int PostID;
-    private int ParentID;
+    private Integer Rating = 0;
+    private Integer UserID;
+    private Integer PostID;
+    private Integer ParentID;
     private Timestamp LastUpdated;
 
-    public int getCommentID() {
+    public Integer getCommentID() {
         return CommentID;
     }
 
@@ -24,19 +24,19 @@ public class Comment {
         return CreationDate;
     }
 
-    public int getUserID() {
+    public Integer getUserID() {
         return UserID;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return Rating;
     }
 
-    public int getPostID() {
+    public Integer getPostID() {
         return PostID;
     }
 
-    public int getParentID() {
+    public Integer getParentID() {
         return ParentID;
     }
 
@@ -44,7 +44,7 @@ public class Comment {
         return LastUpdated;
     }
 
-    public Comment(int commentID, String commentText, Timestamp creationDate, int rating, int userID, int postID, int parentID, Timestamp lastUpdated) {
+    public Comment(Integer commentID, String commentText, Timestamp creationDate, Integer rating, Integer userID, Integer postID, Integer parentID, Timestamp lastUpdated) {
         CommentID = commentID;
         CommentText = commentText;
         CreationDate = creationDate;
