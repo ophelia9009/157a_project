@@ -65,5 +65,44 @@ public class SubforumDAO extends BaseDAO {
         return subforums;
     }
 
-    
+    /**
+     * Creates a new subforum
+     * @param name The name of the subforum
+     * @param description The description of the subforum
+     * @param ownerID The ID of the user creating the subforum
+     * @return The created Subforum object
+     * @throws RuntimeException if subforum creation fails
+     */
+    public Subforum createSubforum(String name, String description, String ownerID) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        String sql = "INSERT INTO subforums (Name, CreationDate, Description, SubscriberCount, LastUpdated, OwnerID) " +
+                     "VALUES (?, ?, ?, 0, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            
+            stmt.setString(1, name);
+            stmt.setTimestamp(2, now);
+            stmt.setString(3, description);
+            stmt.setTimestamp(4, now);
+            stmt.setString(5, ownerID);
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating subforum failed, no rows affected.");
+            }
+            
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    String subforumID = generatedKeys.getString(1);
+                    return new Subforum(subforumID, name, now, description, "0", now, ownerID);
+                } else {
+                    throw new SQLException("Creating subforum failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to create subforum", se);
+        }
+    }
 }
