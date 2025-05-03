@@ -46,7 +46,7 @@
 
 <%-- Subforums section --%>
 <div class="profile-section">
-    <h2>My Subforums</h2>
+    <h2>My Owned Subforums</h2>
     <div class="profile-info">
     <%
     try {
