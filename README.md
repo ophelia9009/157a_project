@@ -23,11 +23,9 @@ Functional Requirements:
     - [x] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
     - [ ] whatever it is , it will use "select all from users" for example, user list page
 - Subforum Management:
-    - [ ] Allow registered users to create new subforums.  @Yeqing Xu
-    - [ ] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
-    - [ ] Allow registered users to delete the subforums they created. (Same note as above regarding ownership).
-    - [ ] Allow the public (and registered users) to view a list of subforums.
-    - [ ] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
+    - [x] Allow registered users to create new subforums.
+    - [x] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
+    - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
 - Post Management:
     - [ ] Allow registered users to create new posts within a specific subforum.
     - [ ] Allow registered users to edit the posts they created.
