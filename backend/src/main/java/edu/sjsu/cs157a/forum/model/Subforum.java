@@ -9,14 +9,16 @@ public class Subforum {
     private String description;
     private String subscriberCount;
     private Timestamp lastUpdated;
+    private String ownerID;
 
-    public Subforum (String subforumID, String name, Timestamp creationDate, String description, String subscriberCount, Timestamp lastUpdated) {
+    public Subforum (String subforumID, String name, Timestamp creationDate, String description, String subscriberCount, Timestamp lastUpdated, String ownerID) {
         this.subforumID = subforumID;
         this.name = name;
         this.creationDate = creationDate;
         this.description = description;
         this.subscriberCount = subscriberCount;
         this.lastUpdated = lastUpdated;
+        this.ownerID = ownerID;
     }
 
     public String getSubforumID() {
@@ -54,5 +56,11 @@ public class Subforum {
     }
     public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    public String getOwnerID() {
+        return ownerID;
+    }
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
     }
 }

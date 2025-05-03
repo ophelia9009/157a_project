@@ -53,7 +53,8 @@ public class SubforumDAO extends BaseDAO {
                         rs.getTimestamp("CreationDate"),
                         rs.getString("Description"),
                         rs.getString("SubscriberCount"),
-                        rs.getTimestamp("LastUpdated")
+                        rs.getTimestamp("LastUpdated"),
+                        rs.getString("OwnerID")
                 ));
             }
             rs.close();
