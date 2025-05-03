@@ -4,7 +4,7 @@
 <%
 User user = (User) session.getAttribute("user");
 if (user == null) {
-    response.sendRedirect(request.getContextPath() + "/user/login.jsp");
+    response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
     return;
 }
 %>
@@ -13,11 +13,11 @@ if (user == null) {
 <head>
     <meta charset="UTF-8">
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="$../css/styles.css">
 </head>
 <body>
     <h1>Edit Your Profile</h1>
-    <form method="post" action="${pageContext.request.contextPath}/user/profileAction">
+    <form method="post" action=".${pageContext.request.contextPath}/api/profileAction">
         <input type="hidden" name="action" value="editSubmit">
         <input type="hidden" name="userId" value="<%= user.getUserID() %>">
 

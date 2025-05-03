@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-@WebServlet("/user/profileAction")
+@WebServlet("/api/profileAction")
 public class ProfileActionServlet extends BaseServlet {
     private final UserDAO userDAO = new UserDAO();
 
@@ -27,6 +27,7 @@ public class ProfileActionServlet extends BaseServlet {
 
         String action = request.getParameter("action");
         Integer userId = Integer.valueOf(request.getParameter("userId"));
+        System.out.println("Action: " + action + ", userId: " + userId);
         HttpSession session = request.getSession();
 
         if (userId == null) {
@@ -47,7 +48,7 @@ public class ProfileActionServlet extends BaseServlet {
                     break;
 
                 case "edit":
-                    response.sendRedirect("../user/editProfile.jsp");
+                    response.sendRedirect(request.getContextPath() + "/user/editProfile.jsp");
                     break;
 
                 case "editSubmit":

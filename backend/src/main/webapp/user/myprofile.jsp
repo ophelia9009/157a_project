@@ -34,7 +34,7 @@
     </div>
 
     <%-- Profile action form --%>
-    <form id="profileForm" method="post" action="../auth/profileAction">
+    <form id="profileForm" method="post" action="${pageContext.request.contextPath}/api/profileAction">
         <input type="hidden" name="userId" value="<%= user.getUserID() %>">
         <button type="submit" name="action" value="edit">Edit Profile</button>
         <button type="submit" name="action" value="delete" class="delete-btn" onclick="return confirmDelete()">Delete My Account</button>
