@@ -104,6 +104,9 @@ public class SubforumDAO extends BaseDAO {
                 }
             }
         } catch (SQLException se) {
+            System.out.println("SQL ErrorState: " + se.getSQLState());
+            System.out.println("SQL ErrorCode: " + se.getErrorCode());
+            se.printStackTrace();
             System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to create subforum", se);
         }

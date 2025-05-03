@@ -1,14 +1,12 @@
-package edu.sjsu.cs157a.forum.servelet;
+package edu.sjsu.cs157a.forum.servlet;
 
 import edu.sjsu.cs157a.forum.dao.SubforumDAO;
-import edu.sjsu.cs157a.forum.model.Subforum;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
 
 @WebServlet("/forum/updateSubforum")
 public class UpdateSubforumServlet extends HttpServlet {

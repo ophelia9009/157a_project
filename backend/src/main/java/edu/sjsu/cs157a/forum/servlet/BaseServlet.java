@@ -1,4 +1,4 @@
-package edu.sjsu.cs157a.forum.servelet;
+package edu.sjsu.cs157a.forum.servlet;
 
 import jakarta.servlet.http.HttpServletResponse;
 
