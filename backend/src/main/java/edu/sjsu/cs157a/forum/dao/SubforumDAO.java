@@ -1,5 +1,6 @@
 package edu.sjsu.cs157a.forum.dao;
 
+import edu.sjsu.cs157a.forum.model.Post;
 import edu.sjsu.cs157a.forum.model.Subforum;
 
 import java.math.BigInteger;
@@ -8,6 +9,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubforumDAO extends BaseDAO {
+    public List<Post> getAllSubforumPosts (Integer subforumID) {
+        List<Post> posts = new ArrayList<>();
+
+        String sql = "SELECT * FROM posts WHERE SubforumID = ?";
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, subforumID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                posts.add(new Post(
+                        rs.getInt("PostID"),
+                        rs.getString("Title"),
+                        rs.getString("BodyText"),
+                        rs.getTimestamp("CreationDate"),
+                        rs.getInt("Rating"),
+                        rs.getInt("UserID"),
+                        rs.getInt("SubforumID")
+                ));
+            }
+            rs.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get posts", se);
+        }
+
+        return posts;
+    }
+
     /**
      * get a filtered list of subforums
      * @param filterName filter by keyword? maybe make this a list of keywords later
@@ -83,7 +114,7 @@ public class SubforumDAO extends BaseDAO {
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
+
             stmt.setString(1, name);
             stmt.setTimestamp(2, now);
             stmt.setString(3, description);
@@ -94,7 +125,7 @@ public class SubforumDAO extends BaseDAO {
             if (affectedRows == 0) {
                 throw new SQLException("Creating subforum failed, no rows affected.");
             }
-            
+
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     Integer subforumID = generatedKeys.getInt(1);
@@ -126,7 +157,7 @@ public class SubforumDAO extends BaseDAO {
         }
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        
+
 
         // Update description
         String updateSql = "UPDATE subforums SET Description = ?, LastUpdated = ? " +
@@ -134,7 +165,7 @@ public class SubforumDAO extends BaseDAO {
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(updateSql)) {
-            
+
             stmt.setString(1, newDescription);
             stmt.setTimestamp(2, now);
             stmt.setInt(3, subforumID);
@@ -150,7 +181,7 @@ public class SubforumDAO extends BaseDAO {
             throw new RuntimeException("Failed to update subforum", se);
         }
     }
-    
+
     /**
      * Gets all subforums that a user is subscribed to
      * @param userID The ID of the user
@@ -159,17 +190,17 @@ public class SubforumDAO extends BaseDAO {
      */
     public List<Subforum> getSubscribedSubforums(Integer userID) {
         List<Subforum> subscribedForums = new ArrayList<>();
-        
+
         String query = "SELECT s.* FROM subforums s " +
                      "JOIN subscriptions sub ON s.SubforumID = sub.SubforumID " +
                      "WHERE sub.UserID = ?";
-        
+
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            
+
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 subscribedForums.add(new Subforum(
                     rs.getInt("SubforumID"),
