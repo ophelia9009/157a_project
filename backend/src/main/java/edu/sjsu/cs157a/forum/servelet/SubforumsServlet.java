@@ -52,7 +52,7 @@ public class SubforumsServlet extends BaseServlet {
 
             // Create subforum
             SubforumDAO subforumDAO = new SubforumDAO();
-            Subforum subforum = subforumDAO.createSubforum(name, description, ownerID.toString());
+            Subforum subforum = subforumDAO.createSubforum(name, description, ownerID);
 
             // Return created subforum
             response.setContentType("application/json");

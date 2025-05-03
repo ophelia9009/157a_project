@@ -3,15 +3,15 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class Subforum {
-    private String subforumID;
+    private Integer subforumID;
     private String name;
     private Timestamp creationDate;
     private String description;
     private String subscriberCount;
     private Timestamp lastUpdated;
-    private String ownerID;
+    private Integer ownerID;
 
-    public Subforum (String subforumID, String name, Timestamp creationDate, String description, String subscriberCount, Timestamp lastUpdated, String ownerID) {
+    public Subforum (Integer subforumID, String name, Timestamp creationDate, String description, String subscriberCount, Timestamp lastUpdated, Integer ownerID) {
         this.subforumID = subforumID;
         this.name = name;
         this.creationDate = creationDate;
@@ -21,10 +21,10 @@ public class Subforum {
         this.ownerID = ownerID;
     }
 
-    public String getSubforumID() {
+    public Integer getSubforumID() {
         return subforumID;
     }
-    public void setSubforumID(String subforumID) {
+    public void setSubforumID(Integer subforumID) {
         this.subforumID = subforumID;
     }
     public String getName() {
@@ -57,10 +57,10 @@ public class Subforum {
     public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    public String getOwnerID() {
+    public Integer getOwnerID() {
         return ownerID;
     }
-    public void setOwnerID(String ownerID) {
+    public void setOwnerID(Integer ownerID) {
         this.ownerID = ownerID;
     }
 }

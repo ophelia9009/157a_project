@@ -17,15 +17,15 @@ public class SubforumDAOTest {
         // Create test data
         String name = "Test Subforum " + System.currentTimeMillis();
         String description = "Test description";
-        int ownerID = 1; // Using existing user ID from sample data
+        Integer ownerID = 1; // Using existing user ID from sample data
         
         // Test creating subforum
-        Subforum createdSubforum = subforumDAO.createSubforum(name, description, String.valueOf(ownerID));
+        Subforum createdSubforum = subforumDAO.createSubforum(name, description, Integer.valueOf(ownerID));
         assertNotNull(createdSubforum);
         assertNotNull(createdSubforum.getSubforumID());
         assertEquals(name, createdSubforum.getName());
         assertEquals(description, createdSubforum.getDescription());
-        assertEquals(String.valueOf(ownerID), createdSubforum.getOwnerID());
+        assertEquals(ownerID, createdSubforum.getOwnerID());
         assertEquals("0", createdSubforum.getSubscriberCount());
         assertNotNull(createdSubforum.getCreationDate());
         assertNotNull(createdSubforum.getLastUpdated());
@@ -35,7 +35,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_nullName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum(null, "Test description", "1");
+            subforumDAO.createSubforum(null, "Test description", 1);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -48,7 +48,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_emptyName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum("", "Test description", "1");
+            subforumDAO.createSubforum("", "Test description", 1);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -61,7 +61,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_nullDescription() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum("Test Subforum", null, "1");
+            subforumDAO.createSubforum("Test Subforum", null, 1);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -70,16 +70,11 @@ public class SubforumDAOTest {
         }
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void test_createSubforum_nullOwnerID() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
-        try {
-            subforumDAO.createSubforum("Test Subforum", "Test description", null);
-        } catch (RuntimeException e) {
-            if (e.getCause() instanceof SQLException) {
-                throw (SQLException) e.getCause();
-            }
-            throw e;
-        }
+
+        subforumDAO.createSubforum("Test Subforum", "Test description", null);
+
     }
 }
