@@ -48,28 +48,28 @@
         const modal = document.getElementById('subforumModal');
         const btn = document.getElementById('createSubforumBtn');
         const span = document.getElementById('closeModal');
-        
+
         btn.onclick = function() {
             modal.style.display = 'block';
         }
-        
+
         span.onclick = function() {
             modal.style.display = 'none';
         }
-        
+
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = 'none';
             }
         }
-        
+
         // Handle Subforum Creation
         document.getElementById('subforumForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('subforumName').value;
             const description = document.getElementById('subforumDesc').value;
-            
+
             fetch('/backend/api/subforums', {
                 method: 'POST',
                 headers: {
@@ -139,25 +139,22 @@
         });
     </script>
 
-<%-- sticky version --%>
-    <form method="get" action="home.jsp">
-        <input type="text" name="filterName" placeholder="Search by Name" value="<%= request.getParameter("filterName") != null ? request.getParameter("filterName") : "" %>">
-        <input type="date" name="endDate" placeholder="End Date" value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>">
-        <input type="number" name="minSubscribers" placeholder="Min Subscribers" value="<%= request.getParameter("minSubscribers") != null ? request.getParameter("minSubscribers") : "" %>">
-        <input type="number" name="maxSubscribers" placeholder="Max Subscribers" value="<%= request.getParameter("maxSubscribers") != null ? request.getParameter("maxSubscribers") : "" %>">
-        <input type="date" name="lastUpdatedStart" placeholder="Last Updated Start" value="<%= request.getParameter("lastUpdatedStart") != null ? request.getParameter("lastUpdatedStart") : "" %>">
-        <input type="date" name="lastUpdatedEnd" placeholder="Last Updated End" value="<%= request.getParameter("lastUpdatedEnd") != null ? request.getParameter("lastUpdatedEnd") : "" %>">
-        <button type="submit">Filter</button>
-    </form> -->
-
     <form method="get" action="/api/subforumsearch">
         <input type="text" name="filterName" placeholder="Search by Name">
-        <input type="date" name="minCreationDate" placeholder="min creation date">
-        <input type="date" name="maxCreationDate" placeholder="Max creation date">
-        <input type="number" name="minSubscribers" placeholder="Min Subscribers">
-        <input type="number" name="maxSubscribers" placeholder="Max Subscribers">
-        <input type="date" name="minLastUpdated" placeholder="min last Updated">
-        <input type="date" name="maxLastUpdated" placeholder="max last End">
+        <div>
+            <label>min, max creation date: </label>
+            <input type="date" name="minCreationDate" placeholder="min creation date">
+            <input type="date" name="maxCreationDate" placeholder="Max creation date">
+        </div>
+        <div>
+                <input type="number" name="minSubscribers" placeholder="Min Subscribers">
+                <input type="number" name="maxSubscribers" placeholder="Max Subscribers">
+        </div>
+        <div>
+            <label> min, max last updated: </label>
+            <input type="date" name="minLastUpdated" placeholder="min last Updated">
+            <input type="date" name="maxLastUpdated" placeholder="max last End">
+        </div>
         <button type="submit">Filter</button>
     </form>
 
@@ -168,7 +165,7 @@
             <%
                 SubforumDAO subforumDAO = new SubforumDAO();
                 List<Subforum> subforums = subforumDAO.getAllSubforumsOrderedByLastUpdated();
-                
+
                 if (subforums.isEmpty()) {
             %>
                 <p>No subforums found.</p>
@@ -193,7 +190,7 @@
                                     }
                                 %>
                                 <%= subforum.getName() %>
-                            </h3> 
+                            </h3>
                         </div>
             <%
                     }
