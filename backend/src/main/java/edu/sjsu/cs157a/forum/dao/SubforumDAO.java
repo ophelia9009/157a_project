@@ -150,4 +150,75 @@ public class SubforumDAO extends BaseDAO {
             throw new RuntimeException("Failed to update subforum", se);
         }
     }
+    
+    /**
+     * Gets all subforums that a user is subscribed to
+     * @param userID The ID of the user
+     * @return List of subscribed subforums
+     * @throws RuntimeException if database operation fails
+     */
+    public List<Subforum> getSubscribedSubforums(Integer userID) {
+        List<Subforum> subscribedForums = new ArrayList<>();
+        
+        String query = "SELECT s.* FROM subforums s " +
+                     "JOIN subscriptions sub ON s.SubforumID = sub.SubforumID " +
+                     "WHERE sub.UserID = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                subscribedForums.add(new Subforum(
+                    rs.getInt("SubforumID"),
+                    rs.getString("Name"),
+                    rs.getTimestamp("CreationDate"),
+                    rs.getString("Description"),
+                    rs.getString("SubscriberCount"),
+                    rs.getTimestamp("LastUpdated"),
+                    rs.getInt("OwnerID")
+                ));
+            }
+            rs.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get subscribed subforums", se);
+        }
+        return subscribedForums;
+    }
+
+    /**
+     * Gets all subforums ordered by last updated timestamp (newest first)
+     * @return List of all subforums ordered by LastUpdated
+     * @throws RuntimeException if database operation fails
+     */
+    public List<Subforum> getAllSubforumsOrderedByLastUpdated() {
+        List<Subforum> subforums = new ArrayList<>();
+        String sql = "SELECT * FROM subforums ORDER BY LastUpdated DESC";
+
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                subforums.add(new Subforum(
+                        rs.getInt("SubforumID"),
+                        rs.getString("Name"),
+                        rs.getTimestamp("CreationDate"),
+                        rs.getString("Description"),
+                        rs.getString("SubscriberCount"),
+                        rs.getTimestamp("LastUpdated"),
+                        rs.getInt("OwnerID")
+                ));
+            }
+            rs.close();
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to get subforums", se);
+        }
+        return subforums;
+    }
 }

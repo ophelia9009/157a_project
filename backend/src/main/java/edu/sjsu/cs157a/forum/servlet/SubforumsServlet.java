@@ -15,7 +15,8 @@ import java.util.Map;
 
 @WebServlet("/api/subforums")
 public class SubforumsServlet extends BaseServlet {
-    private final BaseDAO baseDAO= new BaseDAO();
+    private final BaseDAO baseDAO = new BaseDAO();
+
     private final Gson gson = new Gson();
 
     @Override

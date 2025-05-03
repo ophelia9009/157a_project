@@ -3,6 +3,10 @@
   Displays navigation and subforum listing
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="edu.sjsu.cs157a.forum.dao.SubforumDAO" %>
+<%@ page import="edu.sjsu.cs157a.forum.model.Subforum" %>
+<%@ page import="edu.sjsu.cs157a.forum.model.User" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -156,6 +160,47 @@
         <input type="date" name="maxLastUpdated" placeholder="max last End">
         <button type="submit">Filter</button>
     </form>
+
+    <%-- Display all subforums by lastupdated --%>
+    <div id="allSubforums">
+        <h2>All Subforums</h2>
+        <div class="subforum-list">
+            <%
+                SubforumDAO subforumDAO = new SubforumDAO();
+                List<Subforum> subforums = subforumDAO.getAllSubforumsOrderedByLastUpdated();
+                
+                if (subforums.isEmpty()) {
+            %>
+                <p>No subforums found.</p>
+            <%
+                } else {
+                    for (Subforum subforum : subforums) {
+            %>
+                        <div class="subforum">
+                            <h3>
+                                <%
+                                    User currentUser = (User) session.getAttribute("user");
+                                    if (currentUser != null) {
+                                        List<Subforum> subscribedSubforums = subforumDAO.getSubscribedSubforums(currentUser.getUserID());
+                                        for (Subforum subscribed : subscribedSubforums) {
+                                            if (subscribed.getSubforumID().equals(subforum.getSubforumID())) {
+                                %>
+                                        <span class="subscribed-label">🔔</span>
+                                <%
+                                                break;
+                                            }
+                                        }
+                                    }
+                                %>
+                                <%= subforum.getName() %>
+                            </h3> 
+                        </div>
+            <%
+                    }
+                }
+            %>
+        </div>
+    </div>
 
 
 </body>
