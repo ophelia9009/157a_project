@@ -48,7 +48,7 @@ public class ProfileActionServlet extends BaseServlet {
                     break;
 
                 case "edit":
-                    response.sendRedirect(request.getContextPath() + "/user/editProfile.jsp");
+                    response.sendRedirect(request.getContextPath() + "/user/editprofile.jsp");
                     break;
 
                 case "editSubmit":

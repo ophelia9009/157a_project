@@ -1,4 +1,4 @@
-<%-- editProfile.jsp - User profile editing page --%>
+<%-- editprofile.jsp - User profile editing page --%>
 <%@ page import="edu.sjsu.cs157a.forum.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -17,7 +17,7 @@ if (user == null) {
 </head>
 <body>
     <h1>Edit Your Profile</h1>
-    <form method="post" action=".${pageContext.request.contextPath}/api/profileAction">
+    <form method="post" action="${pageContext.request.contextPath}/api/profileAction">
         <input type="hidden" name="action" value="editSubmit">
         <input type="hidden" name="userId" value="<%= user.getUserID() %>">
 
