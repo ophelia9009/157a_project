@@ -157,7 +157,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        String userId = pathInfo.substring(1); // Remove leading slash
+        Integer userId = Integer.valueOf(pathInfo.substring(1)); // Remove leading slash
         
         try {
             boolean deleted = userDAO.deleteUserById(userId);

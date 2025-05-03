@@ -117,14 +117,14 @@ public class UserDAO extends BaseDAO{
      * @param userId The ID of the user to delete
      * @return boolean indicating if deletion was successful
      */
-    public boolean deleteUserById(String userId) {
+    public boolean deleteUserById(Integer userId) {
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
                 "DELETE FROM users WHERE UserID = ?"
             );
             
-            stmt.setString(1, userId);
+            stmt.setObject(1, userId);
             
             int affectedRows = stmt.executeUpdate();
             
