@@ -23,7 +23,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        String userId = pathInfo.substring(1); // Remove leading slash
+        Integer userId = Integer.parseInt( pathInfo.substring(1)); // Remove leading slash
         User user = userDAO.getUserById(userId);
 
         response.setContentType("application/json");
@@ -97,7 +97,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        String userId = pathInfo.substring(1); // Remove leading slash
+        Integer userId = Integer.parseInt( pathInfo.substring(1)); // Remove leading slash
         
         try {
             // Get existing user data

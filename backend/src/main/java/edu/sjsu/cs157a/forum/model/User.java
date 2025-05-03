@@ -3,13 +3,13 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class User {
-    private String userID;
+    private Integer userID;
     private String username;
     private String password;
     private String email;
     private Timestamp registerDate;
 
-    public User(String userID, String username, String password, String email, Timestamp registerDate) {
+    public User(Integer userID, String username, String password, String email, Timestamp registerDate) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -17,11 +17,11 @@ public class User {
         this.registerDate = registerDate;
     }
 
-    public String getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 

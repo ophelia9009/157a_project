@@ -34,7 +34,7 @@ public class UserDAO extends BaseDAO{
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    newUser.setUserID(generatedKeys.getString(1));
+                    newUser.setUserID(generatedKeys.getInt(1));
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
@@ -66,7 +66,7 @@ public class UserDAO extends BaseDAO{
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getUserID());
+            stmt.setInt(4, user.getUserID());
             
             int affectedRows = stmt.executeUpdate();
             
@@ -96,7 +96,7 @@ public class UserDAO extends BaseDAO{
                 "DELETE FROM users WHERE UserID = ?"
             );
             
-            stmt.setString(1, user.getUserID());
+            stmt.setInt(1, user.getUserID());
             
             int affectedRows = stmt.executeUpdate();
             
@@ -184,7 +184,7 @@ public class UserDAO extends BaseDAO{
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(
-                    rs.getString("UserID"),
+                    rs.getInt("UserID"),
                     rs.getString("Username"),
                     rs.getString("Password"),
                     rs.getString("Email"),
@@ -206,16 +206,16 @@ public class UserDAO extends BaseDAO{
      * @param userId
      * @return User
      */
-    public User getUserById(String userId) {
+    public User getUserById(Integer userId) {
         User user = null;
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE UserID = ?");
-            stmt.setString(1, userId);
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(
-                    rs.getString("UserID"),
+                    rs.getInt("UserID"),
                     rs.getString("Username"),
                     rs.getString("Password"),
                     rs.getString("Email"),
@@ -243,7 +243,7 @@ public class UserDAO extends BaseDAO{
             ResultSet rs = stmt.executeQuery("SELECT * FROM users");
             while (rs.next()) {
                 users.add(new User(
-                    rs.getString("UserID"),
+                    rs.getInt("UserID"),
                     rs.getString("Username"),
                     rs.getString("Password"),
                     rs.getString("Email"),

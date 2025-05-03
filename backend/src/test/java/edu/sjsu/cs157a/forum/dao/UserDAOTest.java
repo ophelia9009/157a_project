@@ -33,10 +33,10 @@ public class UserDAOTest {
         UserDAO userDAO = new UserDAO();
         
         // Test non-existent user
-        assertNull(userDAO.getUserById("999999"));
+        assertNull(userDAO.getUserById(999999));
         
         // Test existing user (using ID from flower_girl)
-        assertNotNull(userDAO.getUserById("1"));
+        assertNotNull(userDAO.getUserById(1));
     }
 
     @Test
