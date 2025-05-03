@@ -1,7 +1,10 @@
 package edu.sjsu.cs157a.forum.servelet;
 
 import edu.sjsu.cs157a.forum.dao.BaseDAO;
+import edu.sjsu.cs157a.forum.dao.SubforumDAO;
+import edu.sjsu.cs157a.forum.model.Subforum;
 import com.google.gson.Gson;
+import edu.sjsu.cs157a.forum.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,5 +32,34 @@ public class SubforumsServlet extends BaseServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(gson.toJson(subforums));
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        try {
+            // Parse request body
+            Map<String, String> requestBody = gson.fromJson(request.getReader(), Map.class);
+            String name = requestBody.get("name");
+            String description = requestBody.get("description");
+            
+            // Get ownerID from session
+            Integer ownerID = ((User) request.getSession().getAttribute("user")).getUserID();
+            if (ownerID == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+                return;
+            }
+
+            // Create subforum
+            SubforumDAO subforumDAO = new SubforumDAO();
+            Subforum subforum = subforumDAO.createSubforum(name, description, ownerID);
+
+            // Return created subforum
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(gson.toJson(subforum));
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create subforum: " + e.getMessage());
+        }
     }
 }
