@@ -15,15 +15,15 @@ $
 Functional Requirements:
 
 - User Management:
-    - [ ] Allow new users to register for an account.
-    - [ ] Allow registered users to log in. 
-    - [ ] Allow registered users to view their own profile information.
+    - [x] Allow new users to register for an account.
+    - [x] Allow registered users to log in. 
+    - [x] Allow registered users to view their own profile information.
     - [ ] Allow registered users to update their own profile information.
-    - [ ] Allow registered users to delete their account.
-    - [ ] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
+    - [x] Allow registered users to delete their account.
+    - [x] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
     - [ ] whatever it is , it will use "select all from users" for example, user list page
 - Subforum Management:
-    - [ ] Allow registered users to create new subforums.
+    - [ ] Allow registered users to create new subforums.  @Yeqing Xu
     - [ ] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
     - [ ] Allow registered users to delete the subforums they created. (Same note as above regarding ownership).
     - [ ] Allow the public (and registered users) to view a list of subforums.
