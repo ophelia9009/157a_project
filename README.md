@@ -18,7 +18,7 @@ Functional Requirements:
     - [x] Allow new users to register for an account.
     - [x] Allow registered users to log in. 
     - [x] Allow registered users to view their own profile information.
-    - [ ] Allow registered users to update their own profile information.
+    - [x] Allow registered users to update their own profile information.
     - [x] Allow registered users to delete their account.
     - [x] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
     - [ ] whatever it is , it will use "select all from users" for example, user list page
