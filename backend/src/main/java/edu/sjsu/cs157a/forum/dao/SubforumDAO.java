@@ -74,7 +74,6 @@ public class SubforumDAO extends BaseDAO {
      * @throws RuntimeException if subforum creation fails
      */
     public Subforum createSubforum(String name, String description, Integer ownerID) {
-
         if (ownerID == null)
             throw new IllegalArgumentException("ownerID cannot be null");
 
@@ -91,7 +90,6 @@ public class SubforumDAO extends BaseDAO {
             stmt.setTimestamp(4, now);
             stmt.setInt(5, ownerID);
 
-            
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating subforum failed, no rows affected.");
@@ -108,6 +106,45 @@ public class SubforumDAO extends BaseDAO {
         } catch (SQLException se) {
             System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to create subforum", se);
+        }
+    }
+
+    /**
+     * Updates a subforum's description if the requesting user is the owner
+     * @param subforumID The ID of the subforum to update
+     * @param newDescription The new description for the subforum
+     * @param requestingUserID The ID of the user requesting the update
+     * @return The updated Subforum object
+     * @throws RuntimeException if update fails or user is not owner
+     */
+    public void updateSubforum(Integer subforumID, String newDescription, Integer requestingUserID) {
+        if (subforumID == null || requestingUserID == null) {
+            throw new IllegalArgumentException("subforumID and requestingUserID cannot be null");
+        }
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        
+
+        // Update description
+        String updateSql = "UPDATE subforums SET Description = ?, LastUpdated = ? " +
+                         "WHERE SubforumID = ? AND OwnerID = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(updateSql)) {
+            
+            stmt.setString(1, newDescription);
+            stmt.setTimestamp(2, now);
+            stmt.setInt(3, subforumID);
+            stmt.setInt(4, requestingUserID);
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new RuntimeException("Update failed - subforum not found or user is not owner");
+            }
+
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to update subforum", se);
         }
     }
 }

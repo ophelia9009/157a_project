@@ -75,6 +75,55 @@ public class SubforumDAOTest {
         SubforumDAO subforumDAO = new SubforumDAO();
 
         subforumDAO.createSubforum("Test Subforum", "Test description", null);
+    }
+
+    @Test
+    public void test_updateSubforum_success() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        
+        // First create a subforum to update with unique name
+        String name = "Test Subforum Update " + System.currentTimeMillis();
+        String originalDesc = "Original description";
+        Integer ownerID = 1;
+        Subforum subforum = subforumDAO.createSubforum(name, originalDesc, ownerID);
+        
+        // Update description
+        String newDesc = "Updated description " + System.currentTimeMillis();
+        subforumDAO.updateSubforum(subforum.getSubforumID(), newDesc, ownerID);
+
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void test_updateSubforum_nonOwner() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        
+        // Create subforum owned by user 1 with unique name
+        String name = "Test Subforum NonOwner " + System.currentTimeMillis();
+        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1);
+        
+        // Try to update as user 2 (non-owner)
+        subforumDAO.updateSubforum(subforum.getSubforumID(), "New desc", 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_updateSubforum_nullSubforumID() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        subforumDAO.updateSubforum(null, "New desc", 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_updateSubforum_nullRequestingUserID() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        subforumDAO.updateSubforum(1, "New desc", null);
+    }
+
+    @Test
+    public void test_updateSubforum_emptyDescription() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        String name = "Test Subforum EmptyDesc " + System.currentTimeMillis();
+        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1);
+        
+        subforumDAO.updateSubforum(subforum.getSubforumID(), "", 1);
 
     }
 }
