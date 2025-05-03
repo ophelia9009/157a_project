@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+    <div class="nav-links">
+        <a href="../forum/home.jsp">Continue As Guest</a>
+    </div>
     <h1>Login</h1>
     
     <%-- Login processing logic --%>

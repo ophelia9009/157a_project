@@ -13,6 +13,7 @@
 <body>
     <%-- Navigation links section --%>
     <div class="nav-links">
+        <a href="forum/home.jsp">Continue As Guest</a>
         <a href="auth/login.jsp">Login</a>
         <a href="auth/signup.jsp">Sign Up</a>
     </div>
