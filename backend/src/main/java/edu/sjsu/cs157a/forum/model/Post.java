@@ -10,8 +10,9 @@ public class Post {
     Integer rating;
     Integer userID;
     Integer subforumID;
+    Timestamp lastupdated;
 
-    public Post(Integer postID, String title, String bodytext, Timestamp creationDate, Integer rating, Integer userID, Integer subforumID) {
+    public Post(Integer postID, String title, String bodytext, Timestamp creationDate, Integer rating, Integer userID, Integer subforumID, Timestamp lastupdated) {
         this.postID = postID;
         this.title = title;
         this.bodytext = bodytext;
@@ -19,6 +20,7 @@ public class Post {
         this.rating = rating;
         this.userID = userID;
         this.subforumID = subforumID;
+        this.lastupdated = lastupdated;
     }
     public Integer getId() {
         return postID;
@@ -40,5 +42,8 @@ public class Post {
     }
     public Integer getSubforumID() {
         return subforumID;
+    }
+    public Timestamp getLastupdated() {
+        return lastupdated;
     }
 }

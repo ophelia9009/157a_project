@@ -27,7 +27,8 @@ public class SubforumDAO extends BaseDAO {
                         rs.getTimestamp("CreationDate"),
                         rs.getInt("Rating"),
                         rs.getInt("UserID"),
-                        rs.getInt("SubforumID")
+                        rs.getInt("SubforumID"),
+                        rs.getTimestamp("LastUpdated")
                 ));
             }
             rs.close();
