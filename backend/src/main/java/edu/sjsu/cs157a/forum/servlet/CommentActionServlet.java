@@ -1,24 +1,31 @@
 package edu.sjsu.cs157a.forum.servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.sjsu.cs157a.forum.dao.CommentDAO;
+import edu.sjsu.cs157a.forum.model.Comment;
 import edu.sjsu.cs157a.forum.model.User;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @WebServlet("/api/commentAction")
 public class CommentActionServlet extends BaseServlet {
     private final CommentDAO commentDAO = new CommentDAO();
+    private final Gson gson = new Gson();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws IOException {
+            throws IOException, ServletException {
         setCorsHeaders(response);
         
-        String action = request.getParameter("action");
-        Integer commentId = Integer.valueOf(request.getParameter("commentId"));
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
@@ -27,6 +34,55 @@ public class CommentActionServlet extends BaseServlet {
             return;
         }
 
+        // Check if this is a JSON request (comment creation) or form submission (comment deletion)
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.contains("application/json")) {
+            // Handle comment creation via JSON
+            handleCommentCreation(request, response, user);
+        } else {
+            // Handle comment deletion via form
+            handleCommentAction(request, response, user);
+        }
+    }
+    
+    private void handleCommentCreation(HttpServletRequest request, HttpServletResponse response, User user) 
+            throws IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        
+        try {
+            // Parse the request body
+            BufferedReader reader = request.getReader();
+            JsonObject jsonRequest = gson.fromJson(reader, JsonObject.class);
+            
+            // Extract parameters
+            Integer postId = jsonRequest.get("postId").getAsInt();
+            String commentText = jsonRequest.get("commentText").getAsString();
+            
+            // Create the comment
+            Comment comment = commentDAO.createComment(commentText, user.getUserID(), postId);
+            
+            // Return success response
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("commentId", comment.getCommentID());
+            
+            out.print(gson.toJson(jsonResponse));
+            
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            JsonObject error = new JsonObject();
+            error.addProperty("success", false);
+            error.addProperty("message", e.getMessage());
+            out.print(gson.toJson(error));
+        }
+    }
+    
+    private void handleCommentAction(HttpServletRequest request, HttpServletResponse response, User user) 
+            throws IOException {
+        String action = request.getParameter("action");
+        Integer commentId = Integer.valueOf(request.getParameter("commentId"));
+        
         try {
             if ("delete".equals(action)) {
                 boolean deleted = commentDAO.deleteComment(commentId, user.getUserID());

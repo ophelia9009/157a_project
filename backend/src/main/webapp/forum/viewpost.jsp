@@ -84,7 +84,86 @@
         function confirmCommentDelete() {
             return confirm("Are you sure you want to delete this comment?");
         }
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Create Comment Modal
+            const commentModal = document.getElementById('commentModal');
+            const commentBtn = document.getElementById('createCommentBtn');
+            const closeCommentSpan = document.getElementById('closeCommentModal');
+            
+            if (commentBtn) {
+                commentBtn.onclick = function() {
+                    commentModal.style.display = 'block';
+                }
+            }
+            
+            if (closeCommentSpan) {
+                closeCommentSpan.onclick = function() {
+                    commentModal.style.display = 'none';
+                }
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == commentModal) {
+                    commentModal.style.display = 'none';
+                }
+            }
+            
+            // Handle Comment Creation
+            const commentForm = document.getElementById('commentForm');
+            if (commentForm) {
+                commentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const postId = <%= post.getId() %>;
+                    const commentText = document.getElementById('commentText').value;
+                    
+                    fetch('${pageContext.request.contextPath}/api/commentAction', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            postId: postId,
+                            commentText: commentText
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to create comment');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert('Comment added successfully!');
+                        commentModal.style.display = 'none';
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        alert('Error: ' + error.message);
+                    });
+                });
+            }
+        });
     </script>
+
+    <%-- Add Comment Button --%>
+    <button id="createCommentBtn" style="margin: 20px 0;">Add Comment</button>
+
+    <%-- Create Comment Modal --%>
+    <div id="commentModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%;">
+            <span id="closeCommentModal" style="float: right; cursor: pointer;">&times;</span>
+            <h2>Add New Comment</h2>
+            <form id="commentForm">
+                <input type="hidden" name="postId" value="<%= post.getId() %>">
+                <label for="commentText">Comment:</label>
+                <textarea id="commentText" name="commentText" required style="width: 100%; min-height: 100px;"></textarea><br><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
 
     <%-- Comments display section --%>
     <div class="comments-section">
