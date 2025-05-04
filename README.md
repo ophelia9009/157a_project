@@ -33,13 +33,12 @@ Functional Requirements:
     - [x] Allow registered users to view posts within a subforum.  
     - [x] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
 - Comment Management:
-    - [x] Allow registered users to create comments (reply) on posts.           @Yeqing
-    - [ ] Allow registered users to edit the comments they created.             @Yeqing
+    - [x] Allow registered users to create comments (reply) on posts.
+    - [x] Allow registered users to edit the comments they created.
     - [x] Allow registered users to delete the comments they created.            
     - [x] Allow registered users to view comments on posts.
-    - [ ] Store comment information (CommentID, CommentText, UserID, CreationDate, Rating, PostID, ParentID, lastUpdated) in a database.
-General Access:
-    - [ ] Public users should be able to browse and view subforums, posts, and comments without registration.
+    - [x] Store comment information (CommentID, CommentText, UserID, CreationDate, Rating, PostID, ParentID, lastUpdated) in a database.
+
 **TODO:**
 
 - Data Layer: Database Design

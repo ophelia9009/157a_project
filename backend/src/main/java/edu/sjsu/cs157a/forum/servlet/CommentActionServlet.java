@@ -95,6 +95,28 @@ public class CommentActionServlet extends BaseServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, 
                         "Comment not found or not authorized");
                 }
+            } else if ("edit".equals(action)) {
+                String newText = request.getParameter("commentText");
+                if (newText == null || newText.trim().isEmpty()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Comment text cannot be empty");
+                    return;
+                }
+                
+                try {
+                    Comment updatedComment = commentDAO.updateComment(commentId, user.getUserID(), newText);
+                    if (updatedComment != null) {
+                        // Redirect back to the same post view
+                        String postId = request.getParameter("postId");
+                        response.sendRedirect(request.getContextPath() + 
+                            "/forum/viewpost.jsp?postId=" + postId);
+                    } else {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, 
+                            "Comment not found or not authorized");
+                    }
+                } catch (SQLException e) {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Error updating comment: " + e.getMessage());
+                }
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, 
                     "Invalid action");

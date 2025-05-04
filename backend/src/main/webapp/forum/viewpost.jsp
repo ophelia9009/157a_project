@@ -85,12 +85,27 @@
             return confirm("Are you sure you want to delete this comment?");
         }
         
+        // Function to open edit comment modal
+        function openEditModal(commentId, commentText) {
+            const editModal = document.getElementById('editCommentModal');
+            const editCommentId = document.getElementById('editCommentId');
+            const editCommentText = document.getElementById('editCommentText');
+            
+            editCommentId.value = commentId;
+            editCommentText.value = commentText;
+            editModal.style.display = 'block';
+        }
+        
         // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Handle Create Comment Modal
             const commentModal = document.getElementById('commentModal');
             const commentBtn = document.getElementById('createCommentBtn');
             const closeCommentSpan = document.getElementById('closeCommentModal');
+            
+            // Handle Edit Comment Modal
+            const editCommentModal = document.getElementById('editCommentModal');
+            const closeEditCommentSpan = document.getElementById('closeEditCommentModal');
             
             if (commentBtn) {
                 commentBtn.onclick = function() {
@@ -104,9 +119,18 @@
                 }
             }
             
+            if (closeEditCommentSpan) {
+                closeEditCommentSpan.onclick = function() {
+                    editCommentModal.style.display = 'none';
+                }
+            }
+            
             window.onclick = function(event) {
                 if (event.target == commentModal) {
                     commentModal.style.display = 'none';
+                }
+                if (event.target == editCommentModal) {
+                    editCommentModal.style.display = 'none';
                 }
             }
             
@@ -165,6 +189,22 @@
         </div>
     </div>
 
+    <%-- Edit Comment Modal --%>
+    <div id="editCommentModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%;">
+            <span id="closeEditCommentModal" style="float: right; cursor: pointer;">&times;</span>
+            <h2>Edit Comment</h2>
+            <form id="editCommentForm" method="post" action="${pageContext.request.contextPath}/api/commentAction">
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="commentId" id="editCommentId">
+                <input type="hidden" name="postId" value="<%= post.getId() %>">
+                <label for="editCommentText">Comment:</label>
+                <textarea id="editCommentText" name="commentText" required style="width: 100%; min-height: 100px;"></textarea><br><br>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
     <%-- Comments display section --%>
     <div class="comments-section">
         <h2>Comments</h2>
@@ -187,13 +227,18 @@
                             <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(comment.getCreationDate()) %>
                         </span>
                         <% if (comment.getUserID() == user.getUserID()) { %>
-                            <form class="comment-delete-form" method="post" action="${pageContext.request.contextPath}/api/commentAction">
-                                <input type="hidden" name="commentId" value="<%= comment.getCommentID() %>">
-                                <input type="hidden" name="postId" value="<%= postId %>">
-                                <button type="submit" name="action" value="delete" class="delete-comment-btn" onclick="return confirmCommentDelete()">
-                                    <i class="delete-icon">🗑️</i> Delete
+                            <div class="comment-actions">
+                                <button class="edit-comment-btn" onclick="openEditModal(<%= comment.getCommentID() %>, '<%= comment.getCommentText().replace("'", "\\'").replace("\n", "\\n") %>')">
+                                    <i class="edit-icon">✏️</i> Edit
                                 </button>
-                            </form>
+                                <form class="comment-delete-form" method="post" action="${pageContext.request.contextPath}/api/commentAction">
+                                    <input type="hidden" name="commentId" value="<%= comment.getCommentID() %>">
+                                    <input type="hidden" name="postId" value="<%= postId %>">
+                                    <button type="submit" name="action" value="delete" class="delete-comment-btn" onclick="return confirmCommentDelete()">
+                                        <i class="delete-icon">🗑️</i> Delete
+                                    </button>
+                                </form>
+                            </div>
                         <% } %>
                     </div>
                     <div class="comment-body">
