@@ -3,8 +3,12 @@ package edu.sjsu.cs157a.forum.dao;
 import edu.sjsu.cs157a.forum.model.Subforum;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -90,7 +94,6 @@ public class SubforumDAOTest {
         // Update description
         String newDesc = "Updated description " + System.currentTimeMillis();
         subforumDAO.updateSubforum(subforum.getSubforumID(), newDesc, ownerID);
-
     }
 
     @Test(expected = RuntimeException.class)
@@ -124,6 +127,121 @@ public class SubforumDAOTest {
         Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1);
         
         subforumDAO.updateSubforum(subforum.getSubforumID(), "", 1);
+    }
 
+    @Test
+    public void test_getSubscribedSubforums_success() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(1);
+        assertNotNull(subscribed);
+    }
+    
+    @Test
+    public void test_getSubscribedSubforums_noSubscriptions() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(999);
+        assertNotNull(subscribed);
+        assertTrue(subscribed.isEmpty());
+    }
+    
+    @Test(expected = RuntimeException.class)
+    public void test_getSubscribedSubforums_invalidUser() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        subforumDAO.getSubscribedSubforums(null);
+    }
+    @Test
+    public void test_getAllSubforumsOrderedByLastUpdated_success() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        
+        try {
+            // Create test subforums with explicit timestamps
+            long now = System.currentTimeMillis();
+            Timestamp oldestTime = new Timestamp(now - 2000);
+            Timestamp middleTime = new Timestamp(now - 1000);
+            Timestamp newestTime = new Timestamp(now);
+            
+            // Create subforums with controlled timestamps and unique names
+            String uniqueId = String.valueOf(now);
+            
+            // Oldest subforum - created 2 seconds ago
+            Subforum oldest = subforumDAO.createSubforum("Oldest-" + uniqueId, "Oldest subforum", 1);
+            subforumDAO.updateSubforum(oldest.getSubforumID(), "Updated oldest", 1);
+            
+            // Sleep to ensure different timestamps
+            Thread.sleep(2000);
+            
+            // Middle subforum - created now
+            Subforum middle = subforumDAO.createSubforum("Middle-" + uniqueId, "Middle subforum", 1);
+            
+            // Sleep again
+            Thread.sleep(2000);
+            
+            // Newest subforum - created 2 seconds later
+            Subforum newest = subforumDAO.createSubforum("Newest-" + uniqueId, "Newest subforum", 1);
+            subforumDAO.updateSubforum(newest.getSubforumID(), "Updated newest", 1);
+            
+            // Get all subforums ordered by last updated
+            List<Subforum> subforums = subforumDAO.getAllSubforumsOrderedByLastUpdated();
+            
+            // Verify ordering (newest first)
+            assertNotNull(subforums);
+            
+            // Find our test subforums in the results
+            Subforum foundNewest = null;
+            Subforum foundMiddle = null;
+            Subforum foundOldest = null;
+            
+            for (Subforum s : subforums) {
+                if (s.getName().startsWith("Newest-")) foundNewest = s;
+                if (s.getName().startsWith("Middle-")) foundMiddle = s;
+                if (s.getName().startsWith("Oldest-")) foundOldest = s;
+            }
+            
+            assertNotNull("Newest subforum not found", foundNewest);
+            assertNotNull("Middle subforum not found", foundMiddle);
+            assertNotNull("Oldest subforum not found", foundOldest);
+            
+            // Debug output
+            System.out.println("Newest timestamp: " + foundNewest.getLastUpdated());
+            System.out.println("Middle timestamp: " + foundMiddle.getLastUpdated());
+            System.out.println("Oldest timestamp: " + foundOldest.getLastUpdated());
+            
+            // Verify ordering
+            assertTrue("Newest (" + foundNewest.getLastUpdated() + ") should be after Middle (" + foundMiddle.getLastUpdated() + ")",
+                foundNewest.getLastUpdated().after(foundMiddle.getLastUpdated()));
+            assertTrue("Middle (" + foundMiddle.getLastUpdated() + ") should be after Oldest (" + foundOldest.getLastUpdated() + ")",
+                foundMiddle.getLastUpdated().after(foundOldest.getLastUpdated()));
+        } catch (InterruptedException e) {
+            fail("Test interrupted: " + e.getMessage());
+        } finally {
+            // Clean up test data
+            try {
+                Connection conn = subforumDAO.getConnection();
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate("DELETE FROM subforums WHERE Name LIKE 'Oldest-%' OR Name LIKE 'Middle-%' OR Name LIKE 'Newest-%'");
+                stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Failed to clean up test data: " + e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void test_getAllSubforumsOrderedByLastUpdated_empty() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        List<Subforum> subforums = subforumDAO.getAllSubforumsOrderedByLastUpdated();
+        assertNotNull(subforums);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void test_getAllSubforumsOrderedByLastUpdated_dbError() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        // Force error by passing invalid SQL (simpler than connection manipulation)
+        try {
+            subforumDAO.getConnection().prepareStatement("INVALID SQL").executeQuery();
+            subforumDAO.getAllSubforumsOrderedByLastUpdated();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

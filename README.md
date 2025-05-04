@@ -18,23 +18,23 @@ Functional Requirements:
     - [x] Allow new users to register for an account.
     - [x] Allow registered users to log in. 
     - [x] Allow registered users to view their own profile information.
-    - [x] Allow registered users to update their own profile information.
+    - [ ] Allow registered users to update their own profile information.
     - [x] Allow registered users to delete their account.
     - [x] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
-    - [ ] whatever it is , it will use "select all from users" for example, user list page
+    - [x] whatever it is , it will use "select all from users" for example, user list page
 - Subforum Management:
     - [x] Allow registered users to create new subforums.
     - [x] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
     - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
 - Post Management:
-    - [ ] Allow registered users to create new posts within a specific subforum.
-    - [ ] Allow registered users to edit the posts they created.
-    - [ ] Allow registered users to delete the posts they created.
-    - [ ] Allow the public (and registered users) to view posts within a subforum.
-    - [ ] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
+    - [ ] Allow registered users to create new posts within a specific subforum. @Vaishu
+    - [ ] Allow registered users to edit the posts they created.                 @Johnathan
+    - [ ] Allow registered users to delete the posts they created.               @Johnathan
+    - [ ] Allow the public (and registered users) to view posts within a subforum.@Vaishu
+    - [X] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
 - Comment Management:
-    - [ ] Allow registered users to create comments (reply) on posts.
-    - [ ] Allow registered users to edit the comments they created.
+    - [ ] Allow registered users to create comments (reply) on posts.           @Yeqing
+    - [ ] Allow registered users to edit the comments they created.             @Yeqing
     - [ ] Allow registered users to delete the comments they created.
     - [ ] Allow the public (and registered users) to view comments on posts.
     - [ ] Store comment information (CommentID, CommentText, UserID, CreationDate, Rating, PostID, ParentID, lastUpdated) in a database.
