@@ -1,12 +1,149 @@
 /* Global styles */
 body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* Navigation styles */
+/* Post Styles */
+.post-header {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.post-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-align: left;
+    color: #343a40;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.post-content {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.post-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.post-footer {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: right;
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: 3rem;
+}
+
+.comments-section h2 {
+    color: #444;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.comment-card {
+    display: flex;
+    gap: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #444;
+}
+
+.comment-date {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.comment-body {
+    margin: 1rem 0;
+    line-height: 1.7;
+}
+
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.comment-rating {
+    color: #000000;;
+}
+
+.rating-icon {
+    color: #ffc107;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    color: #666;
+    font-style: italic;
+}
+
+.error-message {
+    color: #dc3545;
+    padding: 1rem;
+    text-align: center;
+    background: #fff5f5;
+    border-radius: 8px;
+}
+
+/* Navigation and other existing styles remain unchanged */
 .nav-links {
     position: absolute;
     top: 20px;
@@ -19,65 +156,4 @@ body {
     color: #0066cc;
 }
 
-.welcome {
-    text-align: center;
-    margin-top: 100px;
-}
-
-/* Form styles */
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #0066cc;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Message styles */
-.error {
-    color: red;
-}
-
-.success {
-    color: green;
-}
-
-/* Table styles */
-table {
-    border-collapse: collapse;
-    width: 80%;
-    margin: 20px auto;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-/* Heading styles */
-h1 {
-    text-align: center;
-    margin-top: 50px;
-}
+/* ... rest of existing styles ... */
