@@ -66,7 +66,7 @@ public class ProfileActionServlet extends BaseServlet {
                     User updatedUser = userDAO.getUserById(userId);
                     session.setAttribute("user", updatedUser);
 
-                    response.sendRedirect("../forum/myprofile.jsp");
+                    response.sendRedirect("../user/myprofile.jsp");
                     break;
 
                 default:
