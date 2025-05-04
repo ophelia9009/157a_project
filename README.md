@@ -30,7 +30,7 @@ Functional Requirements:
     - [ ] Allow registered users to create new posts within a specific subforum. @Vaishu
     - [ ] Allow registered users to edit the posts they created.                 @Johnathan
     - [ ] Allow registered users to delete the posts they created.               @Johnathan
-    - [ ] Allow the public (and registered users) to view posts within a subforum.@Vaishu
+    - [x] Allow registered users to view posts within a subforum.  
     - [X] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
 - Comment Management:
     - [ ] Allow registered users to create comments (reply) on posts.           @Yeqing
