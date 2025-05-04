@@ -8,6 +8,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="edu.sjsu.cs157a.forum.model.Post" %>
 <%@ page import="edu.sjsu.cs157a.forum.dao.PostDAO" %>
+<%@ page import="edu.sjsu.cs157a.forum.model.Comment" %>
+<%@ page import="edu.sjsu.cs157a.forum.dao.CommentDAO" %>
+<%@ page import="edu.sjsu.cs157a.forum.dao.UserDAO" %>
+<%@ page import="java.sql.SQLException" %>
 
 
 <!DOCTYPE html>
@@ -48,13 +52,22 @@
     }
     %>
     <%-- Post display section --%>
-    <h1>My Post</h1>
-    <div class="post-info">
-        <p><strong>Post ID:</strong> <%= post.getId() %></p>
-        <p><strong>Title:</strong> <%= post.getTitle() %></p>
-        <p><strong>Body Text:</strong> <%= post.getBodyText() %></p>
-        <p><strong>Creation Date:</strong> <%= post.getCreationDate() %></p>
-        <p><strong>Last Updated:</strong> <%= post.getLastUpdated() %></p>
+    <div class="post-header">
+        <h1><%= post.getTitle() %></h1>
+        <div class="post-meta">
+            <span class="post-id">#<%= post.getId() %></span>
+            <span class="post-date">
+                Posted: <%= new java.text.SimpleDateFormat("MMM dd, yyyy").format(post.getCreationDate()) %>
+            </span>
+        </div>
+    </div>
+    <div class="post-content">
+        <div class="post-body">
+            <%= post.getBodyText() %>
+        </div>
+        <div class="post-footer">
+            Last updated: <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(post.getLastUpdated()) %>
+        </div>
     </div>
 
     <%-- Post action form --%>
@@ -69,5 +82,49 @@
         }
     </script>
 
+    <%-- Comments display section --%>
+    <div class="comments-section">
+        <h2>Comments</h2>
+        <div class="comments-container">
+        <%
+        CommentDAO commentDAO = new CommentDAO();
+        UserDAO userDAO = new UserDAO();
+        try {
+            List<Comment> comments = commentDAO.getCommentsByPost(postId);
+            if (comments.isEmpty()) {
+                out.println("<p class='no-comments'>No comments yet. Be the first to comment!</p>");
+            } else {
+                for (Comment comment : comments) {
+        %>
+            <div class="comment-card">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author"><%= userDAO.getUserById(comment.getUserID()).getUsername() %></span>
+                        <span class="comment-date">
+                            <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(comment.getCreationDate()) %>
+                        </span>
+                    </div>
+                    <div class="comment-body">
+                        <%= comment.getCommentText() %>
+                    </div>
+                    <div class="comment-footer">
+                        <span class="comment-rating">
+                            <i class="rating-icon">★</i> <%= comment.getRating() %>
+                        </span>
+                        <span class="comment-updated">
+                            Updated: <%= new java.text.SimpleDateFormat("MMM dd, yyyy").format(comment.getLastUpdated()) %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        <%
+                }
+            }
+        } catch (SQLException e) {
+            out.println("<p class='error-message'>Error loading comments: " + e.getMessage() + "</p>");
+        }
+        %>
+        </div>
+    </div>
 </body>
 </html>
