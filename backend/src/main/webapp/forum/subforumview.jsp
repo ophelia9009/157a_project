@@ -4,6 +4,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- Import required DAOs and models --%>
 <%@ page import="edu.sjsu.cs157a.forum.dao.UserDAO, edu.sjsu.cs157a.forum.model.User" %>
+<%
+    String subforumId = request.getParameter("subforumId");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,12 +15,10 @@
     <link rel="stylesheet" href="../css/styles.css">
 
     <script>
-        async function fetchPosts () {
-            const subforumID = document.getElementById("tempsubID").value.trim();
+        async function fetchPosts(subforumID) {
             console.log("Subforum ID is:", subforumID);
             try {
                 const response = await fetch("/backend/api/subforums/" + subforumID + "/posts");
-                // const response = await fetch(`http://localhost:8080/backend/api/subforums/1/posts`);
                 if (!response.ok) {
                     console.log("Couldn't get posts");
                     return;
@@ -72,10 +73,7 @@
         }
 
         window.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("subforumForm").addEventListener("submit", function (event) {
-                event.preventDefault(); // Prevent page reload
-                fetchPosts();
-            });
+            fetchPosts("<%= subforumId %>");
         });
     </script>
 </head>
@@ -85,13 +83,7 @@
     </div>
 
     <h3> Subforum view </h3>
-    <p> Ill get rid of this later but for now this thing controls which sub</p>
-    <p> actually it just displays the subforum id 1 </p>
-
-    <form id="subforumForm">
-        <input type="text" name="tempsubID" placeholder="Subforum ID" id="tempsubID" required />
-        <button type="submit">Load Posts</button>
-    </form>
+    <p>Viewing posts for subforum ID: <%= subforumId %></p>
 
     <div id="postsContainer">
     </div>
