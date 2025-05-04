@@ -77,67 +77,60 @@ VALUES
 ('SQL Query Optimization', 'Anyone know how to optimize complex JOIN queries in SQL?', '2024-09-23 11:15:00', 20, 14, 14);
 
 INSERT INTO `sf_db`.`comments`
-(`CommentText`, `CreationDate`, `Rating`, `UserID`, `PostID`, `ParentID`, `LastUpdated`)
+(`CommentText`, `CreationDate`, `Rating`, `UserID`, `PostID`, `LastUpdated`)
 VALUES
-('Lovely Day Today, Mewtwo would win no cap! They got higher stats!', '2020-01-01 00:00:00', 10, 10, 1, 1, '2020-01-01 00:00:00'),
--- Generated Subsequent Comments ChatGPT 4/25/25 
-('Mew is adorable but I think Mewtwo would dominate.', '2025-01-01 08:00:00', 4, 2, 1, 2, '2025-01-01 08:00:00'),
--- Nested reply to CommentID 2
-('Maybe, but Mew has more flexibility in movesets.', '2025-01-01 08:10:00', 5, 3, 1, 2, '2025-01-01 08:10:00'),
--- Nested reply to CommentID 3
-('I mean, versatility is great, but sheer power often wins.', '2025-01-01 08:20:00', 2, 5, 1, 3, '2025-01-01 08:20:00'),
--- Another top-level comment
-('Honestly I prefer Lucario over both of them.', '2025-01-01 08:30:00', 3, 6, 1, 5, '2025-01-01 08:30:00'),
--- Reply to CommentID 5
-('Lucario is cool, but c''mon—legendary status matters!', '2025-01-01 08:40:00', 4, 8, 1, 5, '2025-01-01 08:40:00'),
--- Deep reply to CommentID 6
-('Fair, but Lucario had that movie. Instant classic.', '2025-01-01 08:50:00', 6, 10, 1, 6, '2025-01-01 08:50:00'),
--- Another top-level comment
-('I raised a Mew from level 5—pure nostalgia.', '2025-01-01 09:00:00', 7, 11, 1, 8, '2025-01-01 09:00:00'),
--- Reply to CommentID 8
-('Same! Got mine from that old Toys R Us event.', '2025-01-01 09:10:00', 5, 13, 1, 8, '2025-01-01 09:10:00'),
+('Lovely Day Today, Mewtwo would win no cap! They got higher stats!', '2020-01-01 00:00:00', 10, 10, 1, '2020-01-01 00:00:00'),
+-- Generated Subsequent Comments ChatGPT 4/25/25
+('Mew is adorable but I think Mewtwo would dominate.', '2025-01-01 08:00:00', 4, 2, 1, '2025-01-01 08:00:00'),
+('Maybe, but Mew has more flexibility in movesets.', '2025-01-01 08:10:00', 5, 3, 1, '2025-01-01 08:10:00'),
+('I mean, versatility is great, but sheer power often wins.', '2025-01-01 08:20:00', 2, 5, 1, '2025-01-01 08:20:00'),
+('Honestly I prefer Lucario over both of them.', '2025-01-01 08:30:00', 3, 6, 1, '2025-01-01 08:30:00'),
+('Lucario is cool, but c''mon—legendary status matters!', '2025-01-01 08:40:00', 4, 8, 1, '2025-01-01 08:40:00'),
+('Fair, but Lucario had that movie. Instant classic.', '2025-01-01 08:50:00', 6, 10, 1, '2025-01-01 08:50:00'),
+('I raised a Mew from level 5—pure nostalgia.', '2025-01-01 09:00:00', 7, 11, 1, '2025-01-01 09:00:00'),
+('Same! Got mine from that old Toys R Us event.', '2025-01-01 09:10:00', 5, 13, 1, '2025-01-01 09:10:00'),
 -- PostID = 2
-('Mewtwo is so OP. Anyone else remember the Gen 1 days?', '2020-01-01 08:15:00', 10, 2, 2, 10, '2020-01-01 08:15:00'),
+('Mewtwo is so OP. Anyone else remember the Gen 1 days?', '2020-01-01 08:15:00', 10, 2, 2, '2020-01-01 08:15:00'),
 -- PostID = 3
-('Serperior is stylish, but I gotta go with Infernape.', '2020-01-01 08:17:00', 5, 3, 3, 11, '2020-01-01 08:17:00'),
+('Serperior is stylish, but I gotta go with Infernape.', '2020-01-01 08:17:00', 5, 3, 3, '2020-01-01 08:17:00'),
 -- PostID = 4
-('Totally agree! Roses add elegance to any space.', '2025-01-01 11:00:00', 8, 4, 4, 12, '2025-01-01 11:00:00'),
+('Totally agree! Roses add elegance to any space.', '2025-01-01 11:00:00', 8, 4, 4, '2025-01-01 11:00:00'),
 -- PostID = 5
-('Rain team meta is super effective rn. Try Pelipper + Barraskewda!', '2025-01-01 11:45:00', 9, 5, 5, 13, '2025-01-01 11:45:00'),
+('Rain team meta is super effective rn. Try Pelipper + Barraskewda!', '2025-01-01 11:45:00', 9, 5, 5, '2025-01-01 11:45:00'),
 -- PostID = 6
-('MySQL is reliable. Been using it for years with Laravel.', '2024-12-01 09:15:00', 7, 6, 6, 14, '2024-12-01 09:15:00'),
+('MySQL is reliable. Been using it for years with Laravel.', '2024-12-01 09:15:00', 7, 6, 6, '2024-12-01 09:15:00'),
 -- PostID = 7
-('React hooks made my life so much easier. useEffect = ❤️', '2025-02-01 15:00:00', 10, 7, 7, 15, '2025-02-01 15:00:00'),
+('React hooks made my life so much easier. useEffect = ❤️', '2025-02-01 15:00:00', 10, 7, 7, '2025-02-01 15:00:00'),
 -- PostID = 8
-('Unity and C# go together like PB&J. Smooth and powerful.', '2024-05-15 12:30:00', 9, 8, 8, 16, '2024-05-15 12:30:00'),
+('Unity and C# go together like PB&J. Smooth and powerful.', '2024-05-15 12:30:00', 9, 8, 8, '2024-05-15 12:30:00'),
 -- PostID = 9
-('Tracebacks have saved me so many times. Thank you, Python devs.', '2024-03-20 16:15:00', 11, 9, 9, 17, '2024-03-20 16:15:00'),
+('Tracebacks have saved me so many times. Thank you, Python devs.', '2024-03-20 16:15:00', 11, 9, 9, '2024-03-20 16:15:00'),
 -- PostID = 10
-('Postgres ftw. JSONB support is 🔥🔥🔥.', '2023-12-10 09:00:00', 6, 10, 10, 18, '2023-12-10 09:00:00'),
+('Postgres ftw. JSONB support is 🔥🔥🔥.', '2023-12-10 09:00:00', 6, 10, 10, '2023-12-10 09:00:00'),
 -- PostID = 11
-('I dabble in Java game dev. Would love to team up!', '2025-01-10 18:45:00', 13, 11, 11, 19, '2025-01-10 18:45:00'),
+('I dabble in Java game dev. Would love to team up!', '2025-01-10 18:45:00', 13, 11, 11, '2025-01-10 18:45:00'),
 -- PostID = 12
-('Nothing like jazz to wind down after work.', '2025-01-15 20:30:00', 14, 12, 12, 20, '2025-01-15 20:30:00'),
+('Nothing like jazz to wind down after work.', '2025-01-15 20:30:00', 14, 12, 12, '2025-01-15 20:30:00'),
 -- PostID = 13
-('Try a recursive approach. Also check for null nodes!', '2024-10-05 17:30:00', 5, 13, 13, 21, '2024-10-05 17:30:00'),
+('Try a recursive approach. Also check for null nodes!', '2024-10-05 17:30:00', 5, 13, 13, '2024-10-05 17:30:00'),
 -- PostID = 14
-('Indexing cut my query time by 80%. Highly recommend btree index.', '2024-06-03 13:45:00', 7, 14, 14, 22, '2024-06-03 13:45:00'),
+('Indexing cut my query time by 80%. Highly recommend btree index.', '2024-06-03 13:45:00', 7, 14, 14, '2024-06-03 13:45:00'),
 -- PostID = 15
-('Hydrangeas like acidic soil. Test your pH levels!', '2025-01-02 10:30:00', 9, 15, 15, 23, '2025-01-02 10:30:00'),
+('Hydrangeas like acidic soil. Test your pH levels!', '2025-01-02 10:30:00', 9, 15, 15, '2025-01-02 10:30:00'),
 -- PostID = 16
-('Redux was confusing at first, but it’s great once it clicks.', '2025-01-01 13:00:00', 8, 6, 16, 24, '2025-01-01 13:00:00'),
+('Redux was confusing at first, but it’s great once it clicks.', '2025-01-01 13:00:00', 8, 6, 16, '2025-01-01 13:00:00'),
 -- PostID = 17
-('Use try-catch-finally for control flow. Don’t forget logging!', '2024-08-19 08:15:00', 7, 7, 17, 25, '2024-08-19 08:15:00'),
+('Use try-catch-finally for control flow. Don’t forget logging!', '2024-08-19 08:15:00', 7, 7, 17, '2024-08-19 08:15:00'),
 -- CommentID = 26
-('Totally feel this. useSelector tripped me up at first.', '2025-01-01 13:10:00', 6, 7, 16, 24, '2025-01-01 13:10:00'),
+('Totally feel this. useSelector tripped me up at first.', '2025-01-01 13:10:00', 6, 7, 16, '2025-01-01 13:10:00'),
 -- CommentID = 27
-('Once I grasped the store concept, everything started to make sense.', '2025-01-01 13:12:00', 5, 8, 16, 24, '2025-01-01 13:12:00'),
+('Once I grasped the store concept, everything started to make sense.', '2025-01-01 13:12:00', 5, 8, 16, '2025-01-01 13:12:00'),
 -- CommentID = 28
-('Pro tip: use Redux Toolkit. Makes setup *so* much easier.', '2025-01-01 13:15:00', 10, 9, 16, 24, '2025-01-01 13:15:00'),
+('Pro tip: use Redux Toolkit. Makes setup *so* much easier.', '2025-01-01 13:15:00', 10, 9, 16, '2025-01-01 13:15:00'),
 -- CommentID = 29
-('Yeah, `createSlice` + `configureStore` simplified everything for me.', '2025-01-01 13:18:00', 8, 10, 16, 24, '2025-01-01 13:18:00'),
+('Yeah, `createSlice` + `configureStore` simplified everything for me.', '2025-01-01 13:18:00', 8, 10, 16, '2025-01-01 13:18:00'),
 -- CommentID = 30
-('Also: combine Redux DevTools with React DevTools = mind blown!', '2025-01-01 13:22:00', 9, 11, 16, 24, '2025-01-01 13:22:00');
+('Also: combine Redux DevTools with React DevTools = mind blown!', '2025-01-01 13:22:00', 9, 11, 16, '2025-01-01 13:22:00');
 INSERT INTO `sf_db`.`subscriptions`
 (`UserID`, `SubforumID`, `SubscriptionDate`)
 VALUES

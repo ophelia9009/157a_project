@@ -6,19 +6,17 @@ import edu.sjsu.cs157a.forum.model.Element;
 import java.sql.*;
 
 public class CommentDAO extends BaseDAO{
-    public Comment createComment(String text, Integer userId, Integer postId, Integer parentId){
+    public Comment createComment(String text, Integer userId, Integer postId){
         if (text == null)
             throw new IllegalArgumentException("text cannot be null");
         if (userId == null)
             throw new IllegalArgumentException("userID cannot be null");
         if (postId == null)
             throw new IllegalArgumentException("postId cannot be null");
-        if (parentId == null)
-            throw new IllegalArgumentException("parentId cannot be null");
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "INSERT INTO comments (CommentText, CreationDate, UserID, PostID, ParentID, LastUpdated) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO comments (CommentText, CreationDate, UserID, PostID, LastUpdated) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -27,8 +25,7 @@ public class CommentDAO extends BaseDAO{
             stmt.setTimestamp(2, now);
             stmt.setInt(3, userId);
             stmt.setInt(4, postId);
-            stmt.setInt(5, parentId);
-            stmt.setTimestamp(6, now);
+            stmt.setTimestamp(5, now);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -38,7 +35,7 @@ public class CommentDAO extends BaseDAO{
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     Integer commentID = generatedKeys.getInt(1);
-                    return new Comment(commentID, text, now, 0, userId, postId, parentId, now);
+                    return new Comment(commentID, text, now, 0, userId, postId, now);
                 } else {
                     throw new SQLException("Creating comment failed, no ID obtained.");
                 }
