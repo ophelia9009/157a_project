@@ -41,6 +41,7 @@ CREATE TABLE `Posts` (
   `Rating` INT NOT NULL DEFAULT 0,
   `UserID` INT NOT NULL, -- FK to Users table
   `SubforumID` INT NOT NULL, -- FK to Subforums table
+  `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PostID`),
   CONSTRAINT `FK_Posts_UserID`
     FOREIGN KEY (`UserID`)
