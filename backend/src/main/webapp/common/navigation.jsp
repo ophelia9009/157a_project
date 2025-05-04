@@ -89,7 +89,7 @@ boolean isLoggedIn = (user != null);
                 <%-- Authentication-based links --%>
                 <% if (isLoggedIn) { %>
                     <li class="nav-item">
-                        <a class="nav-link <%= currentPage.equals("profile") ? "active" : "" %>" 
+                        <a class="nav-link <%= currentPage.equals("profile") ? "active" : "" %>"
                            href="${pageContext.request.contextPath}/user/myprofile.jsp">
                             <i class="bi bi-person-circle"></i> My Profile
                         </a>
@@ -99,17 +99,26 @@ boolean isLoggedIn = (user != null);
                             <i class="bi bi-box-arrow-right"></i> Logout
                         </a>
                     </li>
-                <% } else { %>
+                <% } else if (!request.getRequestURI().endsWith("/index.jsp")) { %>
                     <li class="nav-item">
-                        <a class="nav-link <%= currentPage.equals("login") ? "active" : "" %>" 
+                        <a class="nav-link <%= currentPage.equals("login") ? "active" : "" %>"
                            href="${pageContext.request.contextPath}/auth/login.jsp">
                             <i class="bi bi-box-arrow-in-right"></i> Login
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%= currentPage.equals("signup") ? "active" : "" %>" 
+                        <a class="nav-link <%= currentPage.equals("signup") ? "active" : "" %>"
                            href="${pageContext.request.contextPath}/auth/signup.jsp">
                             <i class="bi bi-person-plus"></i> Sign Up
+                        </a>
+                    </li>
+                <% } %>
+                
+                <%-- Continue as guest link for index page --%>
+                <% if (!isLoggedIn && request.getRequestURI().endsWith("/index.jsp")) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/forum/home.jsp">
+                            <i class="bi bi-person"></i> Continue As Guest
                         </a>
                     </li>
                 <% } %>
