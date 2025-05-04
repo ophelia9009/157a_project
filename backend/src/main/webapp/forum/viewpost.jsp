@@ -8,6 +8,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="edu.sjsu.cs157a.forum.model.Post" %>
 <%@ page import="edu.sjsu.cs157a.forum.dao.PostDAO" %>
+<%@ page import="edu.sjsu.cs157a.forum.model.Comment" %>
+<%@ page import="edu.sjsu.cs157a.forum.dao.CommentDAO" %>
+<%@ page import="java.sql.SQLException" %>
 
 
 <!DOCTYPE html>
@@ -69,5 +72,32 @@
         }
     </script>
 
+    <%-- Comments display section --%>
+    <h2>Comments</h2>
+    <div class="comments-container">
+    <%
+    CommentDAO commentDAO = new CommentDAO();
+    try {
+        List<Comment> comments = commentDAO.getCommentsByPost(postId);
+        if (comments.isEmpty()) {
+            out.println("<p>No comments yet.</p>");
+        } else {
+            for (Comment comment : comments) {
+    %>
+        <div class="comment">
+            <p><strong>Comment ID:</strong> <%= comment.getCommentID() %></p>
+            <p><strong>Text:</strong> <%= comment.getCommentText() %></p>
+            <p><strong>Posted on:</strong> <%= comment.getCreationDate() %></p>
+            <p><strong>Rating:</strong> <%= comment.getRating() %></p>
+            <p><strong>Last updated:</strong> <%= comment.getLastUpdated() %></p>
+        </div>
+    <%
+            }
+        }
+    } catch (SQLException e) {
+        out.println("<p>Error loading comments: " + e.getMessage() + "</p>");
+    }
+    %>
+    </div>
 </body>
 </html>
