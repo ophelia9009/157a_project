@@ -38,7 +38,7 @@ public class ProfileActionServlet extends BaseServlet {
         try {
             switch (action) {
                 case "delete":
-                    boolean deleted = userDAO.deleteTuple(new Element("users", "UserID", userId,new String[]{}, new Object[]{}));
+                    boolean deleted = userDAO.deleteTuple(new Element("Users", "UserID", userId,new String[]{}, new Object[]{}));
                     if (deleted) {
                         session.invalidate();
                         response.sendRedirect("../index.jsp");
@@ -59,7 +59,7 @@ public class ProfileActionServlet extends BaseServlet {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Username and Email are required.");
                         return;
                     }
-                    userDAO.updateTuple(new Element("users", "UserID", userId,
+                    userDAO.updateTuple(new Element("Users", "UserID", userId,
                             new String[] { "Username", "Email" },
                             new Object[] { newUsername, newEmail }));
 

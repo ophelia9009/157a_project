@@ -10,8 +10,8 @@ import java.util.*;
 public class BaseDAO {
     private static final Logger logger = LogManager.getLogger(BaseDAO.class);
 
-    public static final List <String> VALID_TABLES = Arrays.asList("users", "subforums", "posts",
-     "comments", "subscriptions");
+    public static final List <String> VALID_TABLES = Arrays.asList("Users", "Subforums", "Posts",
+     "Comments", "Subscriptions");
     public Connection getConnection() {
 
         try {
