@@ -22,11 +22,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-    <div class="nav-links">
-        <a href="${pageContext.request.contextPath}/forum/home.jsp">View Forum</a>
-        <a href="${pageContext.request.contextPath}/forum/subforumview.jsp">View Subforum</a>
-        <a href="${pageContext.request.contextPath}/index.jsp">Logout</a>
-    </div>
     <%-- Check user session --%>
     <%
     User user = (User) session.getAttribute("user");
@@ -51,6 +46,11 @@
         return;
     }
     %>
+    <div class="nav-links">
+        <a href="${pageContext.request.contextPath}/forum/home.jsp">View Forum</a>
+        <a href="${pageContext.request.contextPath}/forum/subforumview.jsp?subforumId=<%= post.getSubforumID() %>">View Subforum</a>
+        <a href="${pageContext.request.contextPath}/index.jsp">Logout</a>
+    </div>
     <%-- Post display section --%>
     <div class="post-header">
         <h1><%= post.getTitle() %></h1>
