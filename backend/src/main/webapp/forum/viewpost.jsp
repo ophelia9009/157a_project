@@ -80,6 +80,10 @@
         function confirmDelete() {
             return confirm("Are you sure you want to delete this post?");
         }
+        
+        function confirmCommentDelete() {
+            return confirm("Are you sure you want to delete this comment?");
+        }
     </script>
 
     <%-- Comments display section --%>
@@ -103,6 +107,15 @@
                         <span class="comment-date">
                             <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(comment.getCreationDate()) %>
                         </span>
+                        <% if (comment.getUserID() == user.getUserID()) { %>
+                            <form class="comment-delete-form" method="post" action="${pageContext.request.contextPath}/api/commentAction">
+                                <input type="hidden" name="commentId" value="<%= comment.getCommentID() %>">
+                                <input type="hidden" name="postId" value="<%= postId %>">
+                                <button type="submit" name="action" value="delete" class="delete-comment-btn" onclick="return confirmCommentDelete()">
+                                    <i class="delete-icon">🗑️</i> Delete
+                                </button>
+                            </form>
+                        <% } %>
                     </div>
                     <div class="comment-body">
                         <%= comment.getCommentText() %>
