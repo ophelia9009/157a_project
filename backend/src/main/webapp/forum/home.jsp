@@ -19,25 +19,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">Forum</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../user/myprofile.jsp">My Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.jsp">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Include navigation -->
+    <jsp:include page="../common/navigation.jsp">
+        <jsp:param name="currentPage" value="home" />
+    </jsp:include>
 
     <div class="container mt-4">
         <!-- Create Subforum Button -->

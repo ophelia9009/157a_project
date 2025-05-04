@@ -51,34 +51,11 @@
     }
     %>
 
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">Forum</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/forum/home.jsp">
-                            <i class="bi bi-house-fill"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/forum/subforumview.jsp?subforumId=<%= post.getSubforumID() %>">
-                            <i class="bi bi-arrow-left"></i> Back to Subforum
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">
-                            <i class="bi bi-box-arrow-right"></i> Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Include navigation -->
+    <jsp:include page="../common/navigation.jsp">
+        <jsp:param name="currentPage" value="viewpost" />
+        <jsp:param name="subforumId" value="<%= post.getSubforumID() %>" />
+    </jsp:include>
 
     <div class="container mt-4">
         

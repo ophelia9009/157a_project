@@ -20,6 +20,11 @@ if (user == null) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
+    <!-- Include navigation -->
+    <jsp:include page="../common/navigation.jsp">
+        <jsp:param name="currentPage" value="profile" />
+    </jsp:include>
+    
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
