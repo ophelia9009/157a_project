@@ -61,7 +61,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = "" +
                     "<td>" + post.postID + "</td>" +
-                    "<td>" + post.title + "</td>" +
+                    "<td><a href='viewpost.jsp?postId=" + post.postID + "'>" + post.title + "</a></td>" +
                     "<td>" + post.bodytext + "</td>" +
                     "<td>" + post.creationDate + "</td>" +
                     "<td>" + post.rating + "</td>" ;

@@ -192,7 +192,7 @@
                                         }
                                     }
                                 %>
-                                <%= subforum.getName() %>
+                                <a href="subforumview.jsp?subforumId=<%= subforum.getSubforumID() %>"><%= subforum.getName() %></a>
                             </h3>
                         </div>
             <%
