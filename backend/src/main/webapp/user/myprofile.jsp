@@ -109,7 +109,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <h5 class="card-title"><%= subforum.getName() %></h5>
+                                            <h5 class="card-title"><a href="../forum/subforumview.jsp?subforumId=<%= subforum.getSubforumID() %>" class="text-decoration-none"><%= subforum.getName() %></a></h5>
                                             <p class="card-text text-muted mb-1"><%= subforum.getDescription() %></p>
                                             <small class="text-muted">Created: <%= subforum.getCreationDate() %></small>
                                         </div>
