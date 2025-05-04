@@ -95,7 +95,7 @@ boolean isLoggedIn = (user != null);
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/logout">
                             <i class="bi bi-box-arrow-right"></i> Logout
                         </a>
                     </li>
