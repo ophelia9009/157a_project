@@ -1,11 +1,14 @@
 package edu.sjsu.cs157a.forum.dao;
 
 import edu.sjsu.cs157a.forum.model.Element;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
 
 public class BaseDAO {
+    private static final Logger logger = LogManager.getLogger(BaseDAO.class);
 
     public static final List <String> VALID_TABLES = Arrays.asList("users", "subforums", "posts",
      "comments", "subscriptions");
@@ -17,6 +20,7 @@ public class BaseDAO {
             return DriverManager.getConnection("jdbc:mysql://localhost:3306/sf_db", "appuser",
                     "Password!1");
         } catch (ClassNotFoundException | SQLException e) {
+            logger.error("Failed to establish database connection", e);
             throw new RuntimeException("Something is wrong", e);
         }
 
@@ -135,7 +139,7 @@ public class BaseDAO {
 
             return newElement;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to create " + newElement.getTable(), se);
         }
     }
@@ -170,6 +174,7 @@ public class BaseDAO {
             return elements;
 
         } catch (SQLException e) {
+            logger.error("Batch insert failed for table: {}", first.getTable(), e);
             throw new RuntimeException("Batch insert failed for table: " + first.getTable(), e);
         }
     }
@@ -233,7 +238,7 @@ public class BaseDAO {
             return element;
 
         } catch (SQLException se) {
-            System.out.println("SQL Exception: " + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to update " + element.getTable(), se);
         }
     }
@@ -264,7 +269,7 @@ public class BaseDAO {
             conn.close();
             return true;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to delete "+ element, se);
         }
     }

@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 import edu.sjsu.cs157a.forum.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UserDAO extends BaseDAO{
+    private static final Logger logger = LogManager.getLogger(UserDAO.class);
 
 
     /**
@@ -45,7 +48,7 @@ public class UserDAO extends BaseDAO{
             
             return newUser;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to create user", se);
         }
     }
@@ -79,7 +82,7 @@ public class UserDAO extends BaseDAO{
             
             return user;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to update user", se);
         }
     }
@@ -107,7 +110,7 @@ public class UserDAO extends BaseDAO{
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to delete user", se);
         }
     }
@@ -133,7 +136,7 @@ public class UserDAO extends BaseDAO{
             
             return affectedRows > 0;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to delete user", se);
         }
     }
@@ -161,8 +164,8 @@ public class UserDAO extends BaseDAO{
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
-            throw new RuntimeException("");
+            logger.error("SQL Exception: {}", se.getMessage());
+            throw new RuntimeException("Failed to get password by username", se);
         }
 
         return  result;
@@ -195,7 +198,7 @@ public class UserDAO extends BaseDAO{
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to get user", se);
         }
         return user;
@@ -226,7 +229,7 @@ public class UserDAO extends BaseDAO{
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to get user", se);
         }
         return user;
@@ -254,7 +257,7 @@ public class UserDAO extends BaseDAO{
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception: {}", se.getMessage());
             throw new RuntimeException("Failed to get users", se);
         }
         return users;
@@ -262,14 +265,16 @@ public class UserDAO extends BaseDAO{
 
 
     public static void printTable(String table, String[] columns, Connection connection) throws SQLException{
-        System.out.println(table.toUpperCase());
+        Logger logger = LogManager.getLogger(UserDAO.class);
+        logger.info(table.toUpperCase());
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
         ResultSet rs = statement.executeQuery();
         while(rs.next()) {
+            StringBuilder rowData = new StringBuilder();
             for (String column : columns) {
-                System.out.print(rs.getString(column) + ", ");
+                rowData.append(rs.getString(column)).append(", ");
             }
-            System.out.println();
+            logger.info(rowData.toString());
         }
         rs.close();
         statement.close();
