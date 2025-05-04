@@ -12,7 +12,7 @@ public class SubforumDAO extends BaseDAO {
     public List<Post> getAllSubforumPosts (Integer subforumID) {
         List<Post> posts = new ArrayList<>();
 
-        String sql = "SELECT * FROM posts WHERE SubforumID = ?";
+        String sql = "SELECT * FROM Posts WHERE SubforumID = ?";
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -50,7 +50,7 @@ public class SubforumDAO extends BaseDAO {
     BigInteger minSubscriberCount, BigInteger maxSubscriberCount, Timestamp minLastUpdated, Timestamp maxLastUpdated) {
         List<Subforum> subforums = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM subforums WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM Subforums WHERE 1=1");
         if (filterName != null && !filterName.isEmpty()) {
             sql.append(" AND Name LIKE '%").append(filterName).append("%'");
         }
@@ -110,7 +110,7 @@ public class SubforumDAO extends BaseDAO {
             throw new IllegalArgumentException("ownerID cannot be null");
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "INSERT INTO subforums (Name, CreationDate, Description, SubscriberCount, LastUpdated, OwnerID) " +
+        String sql = "INSERT INTO Subforums (Name, CreationDate, Description, SubscriberCount, LastUpdated, OwnerID) " +
                      "VALUES (?, ?, ?, 0, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -161,7 +161,7 @@ public class SubforumDAO extends BaseDAO {
 
 
         // Update description
-        String updateSql = "UPDATE subforums SET Description = ?, LastUpdated = ? " +
+        String updateSql = "UPDATE Subforums SET Description = ?, LastUpdated = ? " +
                          "WHERE SubforumID = ? AND OwnerID = ?";
 
         try (Connection conn = getConnection();
@@ -192,8 +192,8 @@ public class SubforumDAO extends BaseDAO {
     public List<Subforum> getSubscribedSubforums(Integer userID) {
         List<Subforum> subscribedForums = new ArrayList<>();
 
-        String query = "SELECT s.* FROM subforums s " +
-                     "JOIN subscriptions sub ON s.SubforumID = sub.SubforumID " +
+        String query = "SELECT s.* FROM Subforums s " +
+                     "JOIN Subscriptions sub ON s.SubforumID = sub.SubforumID " +
                      "WHERE sub.UserID = ?";
 
         try (Connection conn = getConnection();
@@ -228,7 +228,7 @@ public class SubforumDAO extends BaseDAO {
      */
     public List<Subforum> getAllSubforumsOrderedByLastUpdated() {
         List<Subforum> subforums = new ArrayList<>();
-        String sql = "SELECT * FROM subforums ORDER BY LastUpdated DESC";
+        String sql = "SELECT * FROM Subforums ORDER BY LastUpdated DESC";
 
         try {
             Connection conn = getConnection();

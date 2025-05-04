@@ -218,7 +218,7 @@ public class SubforumDAOTest {
             try {
                 Connection conn = subforumDAO.getConnection();
                 Statement stmt = conn.createStatement();
-                stmt.executeUpdate("DELETE FROM subforums WHERE Name LIKE 'Oldest-%' OR Name LIKE 'Middle-%' OR Name LIKE 'Newest-%'");
+                stmt.executeUpdate("DELETE FROM Subforums WHERE Name LIKE 'Oldest-%' OR Name LIKE 'Middle-%' OR Name LIKE 'Newest-%'");
                 stmt.close();
             } catch (SQLException e) {
                 System.err.println("Failed to clean up test data: " + e.getMessage());

@@ -10,7 +10,7 @@ import java.util.Map;
 public class PostDAO extends BaseDAO{
     public Post getPostByID(Integer postID){
         try {
-            Map<String, Object> lm = findByPrimaryKey("posts", "PostID", postID);
+            Map<String, Object> lm = findByPrimaryKey("Posts", "PostID", postID);
             return new Post((Integer) lm.get("PostID"), (String) lm.get("Title"), (String) lm.get("BodyText"),
                     (Timestamp) lm.get("CreationDate"), (Integer) lm.get("Rating"), (Integer) lm.get("UserID"),
                     (Integer) lm.get("SubforumID"), (Timestamp) lm.get("LastUpdated"));
@@ -29,7 +29,7 @@ public class PostDAO extends BaseDAO{
             throw new IllegalArgumentException("subforumID cannot be null for post creation");
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "INSERT INTO posts (Title, BodyText, CreationDate, Rating, UserID, SubforumID) " +
+        String sql = "INSERT INTO Posts (Title, BodyText, CreationDate, Rating, UserID, SubforumID) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -68,7 +68,7 @@ public class PostDAO extends BaseDAO{
             throw new IllegalArgumentException("post cannot be null for post updating");
         if (newTitle.isBlank() && newBodyText.isBlank())
             throw new IllegalArgumentException("title and bodyText cannot both be blank for post updating");
-        String sql = "UPDATE posts SET Title = ?, BodyText = ?  WHERE PostID = ?";
+        String sql = "UPDATE Posts SET Title = ?, BodyText = ?  WHERE PostID = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -100,7 +100,7 @@ public class PostDAO extends BaseDAO{
         if (postID == null)
             throw new IllegalArgumentException("postID cannot be null for post deletion");
 
-        String sql = "DELETE FROM posts WHERE postID = ?";
+        String sql = "DELETE FROM Posts WHERE postID = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -132,7 +132,7 @@ public class PostDAO extends BaseDAO{
                                        Integer SubforumID) {
         List<Post> posts = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM posts WHERE ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM Posts WHERE ");
         if(SubforumID != null)
             sql.append("SubforumID = ").append(SubforumID);
         else

@@ -1,4 +1,4 @@
-INSERT INTO `sf_db`.`users`
+INSERT INTO `sf_db`.`Users`
 (`Username`, `Password`, `Email`, `RegisterDate`)
 VALUES
 ('flower_girl', 'flowery_pin', 'floweringNow123@gmail.com', '2017-01-01 00:00:00'),
@@ -34,7 +34,7 @@ VALUES
 ('GenericUser13', 'GenericPassword13', 'generic13@gmail.com', '2016-01-10 15:34:58'),
 ('GenericUser14', 'GenericPassword14', 'generic14@gmail.com', '2016-01-11 06:10:29'),
 ('GenericUser15', 'GenericPassword15', 'generic15@gmail.com', '2016-01-12 12:00:00');
-INSERT INTO `sf_db`.`subforums`
+INSERT INTO `sf_db`.`Subforums`
 (`Name`, `Description`, `CreationDate`, `SubscriberCount`, `LastUpdated`, `OwnerID`)
 VALUES
 ('Pokemon', 'Pls don''t sue Nintendo. We like Pokemon. (a lot). Come discuss about Pokemon, whether the video games, anime, the Pokemon themselves, or movies. We are always open to new community members wanting to get better at battling, team-building, and knowledge of the Pokemon in general (e.g. names, types, stat spreads, etc.', '2020-01-01 00:00:00', 2, '2020-01-01 00:00:00', 11),
@@ -55,7 +55,7 @@ VALUES
 ('Jazz Music', 'Welcome to the smooth, soulful world of jazz! Whether you’re into bebop, swing, blues, or contemporary jazz, this is the place to discuss legendary artists, iconic albums, and the improvisational magic that makes jazz unique. Share your favorite tracks, learn about jazz theory, and connect with fellow enthusiasts who appreciate the rhythms, melodies, and innovations of this ever-evolving genre.', '2022-04-07 18:41:00', 2, '2022-04-07 18:41:00', 10),
 ('SQL', 'Welcome to the SQL subforum! Whether you''re mastering queries, optimizing performance, or tackling complex database problems, this is the place to discuss all things SQL. Share tips, ask questions, troubleshoot issues, and dive deep into relational database concepts. From basic SELECT statements to advanced joins, subqueries, and indexing, all SQL enthusiasts are welcome!', '2020-10-30 20:21:18', 2, '2020-10-30 20:21:18', 5),
 ('React', 'Welcome to the React subforum! Whether you''re building dynamic single-page applications, exploring hooks, or mastering state management, this is the place to discuss everything React. Share components, ask questions, troubleshoot issues, and discover the latest features and best practices in the React ecosystem. All React developers, from beginners to experts, are welcome to join the conversation!', '2022-03-03 03:03:03', 2, '2022-03-03 03:03:03', 3);
-INSERT INTO `sf_db`.`posts` (`Title`, `BodyText`, `CreationDate`, `Rating`, `UserID`, `SubforumID`)
+INSERT INTO `sf_db`.`Posts` (`Title`, `BodyText`, `CreationDate`, `Rating`, `UserID`, `SubforumID`)
 VALUES
 ('Mew vs. Mewtwo, Who Would Win?', 'Mew (Come @ Me)', '2020-01-01 00:00:00',  6, 11, 1),
 ('Mew vs. Mewtwo, Who Would Win?', 'Mewtwo (Come @ Me)', '2020-01-01 00:00:00',  10, 11, 1),
@@ -76,7 +76,7 @@ VALUES
 ('C# Exception Handling', 'Learning how to handle exceptions in C#. Any tips?', '2024-08-19 08:00:00', 10, 7, 11),
 ('SQL Query Optimization', 'Anyone know how to optimize complex JOIN queries in SQL?', '2024-09-23 11:15:00', 20, 14, 14);
 
-INSERT INTO `sf_db`.`comments`
+INSERT INTO `sf_db`.`Comments`
 (`CommentText`, `CreationDate`, `Rating`, `UserID`, `PostID`, `LastUpdated`)
 VALUES
 ('Lovely Day Today, Mewtwo would win no cap! They got higher stats!', '2020-01-01 00:00:00', 10, 10, 1, '2020-01-01 00:00:00'),
@@ -131,7 +131,7 @@ VALUES
 ('Yeah, `createSlice` + `configureStore` simplified everything for me.', '2025-01-01 13:18:00', 8, 10, 16, '2025-01-01 13:18:00'),
 -- CommentID = 30
 ('Also: combine Redux DevTools with React DevTools = mind blown!', '2025-01-01 13:22:00', 9, 11, 16, '2025-01-01 13:22:00');
-INSERT INTO `sf_db`.`subscriptions`
+INSERT INTO `sf_db`.`Subscriptions`
 (`UserID`, `SubforumID`, `SubscriptionDate`)
 VALUES
 -- Flowers-6
@@ -193,8 +193,8 @@ VALUES
 (30, 5, '2019-01-01 13:22:00');
 
 
-SELECT * FROM users;
-SELECT * FROM subforums;
-SELECT * FROM posts;
-SELECT * FROM comments;
-SELECT * FROM subscriptions;
+SELECT * FROM Users;
+SELECT * FROM Subforums;
+SELECT * FROM Posts;
+SELECT * FROM Comments;
+SELECT * FROM Subscriptions;

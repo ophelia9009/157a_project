@@ -18,7 +18,7 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)",
+                "INSERT INTO Users (Username, Password, Email) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             );
             
@@ -60,7 +60,7 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                "UPDATE users SET Username = ?, Password = ?, Email = ? WHERE UserID = ?"
+                "UPDATE Users SET Username = ?, Password = ?, Email = ? WHERE UserID = ?"
             );
             
             stmt.setString(1, user.getUsername());
@@ -93,7 +93,7 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                "DELETE FROM users WHERE UserID = ?"
+                "DELETE FROM Users WHERE UserID = ?"
             );
             
             stmt.setInt(1, user.getUserID());
@@ -121,7 +121,7 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                "DELETE FROM users WHERE UserID = ?"
+                "DELETE FROM Users WHERE UserID = ?"
             );
             
             stmt.setObject(1, userId);
@@ -179,7 +179,7 @@ public class UserDAO extends BaseDAO{
         User user = null;
         try {
             Connection conn = getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE Username = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Users WHERE Username = ?");
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -210,7 +210,7 @@ public class UserDAO extends BaseDAO{
         User user = null;
         try {
             Connection conn = getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE UserID = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Users WHERE UserID = ?");
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -240,7 +240,7 @@ public class UserDAO extends BaseDAO{
         try {
             Connection conn = getConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Users");
             while (rs.next()) {
                 users.add(new User(
                     rs.getInt("UserID"),

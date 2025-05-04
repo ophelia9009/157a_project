@@ -17,7 +17,7 @@ public class CommentDAO extends BaseDAO{
             throw new IllegalArgumentException("postId cannot be null");
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "INSERT INTO comments (CommentText, CreationDate, UserID, PostID, LastUpdated) " +
+        String sql = "INSERT INTO Comments (CommentText, CreationDate, UserID, PostID, LastUpdated) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -75,7 +75,7 @@ public class CommentDAO extends BaseDAO{
         }
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "UPDATE comments SET CommentText = ?, LastUpdated = CURRENT_TIMESTAMP() " +
+        String sql = "UPDATE Comments SET CommentText = ?, LastUpdated = CURRENT_TIMESTAMP() " +
                     "WHERE CommentID = ? AND UserID = ?";
 
         try (Connection conn = getConnection();
@@ -91,7 +91,7 @@ public class CommentDAO extends BaseDAO{
             }
 
             // Get the original comment to preserve other fields
-            String selectSql = "SELECT CommentText, CreationDate, Rating, PostID FROM comments WHERE CommentID = ?";
+            String selectSql = "SELECT CommentText, CreationDate, Rating, PostID FROM Comments WHERE CommentID = ?";
             try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
                 selectStmt.setInt(1, commentId);
                 try (ResultSet rs = selectStmt.executeQuery()) {
@@ -114,7 +114,7 @@ public class CommentDAO extends BaseDAO{
         }
 
         String sql = "SELECT CommentID, CommentText, CreationDate, Rating, UserID, PostID, LastUpdated " +
-                    "FROM comments WHERE PostID = ? ORDER BY CreationDate DESC";
+                    "FROM Comments WHERE PostID = ? ORDER BY CreationDate DESC";
 
         List<Comment> comments = new ArrayList<>();
         try (Connection conn = getConnection();
@@ -143,7 +143,7 @@ public class CommentDAO extends BaseDAO{
             throw new IllegalArgumentException("commentId and userId cannot be null");
         }
 
-        String sql = "DELETE FROM comments WHERE CommentID = ? AND UserID = ?";
+        String sql = "DELETE FROM Comments WHERE CommentID = ? AND UserID = ?";
         
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
