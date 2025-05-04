@@ -19,6 +19,9 @@
     <div class="nav-links">
         <a href="../user/myprofile.jsp">My Profile</a>
         <a href="../index.jsp">Logout</a>
+        <%--Maybe this link can be moved elsewhere for only a single subforum page
+          <a href="newpost.jsp?subforumId=<%= subforum.get("SubforumID") %>">Create Post</a>--%>
+
     </div>
 
     <%-- Create Subforum Button --%>

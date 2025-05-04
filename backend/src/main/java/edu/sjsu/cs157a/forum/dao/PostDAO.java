@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PostDAO extends BaseDAO{
-    public Post getPostByPostID(Integer postID){
+    public Post getPostByID(Integer postID){
         try {
             Map<String, Object> lm = findByPrimaryKey("posts", "PostID", postID);
             return new Post((Integer) lm.get("PostID"), (String) lm.get("Title"), (String) lm.get("BodyText"),
@@ -79,7 +79,7 @@ public class PostDAO extends BaseDAO{
             if(!newBodyText.isBlank())
                 stmt.setString(2, newBodyText);
             else
-                stmt.setString(2, post.getBodytext());
+                stmt.setString(2, post.getBodyText());
             stmt.setInt(3, post.getId());
 
             int affectedRows = stmt.executeUpdate();

@@ -28,7 +28,7 @@ public class Post {
     public String getTitle() {
         return title;
     }
-    public String getBodytext() {
+    public String getBodyText() {
         return bodytext;
     }
     public Timestamp getCreationDate() {
@@ -43,7 +43,7 @@ public class Post {
     public Integer getSubforumID() {
         return subforumID;
     }
-    public Timestamp getLastupdated() {
+    public Timestamp getLastUpdated() {
         return lastupdated;
     }
 }

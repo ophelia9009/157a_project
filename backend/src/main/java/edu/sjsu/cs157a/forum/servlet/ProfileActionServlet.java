@@ -66,7 +66,7 @@ public class ProfileActionServlet extends BaseServlet {
                     User updatedUser = userDAO.getUserById(userId);
                     session.setAttribute("user", updatedUser);
 
-                    response.sendRedirect("../user/myprofile.jsp");
+                    response.sendRedirect("../forum/myprofile.jsp");
                     break;
 
                 default:
@@ -79,7 +79,7 @@ public class ProfileActionServlet extends BaseServlet {
     }
     @Override
     public void init() {
-        System.out.println("🔥 ProfileActionServlet initialized");
+        System.out.println("ProfileActionServlet initialized");
     }
 
 }
