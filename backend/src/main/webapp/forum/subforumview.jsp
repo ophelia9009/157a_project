@@ -82,6 +82,10 @@
         <a href="../forum/home.jsp">Home</a>
     </div>
 
+    <a href="newpost.jsp?subforumId=<%= subforumId %>">
+        <button>Create New Post</button>
+    </a>
+
     <h3> Subforum view </h3>
     <p>Viewing posts for subforum ID: <%= subforumId %></p>
 
