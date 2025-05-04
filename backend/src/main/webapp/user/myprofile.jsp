@@ -11,97 +11,182 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Profile</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-<body>
-    <div class="nav-links">
-        <a href="../forum/home.jsp">View Forum</a>
-        <a href="../index.jsp">Logout</a>
-    </div>
-    <%-- Check user session --%>
-    <%
-    User user = (User) session.getAttribute("user");
-    if (user == null) {
-        response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
-        return;
-    }
-    %>
-    <%-- Profile display section --%>
-    <h1>My Profile</h1>
-    <div class="profile-info">
-        <p><strong>User ID:</strong> <%= user.getUserID() %></p>
-        <p><strong>Username:</strong> <%= user.getUsername() %></p>
-        <p><strong>Email:</strong> <%= user.getEmail() %></p>
-        <p><strong>Registration Date:</strong> <%= user.getRegisterDate() %></p>
-    </div>
-
-    <%-- Profile action form --%>
-    <form id="profileForm" method="post" action="${pageContext.request.contextPath}/api/profileAction">
-        <input type="hidden" name="userId" value="<%= user.getUserID() %>">
-        <button type="submit" name="action" value="edit">Edit Profile</button>
-        <button type="submit" name="action" value="delete" class="delete-btn" onclick="return confirmDelete()">Delete My Account</button>
-    </form>
-</div>
-
-<%-- Subforums section --%>
-<div class="profile-section">
-    <h2>My Owned Subforums</h2>
-    <div class="profile-info">
-    <%
-    try {
-        SubforumDAO subforumDAO = new SubforumDAO();
-        List<Subforum> ownedSubforums = subforumDAO.getFilteredSubforums(
-            null, null, null, null, null, null, null
-        );
-        
-        if (ownedSubforums.isEmpty()) {
-    %>
-        <p>You haven't created any subforums yet.</p>
-    <%
-        } else {
-            for (Subforum subforum : ownedSubforums) {
-                if (subforum.getOwnerID() == user.getUserID()) {
-    %>
-        <div class="subforum-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div>
-                <strong><%= subforum.getName() %></strong> -
-                <%= subforum.getDescription() %>
-                (Created: <%= subforum.getCreationDate() %>)
+<body class="bg-light">
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Forum</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../forum/home.jsp">
+                            <i class="bi bi-house-fill"></i> View Forum
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.jsp">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <form method="get" action="../forum/editSubforum.jsp" style="margin-left: 20px;">
-                <input type="hidden" name="subforumId" value="<%= subforum.getSubforumID() %>">
-                <button type="submit" class="edit-btn">Edit Subforum</button>
-            </form>
         </div>
-    <%
-                }
-            }
+    </nav>
+    <div class="container mt-4">
+        <%-- Check user session --%>
+        <%
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+            return;
         }
-    } catch (Exception e) {
-    %>
-        <p class="error">Error loading subforums: <%= e.getMessage() %></p>
-    <%
-    }
-    %>
+        %>
+        
+        <%-- Profile display section --%>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="bi bi-person-circle me-2"></i>My Profile</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">User ID:</div>
+                            <div class="col-md-8"><%= user.getUserID() %></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Username:</div>
+                            <div class="col-md-8"><%= user.getUsername() %></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Email:</div>
+                            <div class="col-md-8"><%= user.getEmail() %></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Registration Date:</div>
+                            <div class="col-md-8"><%= user.getRegisterDate() %></div>
+                        </div>
+                        
+                        <%-- Profile action form --%>
+                        <form id="profileForm" method="post" action="${pageContext.request.contextPath}/api/profileAction" class="mt-4">
+                            <input type="hidden" name="userId" value="<%= user.getUserID() %>">
+                            <div class="d-flex gap-2">
+                                <button type="submit" name="action" value="edit" class="btn btn-primary">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                                </button>
+                                <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirmDelete()">
+                                    <i class="bi bi-trash me-1"></i> Delete My Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <%-- Subforums section --%>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="bi bi-collection me-2"></i>My Owned Subforums</h2>
+                    </div>
+                    <div class="card-body">
+                        <%
+                        try {
+                            SubforumDAO subforumDAO = new SubforumDAO();
+                            List<Subforum> ownedSubforums = subforumDAO.getFilteredSubforums(
+                                null, null, null, null, null, null, null
+                            );
+                            
+                            boolean hasOwnedSubforums = false;
+                            
+                            for (Subforum subforum : ownedSubforums) {
+                                if (subforum.getOwnerID() == user.getUserID()) {
+                                    hasOwnedSubforums = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!hasOwnedSubforums) {
+                        %>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>You haven't created any subforums yet.
+                            </div>
+                        <%
+                            } else {
+                                for (Subforum subforum : ownedSubforums) {
+                                    if (subforum.getOwnerID() == user.getUserID()) {
+                        %>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title"><%= subforum.getName() %></h5>
+                                            <p class="card-text text-muted mb-1"><%= subforum.getDescription() %></p>
+                                            <small class="text-muted">Created: <%= subforum.getCreationDate() %></small>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary edit-btn" 
+                                                data-subforum-id="<%= subforum.getSubforumID() %>"
+                                                data-subforum-name="<%= subforum.getName() %>"
+                                                data-subforum-desc="<%= subforum.getDescription() %>">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <%
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                        %>
+                            <div class="alert alert-danger">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading subforums: <%= e.getMessage() %>
+                            </div>
+                        <%
+                        }
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
     
     <%-- Edit Subforum Modal --%>
-    <div id="editSubforumModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4);">
-        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%;">
-            <span class="close-edit-modal" style="float: right; cursor: pointer;">&times;</span>
-            <h2>Edit Subforum: <span id="editSubforumName"></span></h2>
-            <form id="editSubforumForm">
-                <input type="hidden" id="editSubforumId">
-                <label for="editSubforumDesc">Description:</label>
-                <textarea id="editSubforumDesc" name="description" required></textarea><br><br>
-                <button type="submit">Save Changes</button>
-                <button type="button" class="cancel-edit-btn">Cancel</button>
-            </form>
+    <div class="modal fade" id="editSubforumModal" tabindex="-1" aria-labelledby="editSubforumModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSubforumModalLabel">Edit Subforum: <span id="editSubforumName"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editSubforumForm">
+                        <input type="hidden" id="editSubforumId">
+                        <div class="mb-3">
+                            <label for="editSubforumDesc" class="form-label">Description:</label>
+                            <textarea class="form-control" id="editSubforumDesc" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <%-- JavaScript functions --%>
     <script>
     function confirmDelete() {
@@ -109,41 +194,21 @@
     }
 
     // Edit Subforum Modal Handling
-    const editModal = document.getElementById('editSubforumModal');
-    const closeEditModal = document.querySelector('.close-edit-modal');
-    const cancelEditBtn = document.querySelector('.cancel-edit-btn');
+    const editModal = new bootstrap.Modal(document.getElementById('editSubforumModal'));
 
     // Set up edit buttons
     document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const subforumId = this.closest('form').querySelector('input[name="subforumId"]').value;
-            const subforumName = this.closest('.subforum-item').querySelector('strong').textContent;
-            const subforumDesc = this.closest('.subforum-item').querySelector('div').textContent
-                .split('-')[1]
-                .split('(')[0]
-                .trim();
+        btn.addEventListener('click', function() {
+            const subforumId = this.getAttribute('data-subforum-id');
+            const subforumName = this.getAttribute('data-subforum-name');
+            const subforumDesc = this.getAttribute('data-subforum-desc');
             
             document.getElementById('editSubforumId').value = subforumId;
             document.getElementById('editSubforumName').textContent = subforumName;
             document.getElementById('editSubforumDesc').value = subforumDesc;
-            editModal.style.display = 'block';
+            editModal.show();
         });
     });
-
-    closeEditModal.onclick = function() {
-        editModal.style.display = 'none';
-    }
-
-    cancelEditBtn.onclick = function() {
-        editModal.style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-        if (event.target == editModal) {
-            editModal.style.display = 'none';
-        }
-    }
 
     // Handle Subforum Update
     document.getElementById('editSubforumForm').addEventListener('submit', function(e) {
@@ -171,12 +236,47 @@
             return response.text();
         })
         .then(() => {
-            alert('Subforum updated successfully!');
-            editModal.style.display = 'none';
-            window.location.reload();
+            // Show success message with Bootstrap toast
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+            toastContainer.style.zIndex = '11';
+            toastContainer.innerHTML = `
+                <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Subforum updated successfully!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toastContainer);
+            const toastEl = toastContainer.querySelector('.toast');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            
+            editModal.hide();
+            setTimeout(() => window.location.reload(), 1500);
         })
         .catch(error => {
-            alert('Error: ' + error.message);
+            // Show error message with Bootstrap toast
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+            toastContainer.style.zIndex = '11';
+            toastContainer.innerHTML = `
+                <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Error: ${error.message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(toastContainer);
+            const toastEl = toastContainer.querySelector('.toast');
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
         });
     });
     </script>

@@ -11,10 +11,26 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Subforum View</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <script>
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
         async function fetchPosts(subforumID) {
             console.log("Subforum ID is:", subforumID);
             try {
@@ -36,19 +52,21 @@
             container.innerHTML = "";
 
             if (posts.length === 0) {
-                container.innerHTML = "<p>No posts available.</p>";
+                container.innerHTML = '<div class="alert alert-info">No posts available.</div>';
                 return;
             }
+            
             const table = document.createElement('table');
-            table.border = '1';
+            table.className = 'table table-striped table-hover w-100';
+            table.style.tableLayout = 'fixed';
             table.innerHTML = `
-                <thead>
+                <thead class="table-primary">
                     <tr>
-                        <th>Post ID</th>
-                        <th>Title</th>
-                        <th>Body</th>
-                        <th>Creation Date</th>
-                        <th>Rating</th>
+                        <th scope="col">Post ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Body</th>
+                        <th scope="col">Creation Date</th>
+                        <th scope="col">Rating</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,13 +77,30 @@
             for (let i = 0; i < posts.length; i++) {
                 const post = posts[i];
                 const row = document.createElement('tr');
-                row.innerHTML = "" +
-                    "<td>" + post.postID + "</td>" +
-                    "<td><a href='viewpost.jsp?postId=" + post.postID + "'>" + post.title + "</a></td>" +
-                    "<td>" + post.bodytext + "</td>" +
-                    "<td>" + post.creationDate + "</td>" +
-                    "<td>" + post.rating + "</td>" ;
+                const title = post.title || 'Untitled Post';
+                const bodyText = post.bodytext || 'No content';
+                const rating = post.rating || 0;
+                const ratingClass = rating > 0 ? 'bg-success' : rating < 0 ? 'bg-danger' : 'bg-secondary';
 
+                const formattedDate = formatDate(post.creationDate);
+                
+                row.innerHTML = `
+                    <td>\${post.postID}</td>
+                    <td>
+                        <a href='viewpost.jsp?postId=\${post.postID}' class="text-decoration-none fw-bold">
+                            \${title}
+                        </a>
+                    </td>
+                    <td class="text-truncate" style="max-width: 200px;">
+                        \${bodyText}
+                    </td>
+                    <td>\${formattedDate}</td>
+                    <td>
+                        <span class="badge \${ratingClass}">
+                            \${rating}
+                        </span>
+                    </td>
+                `;
                 tbody.appendChild(row);
             }
 
@@ -77,19 +112,55 @@
         });
     </script>
 </head>
-<body>
-    <div class="nav-links">
-        <a href="../forum/home.jsp">Home</a>
+<body class="bg-light">
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Forum</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../forum/home.jsp">
+                            <i class="bi bi-house-fill"></i> Home
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">Subforum View</h2>
+                <p class="text-muted">Viewing posts for subforum ID: <%= subforumId %></p>
+            </div>
+            <a href="newpost.jsp?subforumId=<%= subforumId %>" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Create New Post
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Posts</h4>
+            </div>
+            <div class="card-body">
+                <div id="postsContainer" class="table-responsive">
+                    <!-- Posts will be loaded here -->
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <a href="newpost.jsp?subforumId=<%= subforumId %>">
-        <button>Create New Post</button>
-    </a>
-
-    <h3> Subforum view </h3>
-    <p>Viewing posts for subforum ID: <%= subforumId %></p>
-
-    <div id="postsContainer">
-    </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
