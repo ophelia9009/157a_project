@@ -4,6 +4,8 @@ import edu.sjsu.cs157a.forum.model.Comment;
 import edu.sjsu.cs157a.forum.model.Element;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentDAO extends BaseDAO{
     public Comment createComment(String text, Integer userId, Integer postId){
@@ -73,16 +75,15 @@ public class CommentDAO extends BaseDAO{
         }
 
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        String sql = "UPDATE comments SET CommentText = ?, LastUpdated = ? " +
+        String sql = "UPDATE comments SET CommentText = ?, LastUpdated = CURRENT_TIMESTAMP() " +
                     "WHERE CommentID = ? AND UserID = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, newText);
-            stmt.setTimestamp(2, now);
-            stmt.setInt(3, commentId);
-            stmt.setInt(4, userId);
+            stmt.setInt(2, commentId);
+            stmt.setInt(3, userId);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -104,6 +105,54 @@ public class CommentDAO extends BaseDAO{
                 }
             }
             throw new SQLException("Failed to retrieve updated comment");
+        }
+    }
+
+    public List<Comment> getCommentsByPost(Integer postId) throws SQLException {
+        if (postId == null) {
+            throw new IllegalArgumentException("postId cannot be null");
+        }
+
+        String sql = "SELECT CommentID, CommentText, CreationDate, Rating, UserID, PostID, LastUpdated " +
+                    "FROM comments WHERE PostID = ? ORDER BY CreationDate DESC";
+
+        List<Comment> comments = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, postId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    comments.add(new Comment(
+                        rs.getInt("CommentID"),
+                        rs.getString("CommentText"),
+                        rs.getTimestamp("CreationDate"),
+                        rs.getInt("Rating"),
+                        rs.getInt("UserID"),
+                        rs.getInt("PostID"),
+                        rs.getTimestamp("LastUpdated")
+                    ));
+                }
+            }
+        }
+        return comments;
+    }
+
+    public boolean deleteComment(Integer commentId, Integer userId) throws SQLException {
+        if (commentId == null || userId == null) {
+            throw new IllegalArgumentException("commentId and userId cannot be null");
+        }
+
+        String sql = "DELETE FROM comments WHERE CommentID = ? AND UserID = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, commentId);
+            stmt.setInt(2, userId);
+            
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
         }
     }
 }

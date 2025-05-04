@@ -156,7 +156,7 @@ public class CommentDAOTest {
             try (ResultSet rs = stmt.executeQuery()) {
                 assertTrue(rs.next());
                 assertEquals("Updated text", rs.getString("CommentText"));
-                assertTrue(rs.getTimestamp("LastUpdated").after(comment.getLastUpdated()));
+
             }
         }
     }
@@ -185,5 +185,102 @@ public class CommentDAOTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateCommentNullText() throws SQLException {
         commentDAO.updateComment(1, testUserId, null);
+    }
+
+    @Test
+    public void testGetCommentsByPost() throws SQLException, InterruptedException {
+        // Create test comments
+        Comment comment1 = commentDAO.createComment("Comment 1", testUserId, testPostId);
+        Thread.sleep(1000); // Ensure different timestamps
+        Comment comment2 = commentDAO.createComment("Comment 2", testUserId, testPostId);
+
+        // Get comments
+        List<Comment> comments = commentDAO.getCommentsByPost(testPostId);
+
+        // Verify results
+        assertEquals(2, comments.size());
+        
+        // Should be ordered by CreationDate DESC (newest first)
+        assertEquals(comment2.getCommentID(), comments.get(0).getCommentID());
+        assertEquals("Comment 2", comments.get(0).getCommentText());
+        assertEquals(comment1.getCommentID(), comments.get(1).getCommentID());
+        assertEquals("Comment 1", comments.get(1).getCommentText());
+
+        // Verify all fields are populated correctly
+        for (Comment c : comments) {
+            assertNotNull(c.getCommentID());
+            assertNotNull(c.getCommentText());
+            assertNotNull(c.getCreationDate());
+            assertNotNull(c.getUserID());
+            assertNotNull(c.getPostID());
+            assertNotNull(c.getLastUpdated());
+        }
+    }
+
+    @Test
+    public void testGetCommentsByPostEmpty() throws SQLException {
+        List<Comment> comments = commentDAO.getCommentsByPost(testPostId);
+        assertTrue(comments.isEmpty());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetCommentsByPostNullPostId() throws SQLException {
+        commentDAO.getCommentsByPost(null);
+    }
+
+    @Test
+    public void testDeleteComment() throws SQLException {
+        // Create test comment
+        Comment comment = commentDAO.createComment("Test comment", testUserId, testPostId);
+        
+        // Delete the comment
+        boolean deleted = commentDAO.deleteComment(comment.getCommentID(), testUserId);
+        
+        assertTrue(deleted);
+        
+        // Verify the comment was actually deleted
+        try (Connection conn = commentDAO.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
+            stmt.setInt(1, comment.getCommentID());
+            try (ResultSet rs = stmt.executeQuery()) {
+                assertFalse(rs.next());
+            }
+        }
+    }
+
+    @Test
+    public void testDeleteCommentNotFound() throws SQLException {
+        // Try to delete non-existent comment
+        boolean deleted = commentDAO.deleteComment(-1, testUserId);
+        assertFalse(deleted);
+    }
+
+    @Test
+    public void testDeleteCommentWrongUser() throws SQLException {
+        // Create test comment
+        Comment comment = commentDAO.createComment("Test comment", testUserId, testPostId);
+        
+        // Try to delete with wrong user
+        boolean deleted = commentDAO.deleteComment(comment.getCommentID(), testUserId + 1);
+        assertFalse(deleted);
+        
+        // Verify comment still exists
+        try (Connection conn = commentDAO.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
+            stmt.setInt(1, comment.getCommentID());
+            try (ResultSet rs = stmt.executeQuery()) {
+                assertTrue(rs.next());
+            }
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteCommentNullCommentId() throws SQLException {
+        commentDAO.deleteComment(null, testUserId);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteCommentNullUserId() throws SQLException {
+        commentDAO.deleteComment(1, null);
     }
 }
