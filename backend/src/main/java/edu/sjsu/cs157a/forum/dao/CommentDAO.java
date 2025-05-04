@@ -49,10 +49,6 @@ public class CommentDAO extends BaseDAO{
         }
     }
 
-
-
-
-
     public Element createSelfReferencingComment(String text, int userId, int postId) throws SQLException {
         Element created = createTuple(new Element(
                 "comments", "CommentID", null,
@@ -70,4 +66,44 @@ public class CommentDAO extends BaseDAO{
         return created;
     }
 
+    public Comment updateComment(Integer commentId, Integer userId, String newText) throws SQLException {
+        // Validate parameters before any database operations
+        if (commentId == null || userId == null || newText == null) {
+            throw new IllegalArgumentException("Parameters cannot be null");
+        }
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        String sql = "UPDATE comments SET CommentText = ?, LastUpdated = ? " +
+                    "WHERE CommentID = ? AND UserID = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newText);
+            stmt.setTimestamp(2, now);
+            stmt.setInt(3, commentId);
+            stmt.setInt(4, userId);
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating comment failed - comment not found or user not authorized");
+            }
+
+            // Get the original comment to preserve other fields
+            String selectSql = "SELECT CommentText, CreationDate, Rating, PostID FROM comments WHERE CommentID = ?";
+            try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
+                selectStmt.setInt(1, commentId);
+                try (ResultSet rs = selectStmt.executeQuery()) {
+                    if (rs.next()) {
+                        String originalText = rs.getString("CommentText");
+                        Timestamp creationDate = rs.getTimestamp("CreationDate");
+                        Integer rating = rs.getInt("Rating");
+                        Integer postId = rs.getInt("PostID");
+                        return new Comment(commentId, newText, creationDate, rating, userId, postId, now);
+                    }
+                }
+            }
+            throw new SQLException("Failed to retrieve updated comment");
+        }
+    }
 }
