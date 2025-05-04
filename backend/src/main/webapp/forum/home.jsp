@@ -43,7 +43,12 @@
     </div>
 
     <%-- Main content section --%>
-    <h1>Sub Forum List</h1>
+    <div class="forum-header">
+        <h1>Forum Home</h1>
+        <div class="forum-meta">
+            <span>Browse all subforums</span>
+        </div>
+    </div>
 
 
     <script>
@@ -141,25 +146,38 @@
                 });
         });
     </script>
-
-    <form method="get" action="/api/subforumsearch">
-        <input type="text" name="filterName" placeholder="Search by Name">
-        <div>
-            <label>min, max creation date: </label>
-            <input type="date" name="minCreationDate" placeholder="min creation date">
-            <input type="date" name="maxCreationDate" placeholder="Max creation date">
+<div class="search-section">
+    <form method="get" action="/api/subforumsearch" class="search-form">
+        <div class="form-group">
+            <input type="text" name="filterName" placeholder="Search by Name" class="search-input">
         </div>
-        <div>
-                <input type="number" name="minSubscribers" placeholder="Min Subscribers">
-                <input type="number" name="maxSubscribers" placeholder="Max Subscribers">
+        <div class="filter-row">
+            <div class="form-group">
+                <label>Creation Date Range</label>
+                <div class="date-inputs">
+                    <input type="date" name="minCreationDate" placeholder="From">
+                    <input type="date" name="maxCreationDate" placeholder="To">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Subscribers Range</label>
+                <div class="number-inputs">
+                    <input type="number" name="minSubscribers" placeholder="Min">
+                    <input type="number" name="maxSubscribers" placeholder="Max">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Last Updated Range</label>
+                <div class="date-inputs">
+                    <input type="date" name="minLastUpdated" placeholder="From">
+                    <input type="date" name="maxLastUpdated" placeholder="To">
+                </div>
+            </div>
         </div>
-        <div>
-            <label> min, max last updated: </label>
-            <input type="date" name="minLastUpdated" placeholder="min last Updated">
-            <input type="date" name="maxLastUpdated" placeholder="max last End">
-        </div>
-        <button type="submit">Filter</button>
+        <button type="submit" class="search-btn">Search</button>
     </form>
+</div>
+
 
     <%-- Display all subforums by lastupdated --%>
     <div id="allSubforums">
@@ -176,24 +194,22 @@
                 } else {
                     for (Subforum subforum : subforums) {
             %>
-                        <div class="subforum">
-                            <h3>
-                                <%
-                                    User currentUser = (User) session.getAttribute("user");
-                                    if (currentUser != null) {
-                                        List<Subforum> subscribedSubforums = subforumDAO.getSubscribedSubforums(currentUser.getUserID());
-                                        for (Subforum subscribed : subscribedSubforums) {
-                                            if (subscribed.getSubforumID().equals(subforum.getSubforumID())) {
-                                %>
-                                        <span class="subscribed-label">🔔</span>
-                                <%
-                                                break;
-                                            }
+                        <div class="subforum-item">
+                            <%
+                                User currentUser = (User) session.getAttribute("user");
+                                if (currentUser != null) {
+                                    List<Subforum> subscribedSubforums = subforumDAO.getSubscribedSubforums(currentUser.getUserID());
+                                    for (Subforum subscribed : subscribedSubforums) {
+                                        if (subscribed.getSubforumID().equals(subforum.getSubforumID())) {
+                            %>
+                            <span class="subscribed-label">🔔</span>
+                            <%
+                                            break;
                                         }
                                     }
-                                %>
-                                <a href="subforumview.jsp?subforumId=<%= subforum.getSubforumID() %>"><%= subforum.getName() %></a>
-                            </h3>
+                                }
+                            %>
+                            <a href="subforumview.jsp?subforumId=<%= subforum.getSubforumID() %>" class="subforum-link"><%= subforum.getName() %></a>
                         </div>
             <%
                     }
