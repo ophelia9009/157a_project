@@ -8,24 +8,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Subforum View</title>
     <link rel="stylesheet" href="../css/styles.css">
 
     <script>
         async function fetchPosts () {
-            const subforumID = document.getElementById("tempsubID").value;
-
+            const subforumID = document.getElementById("tempsubID").value.trim();
+            console.log("Subforum ID is:", subforumID);
             try {
-                const response = await fetch (`/api/subforums/${subforumID}/posts`);
+                // const response = await fetch(`/backend/api/subforums/${subforumID}/posts`);
+                const response = await fetch(`http://localhost:8080/backend/api/subforums/1/posts`);
                 if (!response.ok) {
-                    console.log("couldn't get posts");
+                    console.log("Couldn't get posts");
+                    return;
                 }
                 const posts = await response.json();
+                console.log("Posts fetched:", posts);
                 renderPosts(posts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
         }
+
         function renderPosts(posts) {
             const container = document.getElementById("postsContainer");
             container.innerHTML = "";
@@ -35,34 +39,19 @@
                 return;
             }
 
-            const table = document.createElement('table');
-            table.border = '1';
-            table.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Body</th>
-                        <th>Creation Date</th>
-                        <th>Rating</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${posts.map(post => `
-                        <tr>
-                            <td>${post.title}</td>
-                            <td>${post.bodytext}</td>
-                            <td>${new Date(post.creationDate).toLocaleString()}</td>
-                            <td>${post.rating}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            `;
+            const preElement = document.createElement('pre');
+            preElement.textContent = posts;
 
-            container.appendChild(table);
+            container.appendChild(preElement);
+
+            // container.innerHTML = `<pre>${JSON.stringify(posts, null, 2)}</pre>`;
         }
-        document.getElementById("subforumForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent page reload
-            fetchPosts();
+
+        window.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("subforumForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent page reload
+                fetchPosts();
+            });
         });
     </script>
 </head>
@@ -73,6 +62,7 @@
 
     <h3> Subforum view </h3>
     <p> Ill get rid of this later but for now this thing controls which sub</p>
+    <p> actually it just displays the subforum id 1 </p>
 
     <form id="subforumForm">
         <input type="text" name="tempsubID" placeholder="Subforum ID" id="tempsubID" required />
