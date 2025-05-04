@@ -62,7 +62,6 @@ CREATE TABLE `Comments` (
   `Rating` INT NOT NULL DEFAULT 0,
   `UserID` INT NOT NULL, -- FK to Users table
   `PostID` INT NOT NULL, -- FK to Posts table
-  `ParentID` INT NOT NULL, -- FK to Comments table (self-reference for replies)
   `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`CommentID`),
   CONSTRAINT `FK_Comments_UserID`
@@ -77,12 +76,6 @@ CREATE TABLE `Comments` (
     ON UPDATE CASCADE
   );
 
-ALTER TABLE `Comments` 
-ADD CONSTRAINT `FK_Comments_ParentID`
-  FOREIGN KEY (`ParentID`)
-  REFERENCES `Comments` (`CommentID`)
-  ON DELETE CASCADE -- If parent comment deleted, delete replies
-  ON UPDATE CASCADE;
 
 CREATE TABLE `Subscriptions` (
   `UserID` INT NOT NULL, -- FK to Users table

@@ -5,12 +5,11 @@ import java.sql.Timestamp;
 public class Comment {
     private Integer CommentID;
     private String CommentText;
-    private Timestamp CreationDate;
+    private Timestamp CreationDate = new Timestamp(System.currentTimeMillis());
     private Integer Rating = 0;
     private Integer UserID;
     private Integer PostID;
-    private Integer ParentID;
-    private Timestamp LastUpdated;
+    private Timestamp LastUpdated = new Timestamp(System.currentTimeMillis());
 
     public Integer getCommentID() {
         return CommentID;
@@ -36,22 +35,18 @@ public class Comment {
         return PostID;
     }
 
-    public Integer getParentID() {
-        return ParentID;
-    }
 
     public Timestamp getLastUpdated() {
         return LastUpdated;
     }
 
-    public Comment(Integer commentID, String commentText, Timestamp creationDate, Integer rating, Integer userID, Integer postID, Integer parentID, Timestamp lastUpdated) {
+    public Comment(Integer commentID, String commentText, Timestamp creationDate, Integer rating, Integer userID, Integer postID, Timestamp lastUpdated) {
         CommentID = commentID;
         CommentText = commentText;
-        CreationDate = creationDate;
-        Rating = rating;
+        CreationDate = creationDate != null ? creationDate : new Timestamp(System.currentTimeMillis());
+        Rating = rating != null ? rating : 0;
         UserID = userID;
         PostID = postID;
-        ParentID = parentID;
-        LastUpdated = lastUpdated;
+        LastUpdated = lastUpdated != null ? lastUpdated : new Timestamp(System.currentTimeMillis());
     }
 }

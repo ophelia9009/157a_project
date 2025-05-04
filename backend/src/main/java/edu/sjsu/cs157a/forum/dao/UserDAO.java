@@ -274,27 +274,7 @@ public class UserDAO extends BaseDAO{
         rs.close();
         statement.close();
     }
-    public static void main(String[] args) {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3306/sf_db",
-                    "root",
-                    "1234"
-            );
 
-            printTable("users", new String[]{"UserID", "Username", "Password", "Email", "RegisterDate"},
-                    connection);
-            printTable("subforums", new String[]{"SubforumID", "Name", "Description", "CreationDate",
-                    "SubscriberCount", "LastUpdated"}, connection);
-            printTable("posts", new String[]{"PostID", "Title", "BodyText", "CreationDate", "Rating", "UserID",
-                    "SubforumID"}, connection);
-            printTable("comments", new String[]{"CommentID", "CommentText", "CreationDate", "Rating",
-                    "UserID", "PostID", "ParentID", "LastUpdated"}, connection);
-            printTable("subscriptions", new String[]{"UserID", "SubforumID", "SubscriptionDate"}, connection);
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
+
 }
