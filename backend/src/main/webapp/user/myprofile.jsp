@@ -115,12 +115,19 @@
                                             <p class="card-text text-muted mb-1"><%= subforum.getDescription() %></p>
                                             <small class="text-muted">Created: <%= subforum.getCreationDate() %></small>
                                         </div>
-                                        <button type="button" class="btn btn-outline-primary edit-btn" 
-                                                data-subforum-id="<%= subforum.getSubforumID() %>"
-                                                data-subforum-name="<%= subforum.getName() %>"
-                                                data-subforum-desc="<%= subforum.getDescription() %>">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-outline-primary edit-btn"
+                                                    data-subforum-id="<%= subforum.getSubforumID() %>"
+                                                    data-subforum-name="<%= subforum.getName() %>"
+                                                    data-subforum-desc="<%= subforum.getDescription() %>">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger delete-btn"
+                                                    data-subforum-id="<%= subforum.getSubforumID() %>"
+                                                    data-subforum-name="<%= subforum.getName() %>">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,6 +197,77 @@
             document.getElementById('editSubforumName').textContent = subforumName;
             document.getElementById('editSubforumDesc').value = subforumDesc;
             editModal.show();
+        });
+    });
+
+    // Set up delete buttons
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const subforumId = this.getAttribute('data-subforum-id');
+            const subforumName = this.getAttribute('data-subforum-name');
+            
+            if (confirm(`Are you sure you want to delete the subforum ` + subforumName + `? This cannot be undone.`)) {
+                const userId = '<%= user.getUserID() %>';
+                
+                fetch('/backend/forum/deleteSubforum', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        subforumId: subforumId,
+                        userId: userId
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete subforum');
+                    }
+                    return response.text();
+                })
+                .then(() => {
+                    // Show success message with Bootstrap toast
+                    const toastContainer = document.createElement('div');
+                    toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+                    toastContainer.style.zIndex = '11';
+                    toastContainer.innerHTML = `
+                        <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    Subforum deleted successfully!
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(toastContainer);
+                    const toastEl = toastContainer.querySelector('.toast');
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                    
+                    setTimeout(() => window.location.reload(), 1500);
+                })
+                .catch(error => {
+                    // Show error message with Bootstrap toast
+                    const toastContainer = document.createElement('div');
+                    toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+                    toastContainer.style.zIndex = '11';
+                    toastContainer.innerHTML = `
+                        <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    Error: ${error.message}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(toastContainer);
+                    const toastEl = toastContainer.querySelector('.toast');
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                });
+            }
         });
     });
 
