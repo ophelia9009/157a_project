@@ -19,7 +19,7 @@ public class PostDAO extends BaseDAO{
         }
     }
     public Post createPost(String title, String bodyText, Integer userID, Integer subforumID){
-        System.out.println ("PostDAO.createPost is called");
+//        System.out.println ("PostDAO.createPost is called");
         if (title.isBlank())
             throw new IllegalArgumentException("title cannot be blank for post creation");
         if (bodyText.isBlank())

@@ -16,7 +16,7 @@ public class PostServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        System.out.println ("PostServlet is called");
+//        System.out.println ("PostServlet is called");
         try {
             String title = request.getParameter("title");
             String bodytext = request.getParameter("bodyText");
@@ -29,6 +29,8 @@ public class PostServlet extends BaseServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(gson.toJson(created));
+
+            response.sendRedirect("/backend/forum/subforumview.jsp?subforumId=" + SubforumID);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\":\"Failed to create post\"}" + e.getMessage() + "\"}");
