@@ -35,7 +35,7 @@ public class SubforumDAOTest {
         assertNotNull(createdSubforum.getLastUpdated());
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void test_createSubforum_nullName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
