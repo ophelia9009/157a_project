@@ -71,7 +71,7 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
         // Handle Create Subforum Modal with Bootstrap
         const modal = new bootstrap.Modal(document.getElementById('subforumModal'));
@@ -123,7 +123,7 @@
                 const toastEl = toastContainer.querySelector('.toast');
                 const toast = new bootstrap.Toast(toastEl);
                 toast.show();
-                
+
                 modal.hide();
                 setTimeout(() => window.location.reload(), 1500);
             })
@@ -158,7 +158,7 @@
 
                     const row = document.createElement('div');
                     row.className = 'row';
-                    
+
                     data.forEach(subforum => {
                         const col = document.createElement('div');
                         col.className = 'col-md-4 mb-3';
@@ -179,7 +179,7 @@
                         `;
                         row.appendChild(col);
                     });
-                    
+
                     resultsDiv.appendChild(row);
                 })
                 .catch(err => {
@@ -193,7 +193,7 @@
             <h4>Search Subforums</h4>
         </div>
         <div class="card-body">
-            <form id="filterForm" method="get" action="/api/subforumsearch">
+            <form id="filterForm" method="get" action="/backend/api/subforumsearch">
                 <div class="mb-3">
                     <input type="text" name="filterName" placeholder="Search by Name" class="form-control">
                 </div>
@@ -231,7 +231,7 @@
             </form>
         </div>
     </div>
-    
+
     <div id="results" class="mt-3">
         <!-- Search results will appear here -->
     </div>
