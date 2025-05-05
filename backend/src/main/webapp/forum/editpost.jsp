@@ -1,6 +1,7 @@
 <%-- editpost.jsp - Post editing page --%>
 <%@ page import="edu.sjsu.cs157a.forum.model.Post" %>
 <%@ page import="edu.sjsu.cs157a.forum.model.User" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 User user = (User) session.getAttribute("user");
@@ -8,9 +9,9 @@ if (user == null) {
     response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
     return;
 }
-Post post = (Post) request.getAttribute("post");
+Post post = (Post) session.getAttribute("post");
 if (post == null) {
-    response.sendRedirect(request.getContextPath() + "/forum/subforumview.jsp?subforumId=" + post.getSubforumID());
+    response.sendRedirect(request.getContextPath() + "/forum/home.jsp");
     return;
 }
 %>
@@ -37,7 +38,7 @@ if (post == null) {
                         <form method="post" action="${pageContext.request.contextPath}/api/postAction">
                             <input type="hidden" name="action" value="editSubmit">
                             <input type="hidden" name="postId" value="<%= post.getPostID() %>">
-                            <input type="hidden" name="subforumId" value="<%=  post.getSubforumID() %>">
+
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
                                 <div class="input-group">

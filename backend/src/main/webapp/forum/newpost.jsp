@@ -52,7 +52,7 @@
             try {
                 subforumId = Integer.parseInt(subforumIdParam);
                 SubforumDAO dao = new SubforumDAO();
-                subforum = dao.findByPrimaryKey("Subforums", "SubforumID", subforumId);
+                subforum = dao.findByPrimaryKey("subforums", "SubforumID", subforumId);
             } catch (Exception e) {
                 out.println("<div class='alert alert-danger'><i class='bi bi-exclamation-triangle-fill me-2'></i>Invalid or missing subforum ID.</div>");
                 return;

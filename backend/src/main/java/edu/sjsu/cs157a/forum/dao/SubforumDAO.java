@@ -8,15 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
 public class SubforumDAO extends BaseDAO {
-
-    private static final Logger logger = LogManager.getLogger(SubforumDAO.class);
-
-
     public List<Post> getAllSubforumPosts (Integer subforumID) {
         List<Post> posts = new ArrayList<>();
 
@@ -41,7 +33,7 @@ public class SubforumDAO extends BaseDAO {
             }
             rs.close();
         } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to get posts", se);
         }
 
@@ -99,7 +91,7 @@ public class SubforumDAO extends BaseDAO {
             }
             rs.close();
         } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to get subforums", se);
         }
         return subforums;
@@ -148,10 +140,10 @@ public class SubforumDAO extends BaseDAO {
                 }
             }
         } catch (SQLException se) {
-            logger.error("SQL ErrorState: " + se.getSQLState());
-            logger.error("SQL ErrorCode: " + se.getErrorCode());
+            System.out.println("SQL ErrorState: " + se.getSQLState());
+            System.out.println("SQL ErrorCode: " + se.getErrorCode());
             se.printStackTrace();
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to create subforum", se);
         }
     }
@@ -190,7 +182,7 @@ public class SubforumDAO extends BaseDAO {
             }
 
         } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to update subforum", se);
         }
     }
@@ -227,7 +219,7 @@ public class SubforumDAO extends BaseDAO {
             }
             rs.close();
         } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to get subscribed subforums", se);
         }
         return subscribedForums;
@@ -260,36 +252,9 @@ public class SubforumDAO extends BaseDAO {
             }
             rs.close();
         } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
+            System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to get subforums", se);
         }
         return subforums;
-    }
-
-    /**
-     * Deletes a subforum by its ID
-     * @param subforumID The ID of the subforum to delete
-     * @throws RuntimeException if deletion fails
-     */
-    public void deleteSubforum(Integer subforumID) {
-        if (subforumID == null) {
-            throw new IllegalArgumentException("subforumID cannot be null");
-        }
-
-        String sql = "DELETE FROM Subforums WHERE SubforumID = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, subforumID);
-            int affectedRows = stmt.executeUpdate();
-            
-            if (affectedRows == 0) {
-                throw new RuntimeException("No subforum found with ID: " + subforumID);
-            }
-        } catch (SQLException se) {
-            logger.error("SQL Exception:" , se.getMessage());
-            throw new RuntimeException("Failed to delete subforum", se);
-        }
     }
 }

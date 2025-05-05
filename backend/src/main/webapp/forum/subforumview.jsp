@@ -107,95 +107,8 @@
             container.appendChild(table);
         }
 
-        async function checkSubscriptionStatus(subforumId) {
-            try {
-                if (!subforumId || subforumId.trim() === '') {
-                    console.error("Invalid subforumId");
-                    return false;
-                }
-                console.log("Checking subscription status using url:" + `/backend/subscription?subforumId=` + subforumId);
-                const encodedSubforumId = encodeURIComponent(subforumId);
-                const response = await fetch(`/backend/subscription?subforumId=` + subforumId, {
-                    credentials: 'include'
-                });
-                if (!response.ok) {
-                    console.error("Failed to check subscription status");
-                    return false;
-                }
-                const result = await response.json();
-                return result.isSubscribed;
-            } catch (error) {
-                console.error("Error checking subscription status:", error);
-                return false;
-            }
-        }
-
-        async function updateSubscriptionButton(subforumId) {
-            const isSubscribed = await checkSubscriptionStatus(subforumId);
-            const btn = document.getElementById("subscriptionBtn");
-            const text = document.getElementById("subscriptionText");
-            
-            if (isSubscribed) {
-                btn.classList.remove("btn-primary");
-                btn.classList.add("btn-danger");
-                text.textContent = "Unsubscribe";
-            } else {
-                btn.classList.remove("btn-danger");
-                btn.classList.add("btn-primary");
-                text.textContent = "Subscribe";
-            }
-        }
-
-        async function handleSubscription() {
-            const subforumId = "<%= subforumId %>";
-            const isSubscribed = await checkSubscriptionStatus(subforumId);
-            const action = isSubscribed ? "unsubscribe" : "subscribe";
-            
-            try {
-                const params = new URLSearchParams();
-                params.append('action', action);
-                params.append('subforumId', subforumId);
-                
-                const response = await fetch("/backend/subscription", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: params
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success) {
-                        // Update button immediately based on action
-                        const btn = document.getElementById("subscriptionBtn");
-                        const text = document.getElementById("subscriptionText");
-                        
-                        if (action === "subscribe") {
-                            btn.classList.remove("btn-primary");
-                            btn.classList.add("btn-danger");
-                            text.textContent = "Unsubscribe";
-                        } else {
-                            btn.classList.remove("btn-danger");
-                            btn.classList.add("btn-primary");
-                            text.textContent = "Subscribe";
-                        }
-                    } else {
-                        alert("Subscription action failed");
-                    }
-                } else {
-                    const error = await response.text();
-                    alert(`Subscription error: ${error}`);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Error processing subscription");
-            }
-        }
-
         window.addEventListener("DOMContentLoaded", function () {
             fetchPosts("<%= subforumId %>");
-            updateSubscriptionButton("<%= subforumId %>");
         });
     </script>
 </head>
@@ -212,14 +125,9 @@
                 <h2 class="mb-1">Subforum View</h2>
                 <p class="text-muted">Viewing posts for subforum ID: <%= subforumId %></p>
             </div>
-            <div class="btn-group" role="group">
-                <a href="newpost.jsp?subforumId=<%= subforumId %>" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Create New Post
-                </a>
-                <button id="subscriptionBtn" class="btn btn-primary" onclick="handleSubscription()">
-                    <i class="bi bi-bell"></i> <span id="subscriptionText">Subscribe</span>
-                </button>
-            </div>
+            <a href="newpost.jsp?subforumId=<%= subforumId %>" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Create New Post
+            </a>
         </div>
 
         <div class="card">

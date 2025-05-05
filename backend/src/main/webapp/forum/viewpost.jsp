@@ -29,7 +29,10 @@
     <%-- Check user session --%>
     <%
     User user = (User) session.getAttribute("user");
-    boolean isGuest = (user == null);
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+        return;
+    }
     %>
     <%-- Get Post session --%>
     <%
@@ -46,9 +49,6 @@
         out.println("<div class='alert alert-danger'>Post not found.</div>");
         return;
     }
-    
-    // Make postId available to later sections
-    pageContext.setAttribute("postId", postId);
     %>
 
     <!-- Include navigation -->
@@ -68,7 +68,7 @@
                 <div class="mb-4">
                     <div class="post-meta text-muted mb-3">
                         <small>
-                            <span class="me-3"><i class="bi bi-hash"></i> <%= post.getPostID() %></span>
+                            <span class="me-3"><i class="bi bi-hash"></i> <%= post.getId() %></span>
                             <span><i class="bi bi-calendar-event"></i> Posted: <%= new java.text.SimpleDateFormat("MMM dd, yyyy").format(post.getCreationDate()) %></span>
                         </small>
                     </div>
@@ -81,11 +81,10 @@
                 </div>
 
                 <%-- Post action form --%>
-                <% if (!isGuest && user.getUserID().equals(post.getUserID())) { %>
+                <% if (user.getUserID().equals(post.getUserID())) { %>
                 <div class="d-flex justify-content-end">
                     <form id="postForm" method="post" action="${pageContext.request.contextPath}/api/postAction" class="d-flex gap-2">
-                        <input type="hidden" name="postId" value="<%= post.getPostID() %>">
-                        <input type="hidden" name="subforumId" value="<%= post.getSubforumID() %>">
+                        <input type="hidden" name="postId" value="<%= post.getId() %>">
                         <button type="submit" name="action" value="edit" class="btn btn-outline-primary">
                             <i class="bi bi-pencil-square"></i> Edit Post
                         </button>
@@ -97,16 +96,11 @@
                 <% } %>
             </div>
         </div>
-        <% if (!isGuest && user.getUserID().equals(post.getUserID())) { %>
-            <!-- Edit/Delete Post Form -->
-        <% } %>
-
         <!-- Add Comment Button and Modal -->
-        <% if (!isGuest) { %>
         <button id="createCommentBtn" class="btn btn-primary mb-4">
             <i class="bi bi-chat-left-text"></i> Add Comment
         </button>
-        <% } %>
+
         <!-- Create Comment Modal -->
         <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -117,7 +111,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="commentForm">
-                            <input type="hidden" id="commentPostId" name="postId" value="<%= post.getPostID() %>">
+                            <input type="hidden" id="commentPostId" name="postId" value="<%= post.getId() %>">
                             <div class="mb-3">
                                 <label for="commentText" class="form-label">Comment:</label>
                                 <textarea id="commentText" name="commentText" class="form-control" rows="5" required></textarea>
@@ -144,7 +138,7 @@
                         <form id="editCommentForm" method="post" action="${pageContext.request.contextPath}/api/commentAction">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="commentId" id="editCommentId">
-                            <input type="hidden" name="postId" value="<%= post.getPostID() %>">
+                            <input type="hidden" name="postId" value="<%= post.getId() %>">
                             <div class="mb-3">
                                 <label for="editCommentText" class="form-label">Comment:</label>
                                 <textarea id="editCommentText" name="commentText" class="form-control" rows="5" required></textarea>
@@ -170,7 +164,7 @@
                 CommentDAO commentDAO = new CommentDAO();
                 UserDAO userDAO = new UserDAO();
                 try {
-                    List<Comment> comments = commentDAO.getCommentsByPost((Integer)pageContext.getAttribute("postId"));
+                    List<Comment> comments = commentDAO.getCommentsByPost(postId);
                     if (comments.isEmpty()) {
                         out.println("<div class='alert alert-info'>No comments yet. Be the first to comment!</div>");
                     } else {
@@ -185,7 +179,7 @@
                                         <i class="bi bi-clock"></i> <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(comment.getCreationDate()) %>
                                     </small>
                                 </div>
-                                <% if (!isGuest && comment.getUserID().equals(user.getUserID())) { %>
+                                <% if (comment.getUserID().equals(user.getUserID())) { %>
                                     <div class="d-flex">
                                         <button class="btn btn-sm btn-outline-primary me-2"
                                                 data-comment-id="<%= comment.getCommentID() %>"
@@ -195,7 +189,7 @@
                                         </button>
                                         <form class="d-inline" method="post" action="${pageContext.request.contextPath}/api/commentAction">
                                             <input type="hidden" name="commentId" value="<%= comment.getCommentID() %>">
-                                            <input type="hidden" name="postId" value="<%= pageContext.getAttribute("postId") %>">
+                                            <input type="hidden" name="postId" value="<%= postId %>">
                                             <button type="submit" name="action" value="delete" class="btn btn-sm btn-outline-danger" 
                                                     onclick="return confirmCommentDelete()">
                                                 <i class="bi bi-trash"></i> Delete

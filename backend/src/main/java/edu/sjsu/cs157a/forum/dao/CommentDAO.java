@@ -6,17 +6,8 @@ import edu.sjsu.cs157a.forum.model.Element;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
 
 public class CommentDAO extends BaseDAO{
-
-    private static final Logger logger = LogManager.getLogger(CommentDAO.class);
-
-
-
     public Comment createComment(String text, Integer userId, Integer postId){
         if (text == null)
             throw new IllegalArgumentException("text cannot be null");
@@ -52,11 +43,11 @@ public class CommentDAO extends BaseDAO{
                 }
             }
         } catch (SQLException se) {
-            logger.error("SQL ErrorState: " + se.getSQLState());
-            logger.error("SQL ErrorCode: " + se.getErrorCode());
+            System.out.println("SQL ErrorState: " + se.getSQLState());
+            System.out.println("SQL ErrorCode: " + se.getErrorCode());
             se.printStackTrace();
-            logger.error("SQL Exception:" + se.getMessage());
-            throw new RuntimeException("Failed to create comment"+ se.getMessage(), se);
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to create comment", se);
         }
     }
 
