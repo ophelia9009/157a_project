@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `Users`;
 
 
 CREATE TABLE `Users` (
-  `UserID` INT NOT NULL AUTO_INCREMENT,
+  `UserID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Username` VARCHAR(45) NOT NULL UNIQUE,
   `Password` VARCHAR(255) NOT NULL,
   `Email` VARCHAR(100) NOT NULL UNIQUE,
@@ -18,13 +18,13 @@ CREATE TABLE `Users` (
 );
 
 CREATE TABLE `Subforums` (
-  `SubforumID` INT NOT NULL AUTO_INCREMENT,
+  `SubforumID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(100) NOT NULL UNIQUE,
   `Description` TEXT NOT NULL,
   `CreationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `SubscriberCount` INT NOT NULL DEFAULT 0,
+  `SubscriberCount` INT UNSIGNED NOT NULL DEFAULT 0,
   `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `OwnerID` INT NOT NULL,
+  `OwnerID` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`SubforumID`),
   CONSTRAINT `FK_User_SubforumID`
     FOREIGN KEY (`OwnerID`)
@@ -34,13 +34,13 @@ CREATE TABLE `Subforums` (
   );
 
 CREATE TABLE `Posts` (
-  `PostID` INT NOT NULL AUTO_INCREMENT,
+  `PostID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Title` VARCHAR(255) NOT NULL,
   `BodyText` TEXT NOT NULL,
   `CreationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Rating` INT NOT NULL DEFAULT 0,
-  `UserID` INT NOT NULL, -- FK to Users table
-  `SubforumID` INT NOT NULL, -- FK to Subforums table
+  `UserID` INT UNSIGNED NOT NULL, -- FK to Users table
+  `SubforumID` INT UNSIGNED NOT NULL, -- FK to Subforums table
   `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PostID`),
   CONSTRAINT `FK_Posts_UserID`
@@ -56,12 +56,12 @@ CREATE TABLE `Posts` (
     );
 
 CREATE TABLE `Comments` (
-  `CommentID` INT NOT NULL AUTO_INCREMENT,
+  `CommentID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `CommentText` TEXT NOT NULL,
   `CreationDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Rating` INT NOT NULL DEFAULT 0,
-  `UserID` INT NOT NULL, -- FK to Users table
-  `PostID` INT NOT NULL, -- FK to Posts table
+  `UserID` INT UNSIGNED NOT NULL, -- FK to Users table
+  `PostID` INT UNSIGNED NOT NULL, -- FK to Posts table
   `LastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`CommentID`),
   CONSTRAINT `FK_Comments_UserID`
@@ -78,8 +78,8 @@ CREATE TABLE `Comments` (
 
 
 CREATE TABLE `Subscriptions` (
-  `UserID` INT NOT NULL, -- FK to Users table
-  `SubforumID` INT NOT NULL, -- FK to Subforums table
+  `UserID` INT UNSIGNED NOT NULL, -- FK to Users table
+  `SubforumID` INT UNSIGNED NOT NULL, -- FK to Subforums table
   `SubscriptionDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserID`, `SubforumID`),
   UNIQUE KEY (`UserID`, `SubforumID`), -- Prevent duplicate subscriptions
