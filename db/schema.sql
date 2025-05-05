@@ -82,7 +82,6 @@ CREATE TABLE `Subscriptions` (
   `SubforumID` INT NOT NULL, -- FK to Subforums table
   `SubscriptionDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserID`, `SubforumID`),
-  UNIQUE KEY (`UserID`, `SubforumID`), -- Prevent duplicate subscriptions
   CONSTRAINT `FK_Subscriptions_UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `Users` (`UserID`)
