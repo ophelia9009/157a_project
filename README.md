@@ -30,8 +30,8 @@ Functional Requirements:
     - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
 - Post Management:
     - [x] Allow registered users to create new posts within a specific subforum. 
-    - [ ] Allow registered users to edit the posts they created.                 @Johnathan
-    - [ ] Allow registered users to delete the posts they created.               @Johnathan
+    - [x] Allow registered users to edit the posts they created.                 @Johnathan
+    - [x] Allow registered users to delete the posts they created.               @Johnathan
     - [x] Allow registered users to view posts within a subforum.  
     - [x] Store post information (PostID, UserID, Title, BodyText, CreationDate, SubforumID, Rating) in a database.
 - Comment Management:
