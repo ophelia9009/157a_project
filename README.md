@@ -28,7 +28,7 @@ Functional Requirements:
     - [ ] Allow registered users to subscribe subforums.
     - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
 - Post Management:
-    - [ ] Allow registered users to create new posts within a specific subforum. @Vaishu
+    - [x] Allow registered users to create new posts within a specific subforum. @Vaishu
     - [ ] Allow registered users to edit the posts they created.                 @Johnathan
     - [ ] Allow registered users to delete the posts they created.               @Johnathan
     - [x] Allow registered users to view posts within a subforum.  
