@@ -46,6 +46,9 @@
         out.println("<div class='alert alert-danger'>Post not found.</div>");
         return;
     }
+    
+    // Make postId available to later sections
+    pageContext.setAttribute("postId", postId);
     %>
 
     <!-- Include navigation -->
@@ -96,6 +99,8 @@
         </div>
         <% if (!isGuest && user.getUserID().equals(post.getUserID())) { %>
             <!-- Edit/Delete Post Form -->
+        <% } %>
+
         <!-- Add Comment Button and Modal -->
         <% if (!isGuest) { %>
         <button id="createCommentBtn" class="btn btn-primary mb-4">
@@ -153,7 +158,6 @@
                 </div>
             </div>
         </div>
-        <% } %>
 
         <%-- Comments display section --%>
         <div class="card shadow-sm mb-5">
@@ -166,7 +170,7 @@
                 CommentDAO commentDAO = new CommentDAO();
                 UserDAO userDAO = new UserDAO();
                 try {
-                    List<Comment> comments = commentDAO.getCommentsByPost(postId);
+                    List<Comment> comments = commentDAO.getCommentsByPost((Integer)pageContext.getAttribute("postId"));
                     if (comments.isEmpty()) {
                         out.println("<div class='alert alert-info'>No comments yet. Be the first to comment!</div>");
                     } else {
@@ -181,7 +185,7 @@
                                         <i class="bi bi-clock"></i> <%= new java.text.SimpleDateFormat("MMM dd, yyyy h:mm a").format(comment.getCreationDate()) %>
                                     </small>
                                 </div>
-                                <% if (comment.getUserID().equals(user.getUserID())) { %>
+                                <% if (!isGuest && comment.getUserID().equals(user.getUserID())) { %>
                                     <div class="d-flex">
                                         <button class="btn btn-sm btn-outline-primary me-2"
                                                 data-comment-id="<%= comment.getCommentID() %>"
@@ -191,7 +195,7 @@
                                         </button>
                                         <form class="d-inline" method="post" action="${pageContext.request.contextPath}/api/commentAction">
                                             <input type="hidden" name="commentId" value="<%= comment.getCommentID() %>">
-                                            <input type="hidden" name="postId" value="<%= postId %>">
+                                            <input type="hidden" name="postId" value="<%= pageContext.getAttribute("postId") %>">
                                             <button type="submit" name="action" value="delete" class="btn btn-sm btn-outline-danger" 
                                                     onclick="return confirmCommentDelete()">
                                                 <i class="bi bi-trash"></i> Delete
