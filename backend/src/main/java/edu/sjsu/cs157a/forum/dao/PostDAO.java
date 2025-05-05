@@ -7,7 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PostDAO extends BaseDAO{
+
+
+    private static final Logger logger = LogManager.getLogger(PostDAO.class);
+
+
     public Post getPostByID(Integer postID){
         try {
             Map<String, Object> lm = findByPrimaryKey("Posts", "PostID", postID);
@@ -19,7 +27,6 @@ public class PostDAO extends BaseDAO{
         }
     }
     public Post createPost(String title, String bodyText, Integer userID, Integer subforumID){
-//        System.out.println ("PostDAO.createPost is called");
         if (title.isBlank())
             throw new IllegalArgumentException("title cannot be blank for post creation");
         if (bodyText.isBlank())
@@ -57,13 +64,13 @@ public class PostDAO extends BaseDAO{
                 }
             }
         } catch (SQLException se) {
-            System.out.println("SQL ErrorState: " + se.getSQLState());
-            System.out.println("SQL ErrorCode: " + se.getErrorCode());
+            logger.error("SQL ErrorState: " + se.getSQLState());
+            logger.error("SQL ErrorCode: " + se.getErrorCode());
             se.printStackTrace();
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to create post", se);
         } catch (Exception e) {
-            System.out.println (e.getStackTrace());
+            logger.error (e);
             throw new RuntimeException("Failed to create post", e);
         }
     }
@@ -93,10 +100,10 @@ public class PostDAO extends BaseDAO{
             return post;
             }
          catch (SQLException se) {
-            System.out.println("SQL ErrorState: " + se.getSQLState());
-            System.out.println("SQL ErrorCode: " + se.getErrorCode());
+            logger.error("SQL ErrorState: " + se.getSQLState());
+            logger.error("SQL ErrorCode: " + se.getErrorCode());
             se.printStackTrace();
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to update post", se);
         }
     }
@@ -121,7 +128,7 @@ public class PostDAO extends BaseDAO{
             conn.close();
             return true;
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to post user", se);
         }
     }
@@ -182,7 +189,7 @@ public class PostDAO extends BaseDAO{
             }
             rs.close();
         } catch (SQLException se) {
-            System.out.println("SQL Exception:" + se.getMessage());
+            logger.error("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to get posts when trying to list/filter them", se);
         }
         return posts;

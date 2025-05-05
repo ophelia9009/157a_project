@@ -1,6 +1,7 @@
 package edu.sjsu.cs157a.forum.servlet;
 
 import edu.sjsu.cs157a.forum.dao.PostDAO;
+import edu.sjsu.cs157a.forum.dao.UserDAO;
 import edu.sjsu.cs157a.forum.model.Element;
 import edu.sjsu.cs157a.forum.model.Post;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,9 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @WebServlet("/api/posts/*")
 public class PostActionServlet extends BaseServlet {
+
+    private static final Logger logger = LogManager.getLogger(PostActionServlet.class);
+
+
     private final PostDAO postDAO = new PostDAO();
 
     @Override
@@ -31,7 +38,7 @@ public class PostActionServlet extends BaseServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Post ID required");
             return;
         }
-        System.out.println("Action: " + action + ", postId: " + postId);
+        logger.info("Action: " + action + ", postId: " + postId);
         HttpSession session = request.getSession();
 
 
@@ -79,7 +86,7 @@ public class PostActionServlet extends BaseServlet {
     }
     @Override
     public void init() {
-        System.out.println("PostActionServlet initialized");
+        logger.info("PostActionServlet initialized");
     }
 
 }
