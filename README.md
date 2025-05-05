@@ -25,6 +25,7 @@ Functional Requirements:
 - Subforum Management:
     - [x] Allow registered users to create new subforums.
     - [x] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
+    - [ ] Allow registered users to subscribe subforums.
     - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
 - Post Management:
     - [ ] Allow registered users to create new posts within a specific subforum. @Vaishu

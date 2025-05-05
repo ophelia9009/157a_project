@@ -89,7 +89,9 @@
                             boolean hasOwnedSubforums = false;
                             
                             for (Subforum subforum : ownedSubforums) {
-                                if (subforum.getOwnerID() == user.getUserID()) {
+
+
+                                if (java.util.Objects.equals(subforum.getOwnerID() , user.getUserID())) {
                                     hasOwnedSubforums = true;
                                     break;
                                 }
@@ -103,7 +105,7 @@
                         <%
                             } else {
                                 for (Subforum subforum : ownedSubforums) {
-                                    if (subforum.getOwnerID() == user.getUserID()) {
+                                    if (java.util.Objects.equals(subforum.getOwnerID() , user.getUserID())) {
                         %>
                             <div class="card mb-3">
                                 <div class="card-body">
