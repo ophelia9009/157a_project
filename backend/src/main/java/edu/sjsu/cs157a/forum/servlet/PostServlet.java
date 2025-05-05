@@ -10,17 +10,18 @@ import java.io.IOException;
 
 
 @WebServlet("/api/posts")
-public class PostServlet extends BaseServlet{
+public class PostServlet extends BaseServlet {
     private final PostDAO postDAO = new PostDAO();
     private final Gson gson = new Gson();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        System.out.println ("PostServlet is called");
         try {
             String title = request.getParameter("title");
             String bodytext = request.getParameter("bodyText");
-            Integer UserID = Integer.valueOf(request.getParameter("userID"));
-            Integer SubforumID = Integer.valueOf(request.getParameter("subforumID"));
+            Integer UserID = Integer.valueOf(request.getParameter("userId"));
+            Integer SubforumID = Integer.valueOf(request.getParameter("subforumId"));
 
             Post created = postDAO.createPost(title, bodytext, UserID, SubforumID);
 

@@ -19,6 +19,7 @@ public class PostDAO extends BaseDAO{
         }
     }
     public Post createPost(String title, String bodyText, Integer userID, Integer subforumID){
+        System.out.println ("PostDAO.createPost is called");
         if (title.isBlank())
             throw new IllegalArgumentException("title cannot be blank for post creation");
         if (bodyText.isBlank())
@@ -39,8 +40,8 @@ public class PostDAO extends BaseDAO{
             stmt.setString(2, bodyText);
             stmt.setTimestamp(3, now);
             stmt.setInt(4, 0);
-            stmt.setInt(4, userID);
-            stmt.setInt(5, subforumID);
+            stmt.setInt(5, userID);
+            stmt.setInt(6, subforumID);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -61,6 +62,9 @@ public class PostDAO extends BaseDAO{
             se.printStackTrace();
             System.out.println("SQL Exception:" + se.getMessage());
             throw new RuntimeException("Failed to create post", se);
+        } catch (Exception e) {
+            System.out.println (e.getStackTrace());
+            throw new RuntimeException("Failed to create post", e);
         }
     }
     public Post editPost(Post post, String newTitle, String newBodyText){

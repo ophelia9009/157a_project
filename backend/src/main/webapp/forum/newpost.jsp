@@ -71,7 +71,8 @@
                 <h2 class="h4 mb-0">Create a Post in: <%= subforum.get("Name") %></h2>
             </div>
             <div class="card-body">
-                <form method="post" action="${pageContext.request.contextPath}/api/posts">
+                <!-- <form method="post" action="${pageContext.request.contextPath}/api/posts"> -->
+                <form method="post" action="/backend/api/posts">
                     <input type="hidden" name="subforumId" value="<%= subforumId %>">
                     <input type="hidden" name="userId" value="<%= userId %>">
 
