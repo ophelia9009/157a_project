@@ -29,7 +29,7 @@ CREATE TABLE `Subforums` (
   CONSTRAINT `FK_User_SubforumID`
     FOREIGN KEY (`OwnerID`)
     REFERENCES `Users` (`UserID`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE
   );
 
@@ -46,7 +46,7 @@ CREATE TABLE `Posts` (
   CONSTRAINT `FK_Posts_UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `Users` (`UserID`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `FK_Posts_SubforumID`
     FOREIGN KEY (`SubforumID`)
@@ -67,7 +67,7 @@ CREATE TABLE `Comments` (
   CONSTRAINT `FK_Comments_UserID`
     FOREIGN KEY (`UserID`)
     REFERENCES `Users` (`UserID`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `FK_Comments_PostID`
     FOREIGN KEY (`PostID`)
