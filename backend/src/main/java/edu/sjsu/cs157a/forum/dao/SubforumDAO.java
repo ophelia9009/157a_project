@@ -257,4 +257,31 @@ public class SubforumDAO extends BaseDAO {
         }
         return subforums;
     }
+
+    /**
+     * Deletes a subforum by its ID
+     * @param subforumID The ID of the subforum to delete
+     * @throws RuntimeException if deletion fails
+     */
+    public void deleteSubforum(Integer subforumID) {
+        if (subforumID == null) {
+            throw new IllegalArgumentException("subforumID cannot be null");
+        }
+
+        String sql = "DELETE FROM Subforums WHERE SubforumID = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, subforumID);
+            int affectedRows = stmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new RuntimeException("No subforum found with ID: " + subforumID);
+            }
+        } catch (SQLException se) {
+            System.out.println("SQL Exception:" + se.getMessage());
+            throw new RuntimeException("Failed to delete subforum", se);
+        }
+    }
 }
