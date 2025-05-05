@@ -8,10 +8,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 @WebServlet("/api/profileAction")
 public class ProfileActionServlet extends BaseServlet {
+
+
+    private static final Logger logger = LogManager.getLogger(UserDAO.class);
+
+
     private final UserDAO userDAO = new UserDAO();
 
     @Override
@@ -27,7 +34,7 @@ public class ProfileActionServlet extends BaseServlet {
 
         String action = request.getParameter("action");
         Integer userId = Integer.valueOf(request.getParameter("userId"));
-        System.out.println("Action: " + action + ", userId: " + userId);
+        logger.info("Action: " + action + ", userId: " + userId);
         HttpSession session = request.getSession();
 
         if (userId == null) {
@@ -79,7 +86,7 @@ public class ProfileActionServlet extends BaseServlet {
     }
     @Override
     public void init() {
-        System.out.println("ProfileActionServlet initialized");
+        logger.info("ProfileActionServlet initialized");
     }
 
 }

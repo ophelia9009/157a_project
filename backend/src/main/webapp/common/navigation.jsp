@@ -20,7 +20,7 @@ boolean isLoggedIn = (user != null);
 <!-- Navigation bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/index.jsp">Forum</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/forum/home.jsp">Forum</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>

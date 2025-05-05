@@ -9,9 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@WebServlet("/api/posts/*")
+@WebServlet("/api/postAction")
 public class PostActionServlet extends BaseServlet {
+
+    private static final Logger logger = LogManager.getLogger(PostActionServlet.class);
+
+
     private final PostDAO postDAO = new PostDAO();
 
     @Override
@@ -27,46 +33,52 @@ public class PostActionServlet extends BaseServlet {
 
         String action = request.getParameter("action");
         Integer postId = Integer.valueOf(request.getParameter("postId"));
-        if (postId == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Post ID required");
-            return;
-        }
-        System.out.println("Action: " + action + ", postId: " + postId);
+        Integer subforumId = Integer.valueOf(request.getParameter("subforumId"));
+        logger.info("Action: " + action + ", postId: " + postId);
         HttpSession session = request.getSession();
-
-
 
         try {
             switch (action) {
                 case "delete":
-                    boolean deleted = postDAO.deleteTuple(new Element("posts", "PostID", postId,new String[]{}, new Object[]{}));
+                    boolean deleted = postDAO.deleteTuple(new Element("Posts", "PostID", postId,new String[]{}, new Object[]{}));
                     if (deleted) {
                         //maybe this should become the subforum homepage
-                        response.sendRedirect("/forum/home/.jsp");
+                        response.sendRedirect("/backend/forum/subforumview.jsp?subforumId=" + subforumId);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "Post not found");
                     }
                     break;
 
                 case "edit":
-                    response.sendRedirect(request.getContextPath() + "/user/editpost.jsp");
+                    Post post = postDAO.getPostByID(postId);
+                    if (post == null) {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Post not found.");
+                        return;
+                    }
+
+                    request.setAttribute("post", post);
+                    request.getRequestDispatcher("/forum/editpost.jsp").forward(request, response);
                     break;
 
                 case "editSubmit":
                     String title = request.getParameter("title");
                     String bodyText = request.getParameter("bodyText");
-                    if (title.isBlank() && bodyText.isBlank()) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title or Body Text are required.");
+                    if (title.isBlank()) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title is required.");
                         return;
                     }
-                    postDAO.updateTuple(new Element("posts", "PostID", postId,
+                    if (bodyText.isBlank()){
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Body Text is required.");
+                        return;
+                    }
+                    postDAO.updateTuple(new Element("Posts", "PostID", postId,
                             new String[] { "Title", "BodyText" },
                             new Object[] { title, bodyText}));
 
                     Post updatedPost = postDAO.getPostByID(postId);
                     session.setAttribute("post", updatedPost);
 
-                    response.sendRedirect("../api/posts");
+                    response.sendRedirect("../forum/viewpost.jsp?postId=" + postId);
                     break;
 
                 default:
@@ -79,7 +91,7 @@ public class PostActionServlet extends BaseServlet {
     }
     @Override
     public void init() {
-        System.out.println("PostActionServlet initialized");
+        logger.info("PostActionServlet initialized");
     }
 
 }
