@@ -48,7 +48,7 @@ public class SubforumDAOTest {
         }
     }
 
-    @Test(expected = SQLException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void test_createSubforum_emptyName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {

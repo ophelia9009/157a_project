@@ -109,6 +109,10 @@ public class SubforumDAO extends BaseDAO {
         if (ownerID == null)
             throw new IllegalArgumentException("ownerID cannot be null");
 
+        if(name == null || name.isEmpty()){
+            throw new IllegalArgumentException("name cannot be null or empty");
+        }
+
         Timestamp now = new Timestamp(System.currentTimeMillis());
         String sql = "INSERT INTO Subforums (Name, CreationDate, Description, SubscriberCount, LastUpdated, OwnerID) " +
                      "VALUES (?, ?, ?, 0, ?, ?)";
