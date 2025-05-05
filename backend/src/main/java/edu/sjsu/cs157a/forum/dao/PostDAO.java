@@ -91,7 +91,7 @@ public class PostDAO extends BaseDAO{
                 stmt.setString(2, newBodyText);
             else
                 stmt.setString(2, post.getBodyText());
-            stmt.setInt(3, post.getId());
+            stmt.setInt(3, post.getPostID());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {

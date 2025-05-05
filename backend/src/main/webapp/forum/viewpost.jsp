@@ -29,10 +29,7 @@
     <%-- Check user session --%>
     <%
     User user = (User) session.getAttribute("user");
-    if (user == null) {
-        response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
-        return;
-    }
+    boolean isGuest = (user == null);
     %>
     <%-- Get Post session --%>
     <%
@@ -68,7 +65,7 @@
                 <div class="mb-4">
                     <div class="post-meta text-muted mb-3">
                         <small>
-                            <span class="me-3"><i class="bi bi-hash"></i> <%= post.getId() %></span>
+                            <span class="me-3"><i class="bi bi-hash"></i> <%= post.getPostID() %></span>
                             <span><i class="bi bi-calendar-event"></i> Posted: <%= new java.text.SimpleDateFormat("MMM dd, yyyy").format(post.getCreationDate()) %></span>
                         </small>
                     </div>
@@ -81,10 +78,11 @@
                 </div>
 
                 <%-- Post action form --%>
-                <% if (user.getUserID().equals(post.getUserID())) { %>
+                <% if (!isGuest && user.getUserID().equals(post.getUserID())) { %>
                 <div class="d-flex justify-content-end">
                     <form id="postForm" method="post" action="${pageContext.request.contextPath}/api/postAction" class="d-flex gap-2">
-                        <input type="hidden" name="postId" value="<%= post.getId() %>">
+                        <input type="hidden" name="postId" value="<%= post.getPostID() %>">
+                        <input type="hidden" name="subforumId" value="<%= post.getSubforumID() %>">
                         <button type="submit" name="action" value="edit" class="btn btn-outline-primary">
                             <i class="bi bi-pencil-square"></i> Edit Post
                         </button>
@@ -96,11 +94,14 @@
                 <% } %>
             </div>
         </div>
+        <% if (!isGuest && user.getUserID().equals(post.getUserID())) { %>
+            <!-- Edit/Delete Post Form -->
         <!-- Add Comment Button and Modal -->
+        <% if (!isGuest) { %>
         <button id="createCommentBtn" class="btn btn-primary mb-4">
             <i class="bi bi-chat-left-text"></i> Add Comment
         </button>
-
+        <% } %>
         <!-- Create Comment Modal -->
         <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -111,7 +112,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="commentForm">
-                            <input type="hidden" id="commentPostId" name="postId" value="<%= post.getId() %>">
+                            <input type="hidden" id="commentPostId" name="postId" value="<%= post.getPostID() %>">
                             <div class="mb-3">
                                 <label for="commentText" class="form-label">Comment:</label>
                                 <textarea id="commentText" name="commentText" class="form-control" rows="5" required></textarea>
@@ -138,7 +139,7 @@
                         <form id="editCommentForm" method="post" action="${pageContext.request.contextPath}/api/commentAction">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="commentId" id="editCommentId">
-                            <input type="hidden" name="postId" value="<%= post.getId() %>">
+                            <input type="hidden" name="postId" value="<%= post.getPostID() %>">
                             <div class="mb-3">
                                 <label for="editCommentText" class="form-label">Comment:</label>
                                 <textarea id="editCommentText" name="commentText" class="form-control" rows="5" required></textarea>
@@ -152,6 +153,7 @@
                 </div>
             </div>
         </div>
+        <% } %>
 
         <%-- Comments display section --%>
         <div class="card shadow-sm mb-5">

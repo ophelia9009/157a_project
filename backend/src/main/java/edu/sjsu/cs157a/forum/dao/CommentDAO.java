@@ -56,7 +56,7 @@ public class CommentDAO extends BaseDAO{
             logger.error("SQL ErrorCode: " + se.getErrorCode());
             se.printStackTrace();
             logger.error("SQL Exception:" + se.getMessage());
-            throw new RuntimeException("Failed to create comment", se);
+            throw new RuntimeException("Failed to create comment"+ se.getMessage(), se);
         }
     }
 
