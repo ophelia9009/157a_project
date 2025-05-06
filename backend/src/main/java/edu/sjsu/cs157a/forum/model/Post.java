@@ -22,7 +22,7 @@ public class Post {
         this.subforumID = subforumID;
         this.lastupdated = lastupdated;
     }
-    public Integer getId() {
+    public Integer getPostID() {
         return postID;
     }
     public String getTitle() {

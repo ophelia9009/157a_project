@@ -25,11 +25,6 @@
     </jsp:include>
 
     <div class="container mt-4">
-        <!-- Create Subforum Button -->
-        <button id="createSubforumBtn" class="btn btn-success mb-3">
-            <i class="bi bi-plus-circle"></i> Create Subforum
-        </button>
-
         <!-- Create Subforum Modal -->
         <div class="modal fade" id="subforumModal" tabindex="-1" aria-labelledby="subforumModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -71,7 +66,6 @@
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         // Handle Create Subforum Modal with Bootstrap
         const modal = new bootstrap.Modal(document.getElementById('subforumModal'));
