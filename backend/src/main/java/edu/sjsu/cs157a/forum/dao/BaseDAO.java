@@ -178,7 +178,7 @@ public class BaseDAO {
             throw new RuntimeException("Batch insert failed for table: " + first.getTable(), e);
         }
     }
-
+/* does not work with Long--Object conversion to int
     public Map<String, Object> findByPrimaryKey(String table, String primaryKeyColumn, Object primaryKeyValue) throws SQLException {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + table + " WHERE " + primaryKeyColumn + " = ?")) {
@@ -196,7 +196,7 @@ public class BaseDAO {
                 }
             }
         }
-    }
+    }*/
 
 
     /**

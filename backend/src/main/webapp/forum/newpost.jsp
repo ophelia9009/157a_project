@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="edu.sjsu.cs157a.forum.dao.SubforumDAO" %>
 <%@ page import="edu.sjsu.cs157a.forum.model.User" %>
-<%@ page import="java.util.Map" %>
+<%@ page import="edu.sjsu.cs157a.forum.model.Subforum" %>
 
 <!DOCTYPE html>
 <html>
@@ -46,13 +46,13 @@
             }
 
             String subforumIdParam = request.getParameter("subforumId");
-            Long subforumId = -1;
-            Map<String, Object> subforum = null;
+            Long subforumId = -1L;
+            Subforum subforum = null;
 
             try {
                 subforumId = Long.parseLong(subforumIdParam);
                 SubforumDAO dao = new SubforumDAO();
-                subforum = dao.findByPrimaryKey("Subforums", "SubforumID", subforumId);
+                subforum = dao.getSubforumByID(subforumId);
             } catch (Exception e) {
                 out.println("<div class='alert alert-danger'><i class='bi bi-exclamation-triangle-fill me-2'></i>Invalid or missing subforum ID.</div>");
                 return;
@@ -68,7 +68,7 @@
 
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h2 class="h4 mb-0">Create a Post in: <%= subforum.get("Name") %></h2>
+                <h2 class="h4 mb-0">Create a Post in: <%= subforum.getName() %></h2>
             </div>
             <div class="card-body">
                 <!-- <form method="post" action="${pageContext.request.contextPath}/api/posts"> -->

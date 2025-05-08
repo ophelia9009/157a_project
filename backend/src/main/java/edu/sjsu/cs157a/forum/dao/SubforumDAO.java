@@ -15,7 +15,36 @@ import org.apache.logging.log4j.Logger;
 public class SubforumDAO extends BaseDAO {
 
     private static final Logger logger = LogManager.getLogger(SubforumDAO.class);
-
+    public Subforum getSubforumByID(Long subforumId){
+        Subforum subforum = null;
+        if (subforumId == null)
+            throw new IllegalArgumentException("subforumId cannot be null for subforum creation");
+        String sql = "SELECT * FROM Subforums WHERE subforumId = ?";
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, subforumId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                subforum = new Subforum(
+                        rs.getLong("SubforumID"),
+                        rs.getString("Name"),
+                        rs.getTimestamp("CreationDate"),
+                        rs.getString("Description"),
+                        rs.getString("SubscriberCount"),
+                        rs.getTimestamp("LastUpdated"),
+                        rs.getLong("OwnerID")
+                        );
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+            return subforum;
+        } catch (SQLException se) {
+            logger.error("SQL Exception: {}", se.getMessage());
+            throw new RuntimeException("Failed to get subforum", se);
+        }
+    }
 
     public List<Post> getAllSubforumPosts (Long subforumID) {
         List<Post> posts = new ArrayList<>();
