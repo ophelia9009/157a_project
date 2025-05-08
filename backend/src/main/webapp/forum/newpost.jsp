@@ -46,11 +46,11 @@
             }
 
             String subforumIdParam = request.getParameter("subforumId");
-            int subforumId = -1;
+            Long subforumId = -1;
             Map<String, Object> subforum = null;
 
             try {
-                subforumId = Integer.parseInt(subforumIdParam);
+                subforumId = Long.parseLong(subforumIdParam);
                 SubforumDAO dao = new SubforumDAO();
                 subforum = dao.findByPrimaryKey("Subforums", "SubforumID", subforumId);
             } catch (Exception e) {
@@ -63,7 +63,7 @@
                 return;
             }
 
-            int userId = user.getUserID();
+            Long userId = user.getUserID();
         %>
 
         <div class="card shadow-sm">

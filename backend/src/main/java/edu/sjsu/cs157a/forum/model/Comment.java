@@ -3,15 +3,15 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class Comment {
-    private Integer CommentID;
+    private Long CommentID;
     private String CommentText;
     private Timestamp CreationDate = new Timestamp(System.currentTimeMillis());
-    private Integer Rating = 0;
-    private Integer UserID;
-    private Integer PostID;
+    private Long Rating = 0L;
+    private Long UserID;
+    private Long PostID;
     private Timestamp LastUpdated = new Timestamp(System.currentTimeMillis());
 
-    public Integer getCommentID() {
+    public Long getCommentID() {
         return CommentID;
     }
 
@@ -23,15 +23,15 @@ public class Comment {
         return CreationDate;
     }
 
-    public Integer getUserID() {
+    public Long getUserID() {
         return UserID;
     }
 
-    public Integer getRating() {
+    public Long getRating() {
         return Rating;
     }
 
-    public Integer getPostID() {
+    public Long getPostID() {
         return PostID;
     }
 
@@ -40,7 +40,7 @@ public class Comment {
         return LastUpdated;
     }
 
-    public Comment(Integer commentID, String commentText, Timestamp creationDate, Integer rating, Integer userID, Integer postID, Timestamp lastUpdated) {
+    public Comment(Long commentID, String commentText, Timestamp creationDate, Long rating, Long userID, Long postID, Timestamp lastUpdated) {
         CommentID = commentID;
         CommentText = commentText;
         CreationDate = creationDate != null ? creationDate : new Timestamp(System.currentTimeMillis());

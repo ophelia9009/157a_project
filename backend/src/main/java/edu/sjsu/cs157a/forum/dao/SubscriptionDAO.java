@@ -1,7 +1,5 @@
 package edu.sjsu.cs157a.forum.dao;
 
-import edu.sjsu.cs157a.forum.model.Subscription;
-import edu.sjsu.cs157a.forum.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +16,7 @@ public class SubscriptionDAO extends BaseDAO {
      * @param subforumID The ID of the subforum
      * @return true if subscription was successful, false otherwise
      */
-    public boolean subscribeUserToSubforum(Integer userID, Integer subforumID) {
+    public boolean subscribeUserToSubforum(Long userID, Long subforumID) {
         // Check if already subscribed
         if (isUserSubscribed(userID, subforumID)) {
             logger.info("User {} is already subscribed to subforum {}", userID, subforumID);
@@ -38,8 +36,8 @@ public class SubscriptionDAO extends BaseDAO {
             );
             
             Timestamp now = new Timestamp(System.currentTimeMillis());
-            stmt.setInt(1, userID);
-            stmt.setInt(2, subforumID);
+            stmt.setLong(1, userID);
+            stmt.setLong(2, subforumID);
             stmt.setTimestamp(3, now);
             
             int affectedRows = stmt.executeUpdate();
@@ -84,7 +82,7 @@ public class SubscriptionDAO extends BaseDAO {
      * @param subforumID The ID of the subforum
      * @return true if unsubscription was successful, false otherwise
      */
-    public boolean unsubscribeUserFromSubforum(Integer userID, Integer subforumID) {
+    public boolean unsubscribeUserFromSubforum(Long userID, Long subforumID) {
         // Check if subscribed
         if (!isUserSubscribed(userID, subforumID)) {
             logger.info("User {} is not subscribed to subforum {}", userID, subforumID);
@@ -103,8 +101,8 @@ public class SubscriptionDAO extends BaseDAO {
                 "DELETE FROM Subscriptions WHERE UserID = ? AND SubforumID = ?"
             );
             
-            stmt.setInt(1, userID);
-            stmt.setInt(2, subforumID);
+            stmt.setLong(1, userID);
+            stmt.setLong(2, subforumID);
             
             int affectedRows = stmt.executeUpdate();
             
@@ -148,7 +146,7 @@ public class SubscriptionDAO extends BaseDAO {
      * @param subforumID The ID of the subforum
      * @return true if subscribed, false otherwise
      */
-    public boolean isUserSubscribed(Integer userID, Integer subforumID) {
+    public boolean isUserSubscribed(Long userID, Long subforumID) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -159,8 +157,8 @@ public class SubscriptionDAO extends BaseDAO {
                 "SELECT 1 FROM Subscriptions WHERE UserID = ? AND SubforumID = ?"
             );
             
-            stmt.setInt(1, userID);
-            stmt.setInt(2, subforumID);
+            stmt.setLong(1, userID);
+            stmt.setLong(2, subforumID);
             
             rs = stmt.executeQuery();
             return rs.next();
@@ -189,8 +187,8 @@ public class SubscriptionDAO extends BaseDAO {
      * @param userID The ID of the user
      * @return List of subforum IDs the user is subscribed to
      */
-    public List<Integer> getUserSubscriptions(Integer userID) {
-        List<Integer> subscriptions = new ArrayList<>();
+    public List<Long> getUserSubscriptions(Long userID) {
+        List<Long> subscriptions = new ArrayList<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -201,11 +199,11 @@ public class SubscriptionDAO extends BaseDAO {
                 "SELECT SubforumID FROM Subscriptions WHERE UserID = ?"
             );
             
-            stmt.setInt(1, userID);
+            stmt.setLong(1, userID);
             
             rs = stmt.executeQuery();
             while (rs.next()) {
-                subscriptions.add(rs.getInt("SubforumID"));
+                subscriptions.add(rs.getLong("SubforumID"));
             }
         } catch (SQLException se) {
             logger.error("SQL Exception: {}", se.getMessage());
@@ -234,8 +232,8 @@ public class SubscriptionDAO extends BaseDAO {
      * @param subforumID The ID of the subforum
      * @return List of user IDs subscribed to the subforum
      */
-    public List<Integer> getSubforumSubscribers(Integer subforumID) {
-        List<Integer> subscribers = new ArrayList<>();
+    public List<Long> getSubforumSubscribers(Long subforumID) {
+        List<Long> subscribers = new ArrayList<>();
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -246,11 +244,11 @@ public class SubscriptionDAO extends BaseDAO {
                 "SELECT UserID FROM Subscriptions WHERE SubforumID = ?"
             );
             
-            stmt.setInt(1, subforumID);
+            stmt.setLong(1, subforumID);
             
             rs = stmt.executeQuery();
             while (rs.next()) {
-                subscribers.add(rs.getInt("UserID"));
+                subscribers.add(rs.getLong("UserID"));
             }
         } catch (SQLException se) {
             logger.error("SQL Exception: {}", se.getMessage());
@@ -280,12 +278,12 @@ public class SubscriptionDAO extends BaseDAO {
      * @param subforumID The ID of the subforum
      * @param increment Whether to increment (true) or decrement (false) the count
      */
-    private void updateSubforumSubscriberCount(Connection conn, Integer subforumID, boolean increment) throws SQLException {
+    private void updateSubforumSubscriberCount(Connection conn, Long subforumID, boolean increment) throws SQLException {
         String operation = increment ? "SubscriberCount + 1" : "SubscriberCount - 1";
         String sql = "UPDATE Subforums SET SubscriberCount = " + operation + " WHERE SubforumID = ?";
         
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, subforumID);
+            stmt.setLong(1, subforumID);
             int affectedRows = stmt.executeUpdate();
             
             if (affectedRows == 0) {

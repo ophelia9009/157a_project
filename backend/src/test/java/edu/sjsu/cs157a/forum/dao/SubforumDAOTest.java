@@ -4,7 +4,6 @@ import edu.sjsu.cs157a.forum.model.Subforum;
 import org.junit.Test;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -21,10 +20,10 @@ public class SubforumDAOTest {
         // Create test data
         String name = "Test Subforum " + System.currentTimeMillis();
         String description = "Test description";
-        Integer ownerID = 1; // Using existing user ID from sample data
+        Long ownerID = 1L; // Using existing user ID from sample data
         
         // Test creating subforum
-        Subforum createdSubforum = subforumDAO.createSubforum(name, description, Integer.valueOf(ownerID));
+        Subforum createdSubforum = subforumDAO.createSubforum(name, description, Long.valueOf(ownerID));
         assertNotNull(createdSubforum);
         assertNotNull(createdSubforum.getSubforumID());
         assertEquals(name, createdSubforum.getName());
@@ -39,7 +38,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_nullName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum(null, "Test description", 1);
+            subforumDAO.createSubforum(null, "Test description", 1L);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -52,7 +51,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_emptyName() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum("", "Test description", 1);
+            subforumDAO.createSubforum("", "Test description", 1L);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -65,7 +64,7 @@ public class SubforumDAOTest {
     public void test_createSubforum_nullDescription() throws SQLException {
         SubforumDAO subforumDAO = new SubforumDAO();
         try {
-            subforumDAO.createSubforum("Test Subforum", null, 1);
+            subforumDAO.createSubforum("Test Subforum", null, 1L);
         } catch (RuntimeException e) {
             if (e.getCause() instanceof SQLException) {
                 throw (SQLException) e.getCause();
@@ -88,7 +87,7 @@ public class SubforumDAOTest {
         // First create a subforum to update with unique name
         String name = "Test Subforum Update " + System.currentTimeMillis();
         String originalDesc = "Original description";
-        Integer ownerID = 1;
+        Long ownerID = 1L;
         Subforum subforum = subforumDAO.createSubforum(name, originalDesc, ownerID);
         
         // Update description
@@ -100,46 +99,46 @@ public class SubforumDAOTest {
     public void test_updateSubforum_nonOwner() {
         SubforumDAO subforumDAO = new SubforumDAO();
         
-        // Create subforum owned by user 1 with unique name
+        // Create subforum owned by user 1L with unique name
         String name = "Test Subforum NonOwner " + System.currentTimeMillis();
-        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1);
+        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1L);
         
         // Try to update as user 2 (non-owner)
-        subforumDAO.updateSubforum(subforum.getSubforumID(), "New desc", 2);
+        subforumDAO.updateSubforum(subforum.getSubforumID(), "New desc", 2L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_updateSubforum_nullSubforumID() {
         SubforumDAO subforumDAO = new SubforumDAO();
-        subforumDAO.updateSubforum(null, "New desc", 1);
+        subforumDAO.updateSubforum(null, "New desc", 1L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_updateSubforum_nullRequestingUserID() {
         SubforumDAO subforumDAO = new SubforumDAO();
-        subforumDAO.updateSubforum(1, "New desc", null);
+        subforumDAO.updateSubforum(1L, "New desc", null);
     }
 
     @Test
     public void test_updateSubforum_emptyDescription() {
         SubforumDAO subforumDAO = new SubforumDAO();
         String name = "Test Subforum EmptyDesc " + System.currentTimeMillis();
-        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1);
+        Subforum subforum = subforumDAO.createSubforum(name, "Test desc", 1L);
         
-        subforumDAO.updateSubforum(subforum.getSubforumID(), "", 1);
+        subforumDAO.updateSubforum(subforum.getSubforumID(), "", 1L);
     }
 
     @Test
     public void test_getSubscribedSubforums_success() {
         SubforumDAO subforumDAO = new SubforumDAO();
-        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(1);
+        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(1L);
         assertNotNull(subscribed);
     }
     
     @Test
     public void test_getSubscribedSubforums_noSubscriptions() {
         SubforumDAO subforumDAO = new SubforumDAO();
-        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(999);
+        List<Subforum> subscribed = subforumDAO.getSubscribedSubforums(999L);
         assertNotNull(subscribed);
         assertTrue(subscribed.isEmpty());
     }
@@ -164,21 +163,21 @@ public class SubforumDAOTest {
             String uniqueId = String.valueOf(now);
             
             // Oldest subforum - created 2 seconds ago
-            Subforum oldest = subforumDAO.createSubforum("Oldest-" + uniqueId, "Oldest subforum", 1);
-            subforumDAO.updateSubforum(oldest.getSubforumID(), "Updated oldest", 1);
+            Subforum oldest = subforumDAO.createSubforum("Oldest-" + uniqueId, "Oldest subforum", 1L);
+            subforumDAO.updateSubforum(oldest.getSubforumID(), "Updated oldest", 1L);
             
             // Sleep to ensure different timestamps
             Thread.sleep(2000);
             
             // Middle subforum - created now
-            Subforum middle = subforumDAO.createSubforum("Middle-" + uniqueId, "Middle subforum", 1);
+            Subforum middle = subforumDAO.createSubforum("Middle-" + uniqueId, "Middle subforum", 1L);
             
             // Sleep again
             Thread.sleep(2000);
             
             // Newest subforum - created 2 seconds later
-            Subforum newest = subforumDAO.createSubforum("Newest-" + uniqueId, "Newest subforum", 1);
-            subforumDAO.updateSubforum(newest.getSubforumID(), "Updated newest", 1);
+            Subforum newest = subforumDAO.createSubforum("Newest-" + uniqueId, "Newest subforum", 1L);
+            subforumDAO.updateSubforum(newest.getSubforumID(), "Updated newest", 1L);
             
             // Get all subforums ordered by last updated
             List<Subforum> subforums = subforumDAO.getAllSubforumsOrderedByLastUpdated();

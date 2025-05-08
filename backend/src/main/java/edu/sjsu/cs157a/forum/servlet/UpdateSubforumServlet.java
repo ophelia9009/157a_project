@@ -12,8 +12,8 @@ import java.io.IOException;
 public class UpdateSubforumServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int subforumId = Integer.parseInt(request.getParameter("subforumId"));
-            int userId = Integer.parseInt(request.getParameter("userId"));
+            Long subforumId = Long.parseLong(request.getParameter("subforumId"));
+            Long userId = Long.parseLong(request.getParameter("userId"));
             String newDescription = request.getParameter("description");
             
             SubforumDAO subforumDAO = new SubforumDAO();

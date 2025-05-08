@@ -1,12 +1,11 @@
 package edu.sjsu.cs157a.forum.dao;
 
 import edu.sjsu.cs157a.forum.model.Post;
+
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,17 +15,38 @@ public class PostDAO extends BaseDAO{
     private static final Logger logger = LogManager.getLogger(PostDAO.class);
 
 
-    public Post getPostByID(Integer postID){
+    public Post getPostByID(Long postID){
+        Post post = null;
+        if (postID == null)
+            throw new IllegalArgumentException("postID cannot be null for post creation");
+        String sql = "SELECT * FROM Posts WHERE PostID = ?";
         try {
-            Map<String, Object> lm = findByPrimaryKey("Posts", "PostID", postID);
-            return new Post((Integer) lm.get("PostID"), (String) lm.get("Title"), (String) lm.get("BodyText"),
-                    (Timestamp) lm.get("CreationDate"), (Integer) lm.get("Rating"), (Integer) lm.get("UserID"),
-                    (Integer) lm.get("SubforumID"), (Timestamp) lm.get("LastUpdated"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, postID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                post = new Post(
+                        rs.getLong("PostID"),
+                        rs.getString("Title"),
+                        rs.getString("BodyText"),
+                        rs.getTimestamp("CreationDate"),
+                        rs.getLong("Rating"),
+                        rs.getLong("UserID"),
+                        rs.getLong("SubforumID"),
+                        rs.getTimestamp("LastUpdated")
+                        );
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+            return post;
+        } catch (SQLException se) {
+            logger.error("SQL Exception: {}", se.getMessage());
+            throw new RuntimeException("Failed to get post", se);
         }
     }
-    public Post createPost(String title, String bodyText, Integer userID, Integer subforumID){
+    public Post createPost(String title, String bodyText, Long userID, Long subforumID){
         if (title.isBlank())
             throw new IllegalArgumentException("title cannot be blank for post creation");
         if (bodyText.isBlank())
@@ -46,9 +66,9 @@ public class PostDAO extends BaseDAO{
             stmt.setString(1, title);
             stmt.setString(2, bodyText);
             stmt.setTimestamp(3, now);
-            stmt.setInt(4, 0);
-            stmt.setInt(5, userID);
-            stmt.setInt(6, subforumID);
+            stmt.setLong(4, 0);
+            stmt.setLong(5, userID);
+            stmt.setLong(6, subforumID);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -57,8 +77,8 @@ public class PostDAO extends BaseDAO{
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    Integer postID = generatedKeys.getInt(1);
-                    return new Post(postID, title, bodyText, now, 0, userID, subforumID, now);
+                    Long postID = generatedKeys.getLong(1);
+                    return new Post(postID, title, bodyText, now, 0L, userID, subforumID, now);
                 } else {
                     throw new SQLException("Creating post failed, no ID obtained.");
                 }
@@ -91,7 +111,7 @@ public class PostDAO extends BaseDAO{
                 stmt.setString(2, newBodyText);
             else
                 stmt.setString(2, post.getBodyText());
-            stmt.setInt(3, post.getPostID());
+            stmt.setLong(3, post.getPostID());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -107,7 +127,7 @@ public class PostDAO extends BaseDAO{
             throw new RuntimeException("Failed to update post", se);
         }
     }
-    public boolean deletePost(Integer postID){
+    public boolean deletePost(Long postID){
         if (postID == null)
             throw new IllegalArgumentException("postID cannot be null for post deletion");
 
@@ -116,7 +136,7 @@ public class PostDAO extends BaseDAO{
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, postID);
+            stmt.setLong(1, postID);
 
             int affectedRows = stmt.executeUpdate();
 
@@ -139,8 +159,8 @@ public class PostDAO extends BaseDAO{
      * @return the list of subforums
      */
     public List<Post> getFilteredPosts(String filterName, Timestamp minCreationDate, Timestamp maxCreationDate,
-        BigInteger minSubscriberCount, BigInteger maxSubscriberCount, Timestamp minLastUpdated, Timestamp maxLastUpdated,
-                                       Integer SubforumID) {
+                                       BigInteger minSubscriberCount, BigInteger maxSubscriberCount, Timestamp minLastUpdated, Timestamp maxLastUpdated,
+                                       Long SubforumID) {
         List<Post> posts = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT * FROM Posts WHERE ");
@@ -177,13 +197,13 @@ public class PostDAO extends BaseDAO{
 
             while (rs.next()) {
                 posts.add(new Post(
-                        rs.getInt("PostID"),
+                        rs.getLong("PostID"),
                         rs.getString("Title"),
                         rs.getString("BodyText"),
                         rs.getTimestamp("CreationDate"),
-                        rs.getInt("Rating"),
-                        rs.getInt("UserID"),
-                        rs.getInt("SubforumID"),
+                        rs.getLong("Rating"),
+                        rs.getLong("UserID"),
+                        rs.getLong("SubforumID"),
                         rs.getTimestamp("LastUpdated")
                 ));
             }

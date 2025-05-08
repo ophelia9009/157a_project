@@ -39,7 +39,7 @@
         return;
     }
 
-    int postId = Integer.parseInt(postIdParam);
+    Long postId = Long.parseLong(postIdParam);
     PostDAO postDAO = new PostDAO();
     Post post = postDAO.getPostByID(postId);
     if (post == null) {
@@ -170,7 +170,7 @@
                 CommentDAO commentDAO = new CommentDAO();
                 UserDAO userDAO = new UserDAO();
                 try {
-                    List<Comment> comments = commentDAO.getCommentsByPost((Integer)pageContext.getAttribute("postId"));
+                    List<Comment> comments = commentDAO.getCommentsByPost((Long)pageContext.getAttribute("postId"));
                     if (comments.isEmpty()) {
                         out.println("<div class='alert alert-info'>No comments yet. Be the first to comment!</div>");
                     } else {

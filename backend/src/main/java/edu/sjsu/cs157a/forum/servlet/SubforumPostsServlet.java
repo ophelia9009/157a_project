@@ -47,9 +47,9 @@ public class SubforumPostsServlet extends BaseServlet {
             return;
         }
 
-        int subforumId;
+        Long subforumId;
         try {
-            subforumId = Integer.parseInt(idStr);
+            subforumId = Long.parseLong(idStr);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid subforum ID: must be a number");
             return;

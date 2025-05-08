@@ -7,14 +7,12 @@ import org.junit.Test;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Map;
-
 import static org.junit.Assert.*;
 
 public class CommentDAOTest {
     private CommentDAO commentDAO;
-    private int testUserId;
-    private int testPostId;
+    private Long testUserId;
+    private Long testPostId;
 
     @Before
     public void setUp() throws SQLException {
@@ -29,23 +27,23 @@ public class CommentDAOTest {
             stmt.executeUpdate("INSERT INTO Users (Username, Password, Email) VALUES ('" + randomUsername + "', 'password', '" + randomEmail + "')");
             try (ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()")) {
                 rs.next();
-                testUserId = rs.getInt(1);
+                testUserId = rs.getLong(1);
             }
 
             // Create test subforum
             String randomSubforum = "testsub_" + java.util.UUID.randomUUID().toString().substring(0, 8);
             stmt.executeUpdate("INSERT INTO Subforums (Name, Description, OwnerID) VALUES ('" + randomSubforum + "', 'test desc', " + testUserId + ")");
-            int subforumId;
+            Long subforumId;
             try (ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()")) {
                 rs.next();
-                subforumId = rs.getInt(1);
+                subforumId = rs.getLong(1);
             }
 
             // Create test post
             stmt.executeUpdate("INSERT INTO Posts (Title, BodyText, UserID, SubforumID) VALUES ('test post', 'test content', " + testUserId + ", " + subforumId + ")");
             try (ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()")) {
                 rs.next();
-                testPostId = rs.getInt(1);
+                testPostId = rs.getLong(1);
             }
         }
     }
@@ -69,18 +67,18 @@ public class CommentDAOTest {
         assertNotNull(comment);
         assertNotNull(comment.getCommentID());
         assertEquals("Test comment", comment.getCommentText());
-        assertEquals(testUserId, (int) comment.getUserID());
-        assertEquals(testPostId, (int) comment.getPostID());
+        assertEquals(testUserId, (Long) comment.getUserID());
+        assertEquals(testPostId, (Long) comment.getPostID());
 
         // Verify the comment was actually created in the database
         try (Connection conn = commentDAO.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
-            stmt.setInt(1, comment.getCommentID());
+            stmt.setLong(1, comment.getCommentID());
             try (ResultSet rs = stmt.executeQuery()) {
                 assertTrue(rs.next());
                 assertEquals("Test comment", rs.getString("CommentText"));
-                assertEquals(testUserId, rs.getInt("UserID"));
-                assertEquals(testPostId, rs.getInt("PostID"));
+                assertEquals(testUserId.longValue(), rs.getLong("UserID"));
+                assertEquals(testPostId.longValue(), rs.getLong("PostID"));
             }
         }
     }
@@ -96,19 +94,19 @@ public class CommentDAOTest {
         assertNotNull(reply);
         assertNotNull(reply.getCommentID());
         assertEquals("Reply comment", reply.getCommentText());
-        assertEquals(testUserId, (int) reply.getUserID());
-        assertEquals(testPostId, (int) reply.getPostID());
+        assertEquals(testUserId, (Long) reply.getUserID());
+        assertEquals(testPostId, (Long) reply.getPostID());
 
         // Verify the reply was actually created in the database
         try (Connection conn = commentDAO.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
-            stmt.setInt(1, reply.getCommentID());
+            stmt.setLong(1, reply.getCommentID());
             try (ResultSet rs = stmt.executeQuery()) {
                 assertTrue(rs.next());
                 assertEquals("Reply comment", rs.getString("CommentText"));
-                assertEquals(testUserId, rs.getInt("UserID"));
-                assertEquals(testPostId, rs.getInt("PostID"));
-                //assertEquals((int)parent.getCommentID(), rs.getInt("ParentID"));
+                assertEquals(testUserId.longValue(), rs.getLong("UserID"));
+                assertEquals(testPostId.longValue(), rs.getLong("PostID"));
+                //assertEquals((Long)parent.getCommentID(), rs.getLong("ParentID"));
             }
         }
     }
@@ -131,7 +129,7 @@ public class CommentDAOTest {
     @Test(expected = RuntimeException.class)
     public void testCreateCommentSQLException() throws SQLException {
         // Force an SQL exception by violating a constraint
-        commentDAO.createComment("Test", -1, -1); // Invalid foreign keys
+        commentDAO.createComment("Test", -1L, -1L); // Invalid foreign keys
     }
 
     @Test
@@ -145,14 +143,14 @@ public class CommentDAOTest {
         assertNotNull(updated);
         assertEquals(comment.getCommentID(), updated.getCommentID());
         assertEquals("Updated text", updated.getCommentText());
-        assertEquals(testUserId, (int) updated.getUserID());
-        assertEquals(testPostId, (int) updated.getPostID());
+        assertEquals(testUserId, (Long) updated.getUserID());
+        assertEquals(testPostId, (Long) updated.getPostID());
         assertTrue(updated.getLastUpdated().after(comment.getLastUpdated()));
 
         // Verify the update in database
         try (Connection conn = commentDAO.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
-            stmt.setInt(1, comment.getCommentID());
+            stmt.setLong(1, comment.getCommentID());
             try (ResultSet rs = stmt.executeQuery()) {
                 assertTrue(rs.next());
                 assertEquals("Updated text", rs.getString("CommentText"));
@@ -163,7 +161,7 @@ public class CommentDAOTest {
 
     @Test(expected = SQLException.class)
     public void testUpdateNonExistentComment() throws SQLException {
-        commentDAO.updateComment(-1, testUserId, "New text");
+        commentDAO.updateComment(-1L, testUserId, "New text");
     }
 
     @Test(expected = SQLException.class)
@@ -179,12 +177,12 @@ public class CommentDAOTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateCommentNullUserId() throws SQLException {
-        commentDAO.updateComment(1, null, "New text");
+        commentDAO.updateComment(1L, null, "New text");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateCommentNullText() throws SQLException {
-        commentDAO.updateComment(1, testUserId, null);
+        commentDAO.updateComment(1L, testUserId, null);
     }
 
     @Test
@@ -241,7 +239,7 @@ public class CommentDAOTest {
         // Verify the comment was actually deleted
         try (Connection conn = commentDAO.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
-            stmt.setInt(1, comment.getCommentID());
+            stmt.setLong(1, comment.getCommentID());
             try (ResultSet rs = stmt.executeQuery()) {
                 assertFalse(rs.next());
             }
@@ -251,7 +249,7 @@ public class CommentDAOTest {
     @Test
     public void testDeleteCommentNotFound() throws SQLException {
         // Try to delete non-existent comment
-        boolean deleted = commentDAO.deleteComment(-1, testUserId);
+        boolean deleted = commentDAO.deleteComment(-1L, testUserId);
         assertFalse(deleted);
     }
 
@@ -267,7 +265,7 @@ public class CommentDAOTest {
         // Verify comment still exists
         try (Connection conn = commentDAO.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Comments WHERE CommentID = ?")) {
-            stmt.setInt(1, comment.getCommentID());
+            stmt.setLong(1, comment.getCommentID());
             try (ResultSet rs = stmt.executeQuery()) {
                 assertTrue(rs.next());
             }
@@ -281,6 +279,6 @@ public class CommentDAOTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testDeleteCommentNullUserId() throws SQLException {
-        commentDAO.deleteComment(1, null);
+        commentDAO.deleteComment(1L, null);
     }
 }

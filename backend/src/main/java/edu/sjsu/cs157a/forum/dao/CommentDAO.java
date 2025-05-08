@@ -17,7 +17,7 @@ public class CommentDAO extends BaseDAO{
 
 
 
-    public Comment createComment(String text, Integer userId, Integer postId){
+    public Comment createComment(String text, Long userId, Long postId){
         if (text == null)
             throw new IllegalArgumentException("text cannot be null");
         if (userId == null)
@@ -34,8 +34,8 @@ public class CommentDAO extends BaseDAO{
 
             stmt.setString(1, text);
             stmt.setTimestamp(2, now);
-            stmt.setInt(3, userId);
-            stmt.setInt(4, postId);
+            stmt.setLong(3, userId);
+            stmt.setLong(4, postId);
             stmt.setTimestamp(5, now);
 
             int affectedRows = stmt.executeUpdate();
@@ -45,8 +45,8 @@ public class CommentDAO extends BaseDAO{
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    Integer commentID = generatedKeys.getInt(1);
-                    return new Comment(commentID, text, now, 0, userId, postId, now);
+                    Long commentID = generatedKeys.getLong(1);
+                    return new Comment(commentID, text, now, 0L, userId, postId, now);
                 } else {
                     throw new SQLException("Creating comment failed, no ID obtained.");
                 }
@@ -77,7 +77,7 @@ public class CommentDAO extends BaseDAO{
         return created;
     }
 
-    public Comment updateComment(Integer commentId, Integer userId, String newText) throws SQLException {
+    public Comment updateComment(Long commentId, Long userId, String newText) throws SQLException {
         // Validate parameters before any database operations
         if (commentId == null || userId == null || newText == null) {
             throw new IllegalArgumentException("Parameters cannot be null");
@@ -91,8 +91,8 @@ public class CommentDAO extends BaseDAO{
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, newText);
-            stmt.setInt(2, commentId);
-            stmt.setInt(3, userId);
+            stmt.setLong(2, commentId);
+            stmt.setLong(3, userId);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -102,13 +102,13 @@ public class CommentDAO extends BaseDAO{
             // Get the original comment to preserve other fields
             String selectSql = "SELECT CommentText, CreationDate, Rating, PostID FROM Comments WHERE CommentID = ?";
             try (PreparedStatement selectStmt = conn.prepareStatement(selectSql)) {
-                selectStmt.setInt(1, commentId);
+                selectStmt.setLong(1, commentId);
                 try (ResultSet rs = selectStmt.executeQuery()) {
                     if (rs.next()) {
                         String originalText = rs.getString("CommentText");
                         Timestamp creationDate = rs.getTimestamp("CreationDate");
-                        Integer rating = rs.getInt("Rating");
-                        Integer postId = rs.getInt("PostID");
+                        Long rating = rs.getLong("Rating");
+                        Long postId = rs.getLong("PostID");
                         return new Comment(commentId, newText, creationDate, rating, userId, postId, now);
                     }
                 }
@@ -117,7 +117,7 @@ public class CommentDAO extends BaseDAO{
         }
     }
 
-    public List<Comment> getCommentsByPost(Integer postId) throws SQLException {
+    public List<Comment> getCommentsByPost(Long postId) throws SQLException {
         if (postId == null) {
             throw new IllegalArgumentException("postId cannot be null");
         }
@@ -129,16 +129,16 @@ public class CommentDAO extends BaseDAO{
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setInt(1, postId);
+            stmt.setLong(1, postId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     comments.add(new Comment(
-                        rs.getInt("CommentID"),
+                        rs.getLong("CommentID"),
                         rs.getString("CommentText"),
                         rs.getTimestamp("CreationDate"),
-                        rs.getInt("Rating"),
-                        rs.getInt("UserID"),
-                        rs.getInt("PostID"),
+                        rs.getLong("Rating"),
+                        rs.getLong("UserID"),
+                        rs.getLong("PostID"),
                         rs.getTimestamp("LastUpdated")
                     ));
                 }
@@ -147,7 +147,7 @@ public class CommentDAO extends BaseDAO{
         return comments;
     }
 
-    public boolean deleteComment(Integer commentId, Integer userId) throws SQLException {
+    public boolean deleteComment(Long commentId, Long userId) throws SQLException {
         if (commentId == null || userId == null) {
             throw new IllegalArgumentException("commentId and userId cannot be null");
         }
@@ -157,8 +157,8 @@ public class CommentDAO extends BaseDAO{
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setInt(1, commentId);
-            stmt.setInt(2, userId);
+            stmt.setLong(1, commentId);
+            stmt.setLong(2, userId);
             
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;

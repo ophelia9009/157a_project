@@ -25,7 +25,7 @@ public class UserDAOTest {
     @Test
     public void test_getAllUsers() {
         UserDAO userDAO = new UserDAO();
-        assertTrue(userDAO.getAllUsers().size()>0);
+        assertFalse(userDAO.getAllUsers().isEmpty());
     }
 
     @Test
@@ -33,10 +33,10 @@ public class UserDAOTest {
         UserDAO userDAO = new UserDAO();
         
         // Test non-existent user
-        assertNull(userDAO.getUserById(999999));
+        assertNull(userDAO.getUserById(999999L));
         
         // Test existing user (using ID from flower_girl)
-        assertNotNull(userDAO.getUserById(1));
+        assertNotNull(userDAO.getUserById(1L));
     }
 
     @Test

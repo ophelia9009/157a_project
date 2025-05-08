@@ -45,7 +45,7 @@ public class SubforumsServlet extends BaseServlet {
             String description = requestBody.get("description");
             
             // Get ownerID from session
-            Integer ownerID = ((User) request.getSession().getAttribute("user")).getUserID();
+            Long ownerID = ((User) request.getSession().getAttribute("user")).getUserID();
             if (ownerID == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
                 return;

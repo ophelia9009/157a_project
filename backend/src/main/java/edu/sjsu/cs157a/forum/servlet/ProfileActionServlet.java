@@ -33,7 +33,7 @@ public class ProfileActionServlet extends BaseServlet {
         setCorsHeaders(response);
 
         String action = request.getParameter("action");
-        Integer userId = Integer.valueOf(request.getParameter("userId"));
+        Long userId = Long.valueOf(request.getParameter("userId"));
         logger.info("Action: " + action + ", userId: " + userId);
         HttpSession session = request.getSession();
 

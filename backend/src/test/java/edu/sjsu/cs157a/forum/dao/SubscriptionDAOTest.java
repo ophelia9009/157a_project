@@ -1,22 +1,19 @@
 package edu.sjsu.cs157a.forum.dao;
 
-import edu.sjsu.cs157a.forum.model.Subscription;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class SubscriptionDAOTest {
     private SubscriptionDAO subscriptionDAO;
-    private static final Integer TEST_USER_ID = 1;
-    private static final Integer TEST_SUBFORUM_ID = 1;
+    private static final Long TEST_USER_ID = 1L;
+    private static final Long TEST_SUBFORUM_ID = 1L;
 
     @Before
     public void setUp() throws SQLException {
@@ -107,7 +104,7 @@ public class SubscriptionDAOTest {
         // Subscribe to test subforum
         subscriptionDAO.subscribeUserToSubforum(TEST_USER_ID, TEST_SUBFORUM_ID);
         
-        List<Integer> subscriptions = subscriptionDAO.getUserSubscriptions(TEST_USER_ID);
+        List<Long> subscriptions = subscriptionDAO.getUserSubscriptions(TEST_USER_ID);
         assertNotNull(subscriptions);
         assertFalse(subscriptions.isEmpty());
         assertTrue(subscriptions.contains(TEST_SUBFORUM_ID));
@@ -115,7 +112,7 @@ public class SubscriptionDAOTest {
 
     @Test
     public void test_getUserSubscriptions_empty() {
-        List<Integer> subscriptions = subscriptionDAO.getUserSubscriptions(999); // Non-existent user
+        List<Long> subscriptions = subscriptionDAO.getUserSubscriptions(999L); // Non-existent user
         assertNotNull(subscriptions);
         assertTrue(subscriptions.isEmpty());
     }
@@ -130,7 +127,7 @@ public class SubscriptionDAOTest {
         // Subscribe test user
         subscriptionDAO.subscribeUserToSubforum(TEST_USER_ID, TEST_SUBFORUM_ID);
         
-        List<Integer> subscribers = subscriptionDAO.getSubforumSubscribers(TEST_SUBFORUM_ID);
+        List<Long> subscribers = subscriptionDAO.getSubforumSubscribers(TEST_SUBFORUM_ID);
         assertNotNull(subscribers);
         assertFalse(subscribers.isEmpty());
         assertTrue(subscribers.contains(TEST_USER_ID));
@@ -138,7 +135,7 @@ public class SubscriptionDAOTest {
 
     @Test
     public void test_getSubforumSubscribers_empty() {
-        List<Integer> subscribers = subscriptionDAO.getSubforumSubscribers(999); // Non-existent subforum
+        List<Long> subscribers = subscriptionDAO.getSubforumSubscribers(999L); // Non-existent subforum
         assertNotNull(subscribers);
         assertTrue(subscribers.isEmpty());
     }

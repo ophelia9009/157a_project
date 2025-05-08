@@ -32,8 +32,8 @@ public class PostActionServlet extends BaseServlet {
         setCorsHeaders(response);
 
         String action = request.getParameter("action");
-        Integer postId = Integer.valueOf(request.getParameter("postId"));
-        Integer subforumId = Integer.valueOf(request.getParameter("subforumId"));
+        Long postId = Long.valueOf(request.getParameter("postId"));
+        Long subforumId = Long.valueOf(request.getParameter("subforumId"));
         logger.info("Action: " + action + ", postId: " + postId);
         HttpSession session = request.getSession();
 

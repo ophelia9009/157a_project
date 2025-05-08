@@ -56,7 +56,7 @@ public class CommentActionServlet extends BaseServlet {
             JsonObject jsonRequest = gson.fromJson(reader, JsonObject.class);
             
             // Extract parameters
-            Integer postId = jsonRequest.get("postId").getAsInt();
+            Long postId = jsonRequest.get("postId").getAsLong();
             String commentText = jsonRequest.get("commentText").getAsString();
             
             // Create the comment
@@ -81,7 +81,7 @@ public class CommentActionServlet extends BaseServlet {
     private void handleCommentAction(HttpServletRequest request, HttpServletResponse response, User user) 
             throws IOException {
         String action = request.getParameter("action");
-        Integer commentId = Integer.valueOf(request.getParameter("commentId"));
+        Long commentId = Long.valueOf(request.getParameter("commentId"));
         
         try {
             if ("delete".equals(action)) {

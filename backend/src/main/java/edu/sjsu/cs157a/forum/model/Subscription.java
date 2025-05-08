@@ -3,35 +3,35 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class Subscription {
-    private Integer userID;
-    private Integer subforumID;
+    private Long userID;
+    private Long subforumID;
     private Timestamp subscriptionDate;
     
-    public Subscription(Integer userID, Integer subforumID, Timestamp subscriptionDate) {
+    public Subscription(Long userID, Long subforumID, Timestamp subscriptionDate) {
         this.userID = userID;
         this.subforumID = subforumID;
         this.subscriptionDate = subscriptionDate;
     }
     
     // Constructor for creating a new subscription (without timestamp)
-    public Subscription(Integer userID, Integer subforumID) {
+    public Subscription(Long userID, Long subforumID) {
         this(userID, subforumID, new Timestamp(System.currentTimeMillis()));
     }
     
     // Getters and setters
-    public Integer getUserID() {
+    public Long getUserID() {
         return userID;
     }
     
-    public void setUserID(Integer userID) {
+    public void setUserID(Long userID) {
         this.userID = userID;
     }
     
-    public Integer getSubforumID() {
+    public Long getSubforumID() {
         return subforumID;
     }
     
-    public void setSubforumID(Integer subforumID) {
+    public void setSubforumID(Long subforumID) {
         this.subforumID = subforumID;
     }
     

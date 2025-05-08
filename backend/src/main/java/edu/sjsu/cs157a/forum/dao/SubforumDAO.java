@@ -17,25 +17,25 @@ public class SubforumDAO extends BaseDAO {
     private static final Logger logger = LogManager.getLogger(SubforumDAO.class);
 
 
-    public List<Post> getAllSubforumPosts (Integer subforumID) {
+    public List<Post> getAllSubforumPosts (Long subforumID) {
         List<Post> posts = new ArrayList<>();
 
         String sql = "SELECT * FROM Posts WHERE SubforumID = ?";
         try {
             Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, subforumID);
+            stmt.setLong(1, subforumID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 posts.add(new Post(
-                        rs.getInt("PostID"),
+                        rs.getLong("PostID"),
                         rs.getString("Title"),
                         rs.getString("BodyText"),
                         rs.getTimestamp("CreationDate"),
-                        rs.getInt("Rating"),
-                        rs.getInt("UserID"),
-                        rs.getInt("SubforumID"),
+                        rs.getLong("Rating"),
+                        rs.getLong("UserID"),
+                        rs.getLong("SubforumID"),
                         rs.getTimestamp("LastUpdated")
                 ));
             }
@@ -88,13 +88,13 @@ public class SubforumDAO extends BaseDAO {
 
             while (rs.next()) {
                 subforums.add(new Subforum(
-                        rs.getInt("SubforumID"),
+                        rs.getLong("SubforumID"),
                         rs.getString("Name"),
                         rs.getTimestamp("CreationDate"),
                         rs.getString("Description"),
                         rs.getString("SubscriberCount"),
                         rs.getTimestamp("LastUpdated"),
-                        rs.getInt("OwnerID")
+                        rs.getLong("OwnerID")
                 ));
             }
             rs.close();
@@ -113,7 +113,7 @@ public class SubforumDAO extends BaseDAO {
      * @return The created Subforum object
      * @throws RuntimeException if subforum creation fails
      */
-    public Subforum createSubforum(String name, String description, Integer ownerID) {
+    public Subforum createSubforum(String name, String description, Long ownerID) {
         if (ownerID == null)
             throw new IllegalArgumentException("ownerID cannot be null");
 
@@ -132,7 +132,7 @@ public class SubforumDAO extends BaseDAO {
             stmt.setTimestamp(2, now);
             stmt.setString(3, description);
             stmt.setTimestamp(4, now);
-            stmt.setInt(5, ownerID);
+            stmt.setLong(5, ownerID);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -141,7 +141,7 @@ public class SubforumDAO extends BaseDAO {
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    Integer subforumID = generatedKeys.getInt(1);
+                    Long subforumID = generatedKeys.getLong(1);
                     return new Subforum(subforumID, name, now, description, "0", now, ownerID);
                 } else {
                     throw new SQLException("Creating subforum failed, no ID obtained.");
@@ -164,7 +164,7 @@ public class SubforumDAO extends BaseDAO {
      * @return The updated Subforum object
      * @throws RuntimeException if update fails or user is not owner
      */
-    public void updateSubforum(Integer subforumID, String newDescription, Integer requestingUserID) {
+    public void updateSubforum(Long subforumID, String newDescription, Long requestingUserID) {
         if (subforumID == null || requestingUserID == null) {
             throw new IllegalArgumentException("subforumID and requestingUserID cannot be null");
         }
@@ -181,8 +181,8 @@ public class SubforumDAO extends BaseDAO {
 
             stmt.setString(1, newDescription);
             stmt.setTimestamp(2, now);
-            stmt.setInt(3, subforumID);
-            stmt.setInt(4, requestingUserID);
+            stmt.setLong(3, subforumID);
+            stmt.setLong(4, requestingUserID);
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -201,7 +201,7 @@ public class SubforumDAO extends BaseDAO {
      * @return List of subscribed subforums
      * @throws RuntimeException if database operation fails
      */
-    public List<Subforum> getSubscribedSubforums(Integer userID) {
+    public List<Subforum> getSubscribedSubforums(Long userID) {
         List<Subforum> subscribedForums = new ArrayList<>();
 
         String query = "SELECT s.* FROM Subforums s " +
@@ -211,18 +211,18 @@ public class SubforumDAO extends BaseDAO {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setInt(1, userID);
+            stmt.setLong(1, userID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 subscribedForums.add(new Subforum(
-                    rs.getInt("SubforumID"),
+                    rs.getLong("SubforumID"),
                     rs.getString("Name"),
                     rs.getTimestamp("CreationDate"),
                     rs.getString("Description"),
                     rs.getString("SubscriberCount"),
                     rs.getTimestamp("LastUpdated"),
-                    rs.getInt("OwnerID")
+                    rs.getLong("OwnerID")
                 ));
             }
             rs.close();
@@ -249,13 +249,13 @@ public class SubforumDAO extends BaseDAO {
 
             while (rs.next()) {
                 subforums.add(new Subforum(
-                        rs.getInt("SubforumID"),
+                        rs.getLong("SubforumID"),
                         rs.getString("Name"),
                         rs.getTimestamp("CreationDate"),
                         rs.getString("Description"),
                         rs.getString("SubscriberCount"),
                         rs.getTimestamp("LastUpdated"),
-                        rs.getInt("OwnerID")
+                        rs.getLong("OwnerID")
                 ));
             }
             rs.close();
@@ -271,7 +271,7 @@ public class SubforumDAO extends BaseDAO {
      * @param subforumID The ID of the subforum to delete
      * @throws RuntimeException if deletion fails
      */
-    public void deleteSubforum(Integer subforumID) {
+    public void deleteSubforum(Long subforumID) {
         if (subforumID == null) {
             throw new IllegalArgumentException("subforumID cannot be null");
         }
@@ -281,7 +281,7 @@ public class SubforumDAO extends BaseDAO {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, subforumID);
+            stmt.setLong(1, subforumID);
             int affectedRows = stmt.executeUpdate();
             
             if (affectedRows == 0) {

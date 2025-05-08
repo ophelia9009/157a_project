@@ -19,8 +19,8 @@ public class PostServlet extends BaseServlet {
         try {
             String title = request.getParameter("title");
             String bodytext = request.getParameter("bodyText");
-            Integer UserID = Integer.valueOf(request.getParameter("userId"));
-            Integer SubforumID = Integer.valueOf(request.getParameter("subforumId"));
+            Long UserID = Long.valueOf(request.getParameter("userId"));
+            Long SubforumID = Long.valueOf(request.getParameter("subforumId"));
 
             Post created = postDAO.createPost(title, bodytext, UserID, SubforumID);
 

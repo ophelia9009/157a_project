@@ -3,16 +3,16 @@ package edu.sjsu.cs157a.forum.model;
 import java.sql.Timestamp;
 
 public class Post {
-    Integer postID;
+    Long postID;
     String title;
     String bodytext;
     Timestamp creationDate;
-    Integer rating;
-    Integer userID;
-    Integer subforumID;
+    Long rating;
+    Long userID;
+    Long subforumID;
     Timestamp lastupdated;
 
-    public Post(Integer postID, String title, String bodytext, Timestamp creationDate, Integer rating, Integer userID, Integer subforumID, Timestamp lastupdated) {
+    public Post(Long postID, String title, String bodytext, Timestamp creationDate, Long rating, Long userID, Long subforumID, Timestamp lastupdated) {
         this.postID = postID;
         this.title = title;
         this.bodytext = bodytext;
@@ -22,7 +22,7 @@ public class Post {
         this.subforumID = subforumID;
         this.lastupdated = lastupdated;
     }
-    public Integer getPostID() {
+    public Long getPostID() {
         return postID;
     }
     public String getTitle() {
@@ -34,13 +34,13 @@ public class Post {
     public Timestamp getCreationDate() {
         return creationDate;
     }
-    public Integer getRating() {
+    public Long getRating() {
         return rating;
     }
-    public Integer getUserID() {
+    public Long getUserID() {
         return userID;
     }
-    public Integer getSubforumID() {
+    public Long getSubforumID() {
         return subforumID;
     }
     public Timestamp getLastUpdated() {

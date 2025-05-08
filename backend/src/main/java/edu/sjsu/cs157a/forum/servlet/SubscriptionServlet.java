@@ -33,7 +33,7 @@ public class SubscriptionServlet extends HttpServlet {
                 return;
             }
             
-            Integer subforumId = Integer.parseInt(subforumIdParam);
+            Long subforumId = Long.parseLong(subforumIdParam);
             User user = (User) request.getSession().getAttribute("user");
             
             if (user == null) {
@@ -75,8 +75,8 @@ public class SubscriptionServlet extends HttpServlet {
                 return;
             }
             
-            Integer subforumId = Integer.parseInt(subforumIdParam);
-            Integer userId = ((User) request.getSession().getAttribute("user")).getUserID();
+            Long subforumId = Long.parseLong(subforumIdParam);
+            Long userId = ((User) request.getSession().getAttribute("user")).getUserID();
             
             if (userId == null) {
                 logger.warn("User not logged in, userId is null");

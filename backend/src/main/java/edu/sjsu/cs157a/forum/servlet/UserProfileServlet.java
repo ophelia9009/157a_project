@@ -24,7 +24,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        Integer userId = Integer.parseInt( pathInfo.substring(1)); // Remove leading slash
+        Long userId = Long.parseLong( pathInfo.substring(1)); // Remove leading slash
         User user = userDAO.getUserById(userId);
 
         response.setContentType("application/json");
@@ -105,7 +105,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        Integer userId = Integer.parseInt( pathInfo.substring(1)); // Remove leading slash
+        Long userId = Long.parseLong( pathInfo.substring(1)); // Remove leading slash
         
         try {
             // Get existing user data
@@ -157,7 +157,7 @@ public class UserProfileServlet extends BaseServlet {
             return;
         }
 
-        Integer userId = Integer.valueOf(pathInfo.substring(1)); // Remove leading slash
+        Long userId = Long.valueOf(pathInfo.substring(1)); // Remove leading slash
         
         try {
             boolean deleted = userDAO.deleteUserById(userId);
