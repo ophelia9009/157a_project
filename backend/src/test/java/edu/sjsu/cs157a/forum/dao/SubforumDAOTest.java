@@ -243,4 +243,10 @@ public class SubforumDAOTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_getSubforumByID_null() {
+        SubforumDAO subforumDAO = new SubforumDAO();
+        subforumDAO.getSubforumByID(null);
+    }
 }

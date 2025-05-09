@@ -4,6 +4,7 @@ import edu.sjsu.cs157a.forum.model.User;
 import org.junit.Test;
 
 import java.sql.Timestamp;
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
@@ -136,5 +137,37 @@ public class UserDAOTest {
         // Verify user no longer exists
         User deletedUser = userDAO.getUserById(createdUser.getUserID());
         assertNull(deletedUser);
+    }
+
+    @Test
+    public void test_getUserByUsername() {
+        UserDAO userDAO = new UserDAO();
+        assertNull(userDAO.getUserByUsername("nonexistent_user"));
+        User user = userDAO.getUserByUsername("flower_girl");
+        assertNotNull(user);
+        assertEquals("flower_girl", user.getUsername());
+    }
+
+    @Test
+    public void test_deleteUserById() {
+        UserDAO userDAO = new UserDAO();
+        User newUser = new User(
+            null,
+            "tempuser_" + System.currentTimeMillis(),
+            "pass",
+            "temp" + System.currentTimeMillis() + "@example.com",
+            new java.sql.Timestamp(System.currentTimeMillis())
+        );
+        User created = userDAO.createUser(newUser);
+        assertNotNull(created.getUserID());
+        boolean deleted = userDAO.deleteUserById(created.getUserID());
+        assertTrue(deleted);
+        assertNull(userDAO.getUserById(created.getUserID()));
+    }
+
+    @Test
+    public void test_printTable_noException() throws SQLException {
+        UserDAO userDAO = new UserDAO();
+        userDAO.printTable("Users", new String[]{"Username"}, userDAO.getConnection());
     }
 }

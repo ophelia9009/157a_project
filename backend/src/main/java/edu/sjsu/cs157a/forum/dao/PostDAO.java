@@ -129,7 +129,7 @@ public class PostDAO extends BaseDAO{
     }
     public boolean deletePost(Long postID){
         if (postID == null)
-            throw new IllegalArgumentException("postID cannot be null for post deletion");
+            return false;
 
         String sql = "DELETE FROM Posts WHERE postID = ?";
 
