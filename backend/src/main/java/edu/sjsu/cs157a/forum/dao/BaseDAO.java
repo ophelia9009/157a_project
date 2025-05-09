@@ -162,11 +162,11 @@ public class BaseDAO {
             throw new RuntimeException("Failed to delete "+ element, se);
         }
     }
-    /* for experiments
+    // for experiments, tested but not used
     public List<Element> createTuplesBatch(List<Element> elements) throws SQLException {
         if (elements == null || elements.isEmpty()) return Collections.emptyList();
 
-        Element first = elements.get(0);
+        Element first = elements.getFirst();
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement("INSERT INTO " +
                 first.getTable() + " " +
@@ -271,6 +271,6 @@ public class BaseDAO {
         rs.close();
         stmt.close();
         return result;
-    }*/
+    }
 
 }

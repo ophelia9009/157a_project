@@ -60,8 +60,7 @@ public class Element {
     public String toString(){
         return getTable() +": "+ getPrimaryKeyColumn()+ ": "+ getPrimaryKeyValueString();
     }
-    //Unneeded Utility
-    /*
+    //Experimental Utility, Tested but not used
     public void setColumnValue(String columnName, Object value) {
         for (int i = 0; i < columnNames.length; i++) {
             if (columnNames[i].equalsIgnoreCase(columnName)) {
@@ -105,6 +104,5 @@ public class Element {
         }
         return map;
     }
-    */
 }
 
