@@ -10,10 +10,13 @@ $ mvn jetty:run
 ```
 OR
 Click run button on Intellij IDEA
-![image](https://github.com/user-attachments/assets/3a2f300d-f3d0-4c33-909b-93929dc70e02)
- with this configuration setup
-![image](https://github.com/user-attachments/assets/85fa5e97-4a42-4a03-b8d7-2f52b13b96a8)
 ```
+![image](https://github.com/user-attachments/assets/3a2f300d-f3d0-4c33-909b-93929dc70e02)
+```
+ with this configuration setup
+```
+![image](https://github.com/user-attachments/assets/85fa5e97-4a42-4a03-b8d7-2f52b13b96a8)
+
 **Requirements:**
 Functional Requirements:
 
