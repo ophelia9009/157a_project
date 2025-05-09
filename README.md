@@ -1,4 +1,6 @@
 # This is a project for course CS157a.
+Project Overview: 
+We created a 3 tier architecture social media forum based web application that took inspiration from the widely popular “front page of the internet” aka Reddit. We used a tech stack of Java and its JDBC API to connect to MySQL database and displayed in Jakarta Server Pages (JSP) with additional functionality in JavaScript. Additional logic is also encapsulated in servlets and the project is deployed on Apache Tomcat. The project’s purpose is to emphasize communities and topics within subforums that are populated by users, posts, and comments. Joining engaging discussions, keeping up to date with the latest news, and Q&A are envisioned relevant usages for individual end-users of the application. Further developments of fondness and a sense of belonging to the people and subforums who engage with each other can foster communities. With time, such interconnectedness can have overall positive benefits for the members. For example, if one wanted to start a project for more programming experience and to put on their resume, they could start by reaching out to subforums that have people with related interests. If they wanted to create an application like this, reaching out to the MySQL, Java, JavaScript, etc. subforums and recruiting teammates and mentors to develop with and learn from should be feasible. This is only one of the many benefits that this project could bring when thriving active communities develop with time.
 
 To run the frontend: 
 ```
@@ -24,7 +26,8 @@ Functional Requirements:
     - [x] whatever it is , it will use "select all from users" for example, user list page
 - Subforum Management:
     - [x] Allow registered users to create new subforums.
-    - [x] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
+    - [x] Allow registered users to edit the subforums they created. (Note: Proposal states "edit and delete own sub-forums" under Functional Req, but schema     
+          doesn't explicitly list an owner UserID for Subforums - this might need clarification in the project).
     - [x] Allow registered users to subscribe subforums.
     - [ ] Allow registered users to search subforums based on specific conditions. @Vaishu
     - [x] Store subforum information (SubforumID, Name, CreationDate, Description, SubscriberCount, lastUpdated) in a database.
@@ -44,12 +47,12 @@ Functional Requirements:
 **TODO:**
 
 - Data Layer: Database Design
-    - [ ] ER Diagram
-    - [ ] Schema Definition
-    - [ ] Normalization
-    - [ ] Set up MySQL database with structured schema, foreign keys, and non-null constraints
-    - [ ] Create the database tables (at least 4 tables) 
-    - [ ] Initialize the different tables (at least 15 entries per table) appropriately: No fields cannot be null.
+    - [x] ER Diagram
+    - [x] Schema Definition
+    - [x] Normalization
+    - [x] Set up MySQL database with structured schema, foreign keys, and non-null constraints
+    - [x] Create the database tables (at least 4 tables) 
+    - [x] Initialize the different tables (at least 15 entries per table) appropriately: No fields cannot be null.
     - [ ] Issue the following SQL statements:
         - [ ] Select all to display existing information
         - [ ] Add new
