@@ -44,62 +44,6 @@ public class BaseDAO {
         stmt.close();
         return result;
     }
-    //with limit
-    public List<Map<String, Object>> getTable(String table, String[] columns, int limit) throws SQLException {
-        List<Map<String, Object>> result = new ArrayList<>();
-        String sql = "SELECT " + String.join(", ", columns) + " FROM " + table + " LIMIT " + limit;
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Map<String, Object> row = new HashMap<>();
-                for (String col : columns) {
-                    row.put(col, rs.getObject(col));
-                }
-                result.add(row);
-            }
-        }
-        return result;
-    }
-
-    //List<Map<String, Object>> posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
-    //                            "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, null, null);
-    // RETURNS SELECT * FROM posts
-    // posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
-    //                    "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
-    // RETURNS SELECT * FROM posts WHERE PostID < 10
-    public List<Map<String, Object>> getTableWithCondition(String table, String[] columns, String condition, Object[] parameters) throws SQLException {
-        List<Map<String, Object>> result = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM " + table);
-        Connection connection = getConnection();
-
-        if(condition != null && !condition.isBlank()) {
-            sql.append(" WHERE ").append(condition);
-        }
-
-        PreparedStatement stmt = connection.prepareStatement(sql.toString());
-
-        if(parameters != null)
-            for (int i = 0; i < parameters.length; i++) {
-                stmt.setObject(i + 1, parameters[i]);
-            }
-
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Map<String, Object> row = new HashMap<>();
-            for (String col : columns) {
-                row.put(col, rs.getObject(col));
-            }
-            result.add(row);
-        }
-
-        rs.close();
-        stmt.close();
-        return result;
-    }
     /**
      * This method is to create a new tuple in database, mainly used for user registration.
      * @param newElement
@@ -143,61 +87,6 @@ public class BaseDAO {
             throw new RuntimeException("Failed to create " + newElement.getTable(), se);
         }
     }
-
-    public List<Element> createTuplesBatch(List<Element> elements) throws SQLException {
-        if (elements == null || elements.isEmpty()) return Collections.emptyList();
-
-        Element first = elements.get(0);
-
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement("INSERT INTO " +
-                first.getTable() + " " +
-                first.getColumnsNames() + " VALUES " + first.getColumnsQuestionMark(), Statement.RETURN_GENERATED_KEYS)) {
-            for (Element element : elements) {
-                Iterator<Object> col = element.iterator();
-                int i = 1;
-                while (col.hasNext()) {
-                    stmt.setObject(i++, col.next());
-                }
-                stmt.addBatch();
-            }
-
-            stmt.executeBatch();
-
-            // Assign generated keys back to each element
-            try (ResultSet keys = stmt.getGeneratedKeys()) {
-                int idx = 0;
-                while (keys.next() && idx < elements.size()) {
-                    elements.get(idx++).setPrimaryKeyValue(keys.getObject(1));
-                }
-            }
-
-            return elements;
-
-        } catch (SQLException e) {
-            logger.error("Batch insert failed for table: {}", first.getTable(), e);
-            throw new RuntimeException("Batch insert failed for table: " + first.getTable(), e);
-        }
-    }
-/* does not work with Long--Object conversion to int
-    public Map<String, Object> findByPrimaryKey(String table, String primaryKeyColumn, Object primaryKeyValue) throws SQLException {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + table + " WHERE " + primaryKeyColumn + " = ?")) {
-            stmt.setObject(1, primaryKeyValue);
-            try (ResultSet rs = stmt.executeQuery()) {
-                ResultSetMetaData meta = rs.getMetaData();
-                if (rs.next()) {
-                    Map<String, Object> row = new HashMap<>();
-                    for (int i = 1; i <= meta.getColumnCount(); i++) {
-                        row.put(meta.getColumnName(i), rs.getObject(i));
-                    }
-                    return row;
-                } else {
-                    return null;
-                }
-            }
-        }
-    }*/
-
 
     /**
      * This method is to update tuples, mainly used for tuple file edit. Does not work for tables with composite keys.
@@ -273,6 +162,115 @@ public class BaseDAO {
             throw new RuntimeException("Failed to delete "+ element, se);
         }
     }
+    /* for experiments
+    public List<Element> createTuplesBatch(List<Element> elements) throws SQLException {
+        if (elements == null || elements.isEmpty()) return Collections.emptyList();
 
+        Element first = elements.get(0);
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement("INSERT INTO " +
+                first.getTable() + " " +
+                first.getColumnsNames() + " VALUES " + first.getColumnsQuestionMark(), Statement.RETURN_GENERATED_KEYS)) {
+            for (Element element : elements) {
+                Iterator<Object> col = element.iterator();
+                int i = 1;
+                while (col.hasNext()) {
+                    stmt.setObject(i++, col.next());
+                }
+                stmt.addBatch();
+            }
+
+            stmt.executeBatch();
+
+            // Assign generated keys back to each element
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                int idx = 0;
+                while (keys.next() && idx < elements.size()) {
+                    elements.get(idx++).setPrimaryKeyValue(keys.getObject(1));
+                }
+            }
+
+            return elements;
+
+        } catch (SQLException e) {
+            logger.error("Batch insert failed for table: {}", first.getTable(), e);
+            throw new RuntimeException("Batch insert failed for table: " + first.getTable(), e);
+        }
+    }
+
+    public Map<String, Object> findByPrimaryKey(String table, String primaryKeyColumn, Object primaryKeyValue) throws SQLException {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + table + " WHERE " + primaryKeyColumn + " = ?")) {
+            stmt.setObject(1, primaryKeyValue);
+            try (ResultSet rs = stmt.executeQuery()) {
+                ResultSetMetaData meta = rs.getMetaData();
+                if (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    for (int i = 1; i <= meta.getColumnCount(); i++) {
+                        row.put(meta.getColumnName(i), rs.getObject(i));
+                    }
+                    return row;
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
+    //with limit
+    public List<Map<String, Object>> getTable(String table, String[] columns, int limit) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        String sql = "SELECT " + String.join(", ", columns) + " FROM " + table + " LIMIT " + limit;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                for (String col : columns) {
+                    row.put(col, rs.getObject(col));
+                }
+                result.add(row);
+            }
+        }
+        return result;
+    }
+
+    //List<Map<String, Object>> posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+    //                            "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, null, null);
+    // RETURNS SELECT * FROM posts;
+    // posts = userDAO.getTableWithCondition("posts", new String[]{"PostID",
+    //                    "Title", "BodyText", "CreationDate","Rating", "UserID", "SubforumID"}, "PostID < ?", new Object[]{10} );
+    // RETURNS SELECT * FROM posts WHERE PostID < 10
+    public List<Map<String, Object>> getTableWithCondition(String table, String[] columns, String condition, Object[] parameters) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM " + table);
+        Connection connection = getConnection();
+
+        if(condition != null && !condition.isBlank()) {
+            sql.append(" WHERE ").append(condition);
+        }
+
+        PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+        if(parameters != null)
+            for (int i = 0; i < parameters.length; i++) {
+                stmt.setObject(i + 1, parameters[i]);
+            }
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<>();
+            for (String col : columns) {
+                row.put(col, rs.getObject(col));
+            }
+            result.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        return result;
+    }*/
 
 }
