@@ -249,4 +249,27 @@ public class SubforumDAOTest {
         SubforumDAO subforumDAO = new SubforumDAO();
         subforumDAO.getSubforumByID(null);
     }
+
+    // ... existing code ...
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_deleteSubforum_null() {
+        SubforumDAO dao = new SubforumDAO();
+        dao.deleteSubforum(null);
+    }
+
+    @Test
+    public void test_deleteSubforum_success() {
+        SubforumDAO dao = new SubforumDAO();
+        // Create a subforum to delete
+        String name = "tempDel_" + System.currentTimeMillis();
+        String desc = "tempDesc";
+        Long ownerID = 1L;
+        Subforum sub = dao.createSubforum(name, desc, ownerID);
+        Long id = sub.getSubforumID();
+        // Delete it
+        dao.deleteSubforum(id);
+        // Verify it's gone
+        assertNull(dao.getSubforumByID(id));
+    }
 }
