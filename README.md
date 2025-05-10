@@ -26,7 +26,7 @@ Functional Requirements:
     - [x] Allow new users to register for an account.
     - [x] Allow registered users to log in. 
     - [x] Allow registered users to view their own profile information.
-    - [ ] Allow registered users to update their own profile information.
+    - [x] Allow registered users to update their own profile information.
     - [x] Allow registered users to delete their account.
     - [x] Store user information (UserID, Username, Password, Email, RegisterDate) in a database.
     - [x] whatever it is , it will use "select all from users" for example, user list page
@@ -50,7 +50,6 @@ Functional Requirements:
     - [x] Allow registered users to view comments on posts.
     - [x] Store comment information (CommentID, CommentText, UserID, CreationDate, Rating, PostID, ParentID, lastUpdated) in a database.
 
-**TODO:**
 
 - Data Layer: Database Design
     - [x] ER Diagram
@@ -59,16 +58,19 @@ Functional Requirements:
     - [x] Set up MySQL database with structured schema, foreign keys, and non-null constraints
     - [x] Create the database tables (at least 4 tables) 
     - [x] Initialize the different tables (at least 15 entries per table) appropriately: No fields cannot be null.
-    - [ ] Issue the following SQL statements:
-        - [ ] Select all to display existing information
-        - [ ] Add new
-        - [ ] Edit/Update the existing information
-        - [ ] Delete existing information
+    - [x] Issue the following SQL statements:
+        - [x] Select all to display existing information
+        - [x] Add new
+        - [x] Edit/Update the existing information
+        - [x] Delete existing information
 
 - Application Layer: JDBC-powered DAO classes
     * Set Up Java Project: Use build tool Maven, add the MySQL Connector/J library as a dependency.
-    * Implement Database Connection Utility
+    * Implement Database Connection Utility (JDBC)
     * Create Model Class and Data Access Object
     * Test and confirm the connection to database and retrieval of data from the database
 
 - Presentation Layer: for user interactions
+    * Implement Jakarta Server Pages (JSP)
+    * Create Servlet Classes
+    * Test and confirm the operations and interactions from the end user side.
