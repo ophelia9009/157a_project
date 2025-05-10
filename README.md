@@ -65,12 +65,12 @@ Functional Requirements:
         - [x] Delete existing information
 
 - Application Layer: JDBC-powered DAO classes
-    * Set Up Java Project: Use build tool Maven, add the MySQL Connector/J library as a dependency.
-    * Implement Database Connection Utility (JDBC)
-    * Create Model Class and Data Access Object
-    * Test and confirm the connection to database and retrieval of data from the database
+    - [x] Set Up Java Project: Use build tool Maven, add the MySQL Connector/J library as a dependency.
+    - [x] Implement Database Connection Utility (JDBC)
+    - [x] Create Model Class and Data Access Object
+    - [x] Test and confirm the connection to database and retrieval of data from the database
 
 - Presentation Layer: for user interactions
-    * Implement Jakarta Server Pages (JSP)
-    * Create Servlet Classes
-    * Test and confirm the operations and interactions from the end user side.
+    - [x] Implement Jakarta Server Pages (JSP)
+    - [x] Create Servlet Classes
+    - [x] Test and confirm the operations and interactions from the end user side.
